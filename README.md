@@ -16,7 +16,8 @@ their favorite family recipes.
 
 - Python
 - Django
-- MySQL
+- PostgreSQL
+- Bootstrap 5
 
 ### Demo
 
@@ -55,14 +56,17 @@ There are several tools and resources I'd like to either make use of or
 at least consider for this project
 
 - [shields.io](https://shields.io) - Badges to include in README.md
-- ERD Entity-Relationship Diagramming software - Either [Miro](https://miro.com) or [drawSQL](https://drawsql.app)
+- ERD Entity-Relationship Diagramming software  
+  - Either [Miro](https://miro.com) or [drawSQL](https://drawsql.app)
 - Bootstrap 5
 - [Masonry](https://masonry.desandro.com)
+- [Framer](https://www.framer.com) - Used to create mockups
+- [Monday](https://monday.com) - Used to define tasks and completion status
 
 ### Project Retrospective
 
 Once completed, this is where I will list what I learned on this project. I  
-will athen answer the following questions I've prepared for myself.
+will then answer the following questions I've prepared for myself.
 
 #### Learning Focus Questionnaire
 
