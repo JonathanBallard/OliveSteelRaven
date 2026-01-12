@@ -1,5 +1,5 @@
 """
-URL configuration for osr project.
+URL configuration for accounts app.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/6.0/topics/http/urls/
@@ -19,10 +19,12 @@ from django.urls import path, include
 
 # Import views from my apps
 from accounts import views
-from recipes import views 
 
 urlpatterns = [
-    path('', include('apps.accounts.urls')),
-    path('', include('apps.recipes.urls')),
-    path('admin/', admin.site.urls),
+    path('', views.get_home, name='get_home'), # Display the log-in page unless a user is logged in, in which case it shows the homepage
+    path('login/', views.get_login, name='get_login_page'), # Display the log-in page
+    path('login/submit', views.post_login, name='post_login'), # POST login
+    path('signup/', views.get_signup, name='get_signup_page'), # Display the sign-up page
+    path('signup/submit', views.post_signup, name='post_signup'), # POST sign-up
+    path('logout/', views.get_logout, name='get_logout'), # GET logout
 ]

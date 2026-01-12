@@ -71,7 +71,28 @@ Palette 2
 - #D87725
 - #DC3743
 
-### Django Project
+### Project Organization
+
+#### Pages
+Home
+Login
+Signup
+Browse Categories -> Each category simply runs a search for that 'type'
+Search Recipes
+Search Results
+Recipe Details
+Account
+Show my Recipes -> Runs a search with all recipes you've created
+
+#### Locations
+
+- Project Wide Utilities are stored in OliveSteelRaven/osr/common/utils.py
+- App-specific utils.py exist as well
+- Templates are stored in each app in this way: OliveSteelReaven/osr/app_name/templates/app_name/my_template.html
+- Each app contains it's own models.py
+- Each app contains it's own views.py
+- Each app contains it's own urls.py
+- The Project Wide urls.py imports from the apps urls.py
 
 #### Apps
 
@@ -79,6 +100,41 @@ Palette 2
 2. Recipes - Contains CRUD for Recipes
 3. Comments - If implemented, will contain logic for commenting on recipes
 4. Ratings - Ifi implemented, will contain logic for rating recipes
+
+#### Database
+
+##### Users Table
+
+id - bigint
+username - mediumtext
+email - mediumtext
+password - longtext
+image - blob
+recipes_authored - foreign key (recipes junction table)
+recipes_favorited - foreign key (recipes junction table)
+recipes_attempted - foreign key (recipes junction table)
+recipe_rating - foreign key (recipes junction table)
+created_at - datetime
+last_login - datetime
+
+##### Recipes Table
+
+id - bigint
+title - mediumtext
+tags - longtext
+description_short - mediumtext
+description_long - longtext
+difficulty - smallint
+user_rating - smallint
+preparation_time 0 text
+allergies - text (DELETE?)
+ingredients - json
+instructions - json
+views - bigint
+attempts - bigint
+created_by - foreign key (users)
+created_at - datetime
+updated_at - datetime
 
 ### Considerations
 
@@ -88,6 +144,8 @@ Palette 2
 2. JWT - For authentication and security
 3. Auth0 - For login/signup simplicity
 4. dotenv - For handling secrets (Implemented)
+5. [Render](https://render.com/docs/deploy-django) - To deploy Backend on and keep Framer Front-End
+6. [PythonAnywhere](https://help.pythonanywhere.com/pages/DeployExistingDjangoProject/) - Same as Render
 
 #### Things to Consider Doing Differently
 

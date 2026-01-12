@@ -1,6 +1,7 @@
 
-# utils.py
+# `accounts` app utils.py
 
+# login
 def validate_login():
     pass
 
@@ -10,8 +11,7 @@ def check_login_password():
 def check_user_exists():
     pass
 
-
-
+# signup
 def validate_signup():
     pass
 
