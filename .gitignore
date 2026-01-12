@@ -1,1 +1,4 @@
 *.vscode
+creds.env
+.env
+*.env

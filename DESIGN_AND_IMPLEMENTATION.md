@@ -79,3 +79,16 @@ Palette 2
 2. Recipes - Contains CRUD for Recipes
 3. Comments - If implemented, will contain logic for commenting on recipes
 4. Ratings - Ifi implemented, will contain logic for rating recipes
+
+### Considerations
+
+#### Additional Tools and Technologies Considered
+
+1. React - For reusable components. Primarily would be used for cards, nav, footer, and search results
+2. JWT - For authentication and security
+3. Auth0 - For login/signup simplicity
+4. dotenv - For handling secrets (Implemented)
+
+#### Things to Consider Doing Differently
+
+1. Use Django's Forms and Templates
