@@ -50,8 +50,8 @@ Ideally the plan will be repeatable and refinable for future projects.
 ### Fonts & Sizes
 
 Title: Libre Baskerville
-H1:
-Others: Archivo, 
+Body: Roboto 18pt
+Others: Archivo
 
 ### Color Palettes
 
@@ -74,6 +74,7 @@ Palette 2
 ### Project Organization
 
 #### Pages
+
 Home
 Login
 Signup
@@ -146,6 +147,7 @@ updated_at - datetime
 4. dotenv - For handling secrets (Implemented)
 5. [Render](https://render.com/docs/deploy-django) - To deploy Backend on and keep Framer Front-End
 6. [PythonAnywhere](https://help.pythonanywhere.com/pages/DeployExistingDjangoProject/) - Same as Render
+7. Tailwind CSS - Instead of Bootstrap
 
 #### Things to Consider Doing Differently
 
