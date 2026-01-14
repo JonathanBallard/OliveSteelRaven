@@ -53,11 +53,13 @@ to give me good practice in organization.
 #### Tools & Resources to use
 
 There are several tools and resources I'd like to either make use of or  
-at least consider for this project
+at least consider for this project.
 
 - [shields.io](https://shields.io) - Badges to include in README.md
 - ERD Entity-Relationship Diagramming software  
-  - Either [Miro](https://miro.com) or [drawSQL](https://drawsql.app)
+  - [drawSQL](https://drawsql.app) - Used to create initial Schema and ERD
+  - [DBdiagram.io](https://dbdiagram.io) - Used to create new ERD and export .sql script
+  - [Miro](https://miro.com) - Didn't use this time
 - Bootstrap 5
 - [Masonry](https://masonry.desandro.com)
 - [Framer](https://www.framer.com) - Used to create mockups

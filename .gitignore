@@ -2,3 +2,6 @@
 creds.env
 .env
 *.env
+**/.env
+/Schema/
+**/Recipe Images/
