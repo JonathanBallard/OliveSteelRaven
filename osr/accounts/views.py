@@ -16,10 +16,11 @@ from common.utils import safe_method_validator
 # *DONE* Check if user is logged in. If not, redirect to /login/
 # *DONE* Otherwise open home.html page
 @safe_method_validator("", ["GET", "HEAD", "OPTIONS"])
-def get_home(request, _context):
+def get_home(request, *args, **kwargs):
+    context = {}
     if(not request.user.is_authenticated):
         return HttpResponseRedirect('/login/')
-    return render(request=request, template_name=".\\accounts\\home.html", context=_context)
+    return render(request=request, template_name=".\\accounts\\home.html", context=context)
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `LOGIN` VIEWS
@@ -27,15 +28,17 @@ def get_home(request, _context):
 
 # Open login.html page
 @safe_method_validator(".\\accounts\\login.html", ["GET", "HEAD", "OPTIONS"])
-def get_login(request, _context):
-    return render(request=request, template_name=".\\accounts\\login.html", context=_context)
+def get_login(request, *args, **kwargs):
+    context = {}
+    return render(request=request, template_name=".\\accounts\\login.html", context=context)
 
 # POST Info
 # Validate User Information
 # Tell Django user is authenticated
 # Then Open Homepage
 @safe_method_validator(".\\accounts\\login.html", ["POST", "HEAD", "OPTIONS"])
-def post_login(request, _context):
+def post_login(request, *args, **kwargs):
+    context = {}
     posted_data_dict = request.POST.copy()
     return HttpResponseRedirect('') # Assuming successful login, redirect user to homepage
 
@@ -45,14 +48,16 @@ def post_login(request, _context):
 
 # Open signup.html
 @safe_method_validator(".\\accounts\\signup.html", ["GET", "HEAD", "OPTIONS"])
-def get_signup(request, _context):
-    return render(request=request, template_name=".\\accounts\\signup.html", context=_context)
+def get_signup(request, *args, **kwargs):
+    context = {}
+    return render(request=request, template_name=".\\accounts\\signup.html", context=context)
 
 # POST Info
 # Validate User Information
 # Bring user to login.html
 @safe_method_validator(".\\accounts\\signup.html", ["POST", "HEAD", "OPTIONS"])
-def post_signup(request, _context):
+def post_signup(request, *args, **kwargs):
+    context = {}
     posted_data_dict = request.POST.copy()
     return HttpResponseRedirect('') # Assuming successful signup, redirect user to home
 
@@ -62,6 +67,7 @@ def post_signup(request, _context):
 
 # logout
 @safe_method_validator(".\\accounts\\signup.html", ["GET", "HEAD", "OPTIONS"])
-def get_logout(request, _context):
-    return render(request=request, template_name=".\\accounts\\login.html", context=_context)
+def get_logout(request, *args, **kwargs):
+    context = {}
+    return render(request=request, template_name=".\\accounts\\login.html", context=context)
 

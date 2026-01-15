@@ -20,18 +20,21 @@ from common.utils import safe_method_validator
 
 # Open browse.html
 @safe_method_validator(".\\recipes\\browse.html", ["GET", "HEAD", "OPTIONS"])
-def get_browse(request, _context):
-    return render(request=request, template_name=".\\recipes\\browse.html", context=_context)
+def get_browse(request, *args, **kwargs):
+    context = {}
+    return render(request=request, template_name=".\\recipes\\browse.html", context=context)
 
 # Open account.html
 @safe_method_validator(".\\recipes\\account.html", ["GET", "HEAD", "OPTIONS"])
-def get_account(request, _context):
-    return render(request=request, template_name=".\\recipes\\account.html", context=_context)
+def get_account(request, *args, **kwargs):
+    context = {}
+    return render(request=request, template_name=".\\recipes\\account.html", context=context)
 
 # Open recipe.html
 @safe_method_validator(".\\recipes\\recipe.html", ["GET", "HEAD", "OPTIONS"])
-def get_recipe(request, _context):
-    return render(request=request, template_name=".\\recipes\\recipe.html", context=_context)
+def get_recipe(request, *args, **kwargs):
+    context = {}
+    return render(request=request, template_name=".\\recipes\\recipe.html", context=context)
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `CREATE` VIEWS
@@ -39,14 +42,16 @@ def get_recipe(request, _context):
 
 # Open create.html
 @safe_method_validator(".\\recipes\\create.html", ["GET", "HEAD", "OPTIONS"])
-def get_create(request, _context):
-    return render(request=request, template_name=".\\recipes\\create.html", context=_context)
+def get_create(request, *args, **kwargs):
+    context = {}
+    return render(request=request, template_name=".\\recipes\\create.html", context=context)
 
 # POST create recipe page
 # If POST fails, redirect to create recipe page
 # Otherwise get newly created recipe ID, and redirect to that details page
 @safe_method_validator(".\\recipes\\create.html", ["POST", "HEAD", "OPTIONS"])
-def post_create(request, _context):
+def post_create(request, *args, **kwargs):
+    context = {}
     posted_data_dict = request.POST.copy()
     recipe_id = 0 # get from posted_data_dict, then pass for the redirect
     
@@ -60,14 +65,16 @@ def post_create(request, _context):
 
 # Show update.html
 @safe_method_validator(".\\recipes\\update.html", ["GET", "HEAD", "OPTIONS"])
-def get_update(request, _context):
-    return render(request=request, template_name=".\\recipes\\update.html", context=_context)
+def get_update(request, *args, **kwargs):
+    context = {}
+    return render(request=request, template_name=".\\recipes\\update.html", context=context)
 
 # POST updated recipe
 # if POST fails, redirect to update recipe page
 # Otherwise redirect to updated recipe details pages
 @safe_method_validator(".\\recipes\\update.html", ["POST", "HEAD", "OPTIONS"])
-def post_update(request, _context):
+def post_update(request, *args, **kwargs):
+    context = {}
     posted_data_dict = request.POST.copy()
     recipe_id = 0 # get from posted_data_dict, then pass for the redirect
     
@@ -81,14 +88,16 @@ def post_update(request, _context):
 
 # Open delete.html
 @safe_method_validator(".\\recipes\\delete.html", ["GET", "HEAD", "OPTIONS"])
-def get_delete(request, _context):
-    return render(request=request, template_name=".\\recipes\\delete.html", context=_context)
+def get_delete(request, *args, **kwargs):
+    context = {}
+    return render(request=request, template_name=".\\recipes\\delete.html", context=context)
 
 # POST delete
 # Ensure recipe deleted
 # Then redirect to my recipes
 @safe_method_validator(".\\recipes\\delete.html", ["POST", "HEAD", "OPTIONS"])
-def post_delete(request, _context):
+def post_delete(request, *args, **kwargs):
+    context = {}
     posted_data_dict = request.POST.copy()
     return HttpResponseRedirect('/account/my_recipes') # Return to my recipes
 
@@ -98,18 +107,21 @@ def post_delete(request, _context):
 
 # Open search.html
 @safe_method_validator(".\\recipes\\search.html", ["GET", "HEAD", "OPTIONS"])
-def get_search(request, _context):
-    return render(request=request, template_name=".\\recipes\\search.html", context=_context)
+def get_search(request, *args, **kwargs):
+    context = {}
+    return render(request=request, template_name=".\\recipes\\search.html", context=context)
 
 # POST search
 # Return search_results
 @safe_method_validator(".\\recipes\\search.html", ["POST", "HEAD", "OPTIONS"])
-def post_search(request, _context):
+def post_search(request, *args, **kwargs):
+    context = {}
     posted_data_dict = request.POST.copy()
-    return get_search_results(request, _context) #Get search results with passed context
+    return get_search_results(request, context) #Get search results with passed context
 
 # Open search_results.html
 @safe_method_validator(".\\recipes\\search_results.html", ["GET", "HEAD", "OPTIONS"])
-def get_search_results(request, _context):
-    return render(request=request, template_name=".\\recipes\\search_results.html", context=_context)
+def get_search_results(request, *args, **kwargs):
+    context = {}
+    return render(request=request, template_name=".\\recipes\\search_results.html", context=context)
 
