@@ -15,13 +15,22 @@ from common.utils import safe_method_validator
 # POST signup
 # GET logout
 
+
+@safe_method_validator("", ["GET", "HEAD", "OPTIONS"])
+def get_root(request, *args, **kwargs):
+    if(not request.user.is_authenticated):
+        return redirect('accounts:get_login_page')
+    else:
+        return redirect('accounts:get_home_page')
+
+
 # *DONE* Check if user is logged in. If not, redirect to /login/
 # *DONE* Otherwise open home.html page
-@safe_method_validator("", ["GET", "HEAD", "OPTIONS"])
+@safe_method_validator(".\\accounts\\home.html", ["GET", "HEAD", "OPTIONS"])
 def get_home(request, *args, **kwargs):
     context = {}
     if(not request.user.is_authenticated):
-        return redirect('accounts:get_login')
+        return redirect('accounts:get_login_page')
     else:
         return render(request=request, template_name=".\\accounts\\home.html", context=context)
 
@@ -48,11 +57,11 @@ def post_login(request, *args, **kwargs):
     user = authenticate(request, username=posted_data_dict['username'], password=posted_data_dict['password'])
     if user is not None:
         login(request, user)
-        return redirect('get_home')
+        return redirect('accounts:get_home_page')
     else:
         # handle invalid login
         # then redirect
-        return redirect('accounts:get_login')
+        return redirect('accounts:get_login_page')
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `SIGNUP` VIEWS
@@ -77,10 +86,10 @@ def post_signup(request, *args, **kwargs):
     form = UserCreationForm(request.POST)
     if form.is_valid():
         form.save()
-        return redirect('accounts:get_login') # Assuming successful signup, redirect user to login
+        return redirect('accounts:get_login_page') # Assuming successful signup, redirect user to login
     else:
         form = UserCreationForm()
-    return redirect('accounts:get_signup', {'form': form})
+    return redirect('accounts:get_signup_page', {'form': form})
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `LOGOUT` VIEWS
@@ -92,5 +101,5 @@ def post_signup(request, *args, **kwargs):
 def post_logout(request, *args, **kwargs):
     context = {}
     logout(request)
-    return redirect('accounts:get_login')
+    return redirect('accounts:get_login_page')
 

@@ -20,6 +20,8 @@ from django.urls import path, include
 # Import views from my apps
 from recipes import views
 
+app_name = 'recipes'
+
 urlpatterns = [
     path('browse/', views.get_browse, name='get_browse_page'), # Display the browse page
     path('account/', views.get_account, name='get_account_page'), # Display the account page
@@ -33,4 +35,5 @@ urlpatterns = [
     path('search/', views.get_search, name='get_search_page'), # Display the search page
     path('search/submit', views.post_search, name='post_search'), # POST search
     path('search_results/', views.get_search_results, name='get_search_results_page'), # Display the search results page
+    path('search/my_recipes/', views.get_my_recipes, name='get_my_recipes_page')
 ]

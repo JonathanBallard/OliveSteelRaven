@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 
 from common.utils import safe_method_validator
@@ -56,8 +56,11 @@ def post_create(request, *args, **kwargs):
     recipe_id = 0 # get from posted_data_dict, then pass for the redirect
     
     if recipe_id == 0:
-        return HttpResponseRedirect('/create/')
-    return HttpResponseRedirect('/recipe/' + str(recipe_id) + '/') # Redirect to created recipe
+        return redirect('recipes:get_create_page')
+    return redirect('recipes:get_recipe_page', recipe_id=recipe_id) # Redirect to created recipe
+
+    # old method
+    # return HttpResponseRedirect('/recipe/' + str(recipe_id) + '/') 
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `UPDATE` VIEWS
@@ -79,8 +82,8 @@ def post_update(request, *args, **kwargs):
     recipe_id = 0 # get from posted_data_dict, then pass for the redirect
     
     if recipe_id == 0:
-        return HttpResponseRedirect('/update/')
-    return HttpResponseRedirect('/recipe/' + str(recipe_id) + '/') # Redirect to updated recipe
+        return redirect('recipes:get_update_page')
+    return redirect('recipes:get_recipe_page', recipe_id=recipe_id) # Redirect to updated recipe
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `DELETE` VIEWS
@@ -99,7 +102,7 @@ def get_delete(request, *args, **kwargs):
 def post_delete(request, *args, **kwargs):
     context = {}
     posted_data_dict = request.POST.copy()
-    return HttpResponseRedirect('/account/my_recipes') # Return to my recipes
+    return redirect('recipes:get_my_recipes_page') # Return to my recipes
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `SEARCH` VIEWS
@@ -122,6 +125,14 @@ def post_search(request, *args, **kwargs):
 # Open search_results.html
 @safe_method_validator(".\\recipes\\search_results.html", ["GET", "HEAD", "OPTIONS"])
 def get_search_results(request, *args, **kwargs):
+    context = {}
+    return render(request=request, template_name=".\\recipes\\search_results.html", context=context)
+
+# Open my recipes
+# Return search results for authenticated user
+@safe_method_validator(".\\recipes\\search_results.html", ["POST", "HEAD", "OPTIONS"])
+def get_my_recipes(request, *args, **kwargs):
+    posted_data_dict = request.POST.copy()
     context = {}
     return render(request=request, template_name=".\\recipes\\search_results.html", context=context)
 

@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.http import HttpRequest, HttpResponseBadRequest, HttpResponseForbidden
 
 
-def safe_method_validator(backup_render_template_path, safe_methods_list):
+def safe_method_validator(backup_render_template_path, safe_methods_list, requires_authentication=False):
     """
     Docstring for safe_method_validator
     
@@ -14,19 +14,22 @@ def safe_method_validator(backup_render_template_path, safe_methods_list):
     this view is called from any request method besides the intended method.
     
     Example Usage:
-    @safe_method_validator(".\\path\\to\\backup\\template.html", ["GET", "HEAD", "OPTIONS"])
+    @safe_method_validator(".\\path\\to\\backup\\template.html", ["GET", "HEAD", "OPTIONS"], requires_authentication=True)
     def my_get_method_view_function(request, _context):
         pass
     """
     def outer(view_func):
         @functools.wraps(view_func)
-        def wrapper(request: HttpRequest, _context, *args, **kwargs):
+        def wrapper(request: HttpRequest, *args, **kwargs):
+            context = {}
+            if('_context' in kwargs):
+                context = kwargs['_context']
             if request.method not in safe_methods_list:
-                return render(request=request, template_name=backup_render_template_path, context=_context)
-            elif(not request.user.is_authenticated):
+                return render(request=request, template_name=backup_render_template_path, context=context)
+            elif(requires_authentication and not request.user.is_authenticated):
                 return HttpResponseForbidden("This requires an authenticated user -> Blocked by: `accounts` views.py -> safe_method_validator()")
             elif(request.method in safe_methods_list):
-                return view_func(request, _context, *args, **kwargs)
+                return view_func(request, *args, **kwargs)
             else:
                 safe_methods = lambda a: ', '.join(a for a in safe_methods_list)
                 return HttpResponseBadRequest(f"Method {request.method} is not in list of safe_methods for this view function. Safe methods include [{safe_methods}]")

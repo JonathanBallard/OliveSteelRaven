@@ -21,8 +21,11 @@ from django.contrib.auth import views as auth_views
 # Import views from my apps
 from accounts import views
 
+app_name = 'accounts'
+
 urlpatterns = [
-    path('', views.get_home, name='get_home_page'), # Display the log-in page unless a user is logged in, in which case it shows the homepage
+    path('', views.get_root, name='get_root_page'), # Display the log-in page unless a user is logged in, in which case it shows the homepage
+    path('home/', views.get_home, name='get_home_page'), # Display the log-in page unless a user is logged in, in which case it shows the homepage
     path('login/', views.get_login, name='get_login_page'), # Display the log-in page
     path('login/submit', views.post_login, name='post_login'), # POST login
     path('signup/', views.get_signup, name='get_signup_page'), # Display the sign-up page

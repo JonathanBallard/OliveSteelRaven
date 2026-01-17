@@ -46,8 +46,10 @@ Ideally the plan will be repeatable and refinable for future projects.
 14. *DONE* Setup Database to work with Django
 15. *DONE* Creating Views in Django
 16. *DONE* Plan models based on Django Apps
-17. Create `accounts` views.py
-18. Create `recipes` views.py
+17. Create `accounts` urls.py
+18. Create `recipes` urls.py
+19. Create `accounts` views.py
+20. Create `recipes` views.py
 
 ### Fonts & Sizes
 
