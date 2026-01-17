@@ -1,6 +1,8 @@
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
+from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
 
 from common.utils import safe_method_validator
 
@@ -19,8 +21,9 @@ from common.utils import safe_method_validator
 def get_home(request, *args, **kwargs):
     context = {}
     if(not request.user.is_authenticated):
-        return HttpResponseRedirect('/login/')
-    return render(request=request, template_name=".\\accounts\\home.html", context=context)
+        return redirect('accounts:get_login')
+    else:
+        return render(request=request, template_name=".\\accounts\\home.html", context=context)
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `LOGIN` VIEWS
@@ -34,13 +37,22 @@ def get_login(request, *args, **kwargs):
 
 # POST Info
 # Validate User Information
+# use django.contrib.auth.authenticate(username="Tax", password="secret") for authentication
 # Tell Django user is authenticated
 # Then Open Homepage
 @safe_method_validator(".\\accounts\\login.html", ["POST", "HEAD", "OPTIONS"])
 def post_login(request, *args, **kwargs):
     context = {}
     posted_data_dict = request.POST.copy()
-    return HttpResponseRedirect('') # Assuming successful login, redirect user to homepage
+    
+    user = authenticate(request, username=posted_data_dict['username'], password=posted_data_dict['password'])
+    if user is not None:
+        login(request, user)
+        return redirect('get_home')
+    else:
+        # handle invalid login
+        # then redirect
+        return redirect('accounts:get_login')
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `SIGNUP` VIEWS
@@ -54,20 +66,31 @@ def get_signup(request, *args, **kwargs):
 
 # POST Info
 # Validate User Information
-# Bring user to login.html
+# Use the User.objects.create_user() function to create new users``
+# Authenticate the user
+# Bring user to home.html
 @safe_method_validator(".\\accounts\\signup.html", ["POST", "HEAD", "OPTIONS"])
 def post_signup(request, *args, **kwargs):
     context = {}
     posted_data_dict = request.POST.copy()
-    return HttpResponseRedirect('') # Assuming successful signup, redirect user to home
+    
+    form = UserCreationForm(request.POST)
+    if form.is_valid():
+        form.save()
+        return redirect('accounts:get_login') # Assuming successful signup, redirect user to login
+    else:
+        form = UserCreationForm()
+    return redirect('accounts:get_signup', {'form': form})
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `LOGOUT` VIEWS
 #&-----------------------------------------------------------------------------------------------------
 
 # logout
-@safe_method_validator(".\\accounts\\signup.html", ["GET", "HEAD", "OPTIONS"])
-def get_logout(request, *args, **kwargs):
+# Currently not in use, instead using Django's built-in logout view
+@safe_method_validator(".\\accounts\\signup.html", ["POST", "HEAD", "OPTIONS"])
+def post_logout(request, *args, **kwargs):
     context = {}
-    return render(request=request, template_name=".\\accounts\\login.html", context=context)
+    logout(request)
+    return redirect('accounts:get_login')
 

@@ -43,9 +43,11 @@ Ideally the plan will be repeatable and refinable for future projects.
 11. Create typography/font sizes
 12. Create color palettes
 13. *DONE* Create Django project and Django App(s)
-14. Setup Database to work with Django
-15. Creating Views and Routing in Django
-16. Plan models based on Django Apps
+14. *DONE* Setup Database to work with Django
+15. *DONE* Creating Views in Django
+16. *DONE* Plan models based on Django Apps
+17. Create `accounts` views.py
+18. Create `recipes` views.py
 
 ### Fonts & Sizes
 

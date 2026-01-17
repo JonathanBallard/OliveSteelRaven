@@ -24,7 +24,7 @@ class User(AbstractUser):
     """
 
     # Override username length to match varchar(50)
-    username = models.CharField(max_length=50, unique=True)
+    # username = models.CharField(max_length=50, unique=True)
 
     # Email: unique + validator + DB CHECK constraint equivalent
     email = models.EmailField(
@@ -40,7 +40,7 @@ class User(AbstractUser):
     )
 
     # Store Django's hashed password in column "password_hash" (TEXT)
-    password = models.TextField(db_column="password_hash")
+    # password = models.TextField(db_column="password_hash")
 
     # Text column in SQL
     profile_image_url = models.TextField(null=True, blank=True, default="./assets/icons/users/default_user.png")
@@ -63,4 +63,4 @@ class User(AbstractUser):
         ]
 
     def __str__(self) -> str:
-        return self.username
+        return f"User: username={self.username}, email={self.email}, first_name={self.first_name}, last_name={self.last_name}"

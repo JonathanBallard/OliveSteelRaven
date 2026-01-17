@@ -16,15 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
 # Import views from my apps
 from accounts import views
 
 urlpatterns = [
-    path('', views.get_home, name='get_home'), # Display the log-in page unless a user is logged in, in which case it shows the homepage
+    path('', views.get_home, name='get_home_page'), # Display the log-in page unless a user is logged in, in which case it shows the homepage
     path('login/', views.get_login, name='get_login_page'), # Display the log-in page
     path('login/submit', views.post_login, name='post_login'), # POST login
     path('signup/', views.get_signup, name='get_signup_page'), # Display the sign-up page
     path('signup/submit', views.post_signup, name='post_signup'), # POST sign-up
-    path('logout/', views.get_logout, name='get_logout'), # GET logout
+    # path('logout/', views.post_logout, name='get_logout'), # POST logout
+    path('logout/', auth_views.LogoutView.as_view(next_page=""), name="logout") # The Default Logout View
 ]
