@@ -29,8 +29,9 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html', next_page=reverse_lazy('accounts:get_home_page')), name='login'), # Django's Default Login View
     # path('login/', views.login, name='login'), # Display the log-in page
     # path('login/submit', views.post_login, name='post_login'), # POST login
-    path('signup/', views.get_signup, name='get_signup_page'), # Display the sign-up page
-    path('signup/submit', views.post_signup, name='post_signup'), # POST sign-up
+    path('signup/', views.signup, name='signup'), # Display the sign-up page
+    # path('signup/', views.get_signup, name='get_signup_page'), # Display the sign-up page
+    # path('signup/submit', views.post_signup, name='post_signup'), # POST sign-up
     path('logout/', auth_views.LogoutView.as_view(next_page=reverse_lazy('accounts:get_home_page')), name="logout") # Django's Default Logout View
     # path('logout/', views.post_logout, name='get_logout'), # POST logout
 ]

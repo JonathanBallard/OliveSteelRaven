@@ -33,7 +33,7 @@
     </form>
     {% else %}
     <p>You are not logged in.</p>
-    <a href="{% url 'accounts:get_signup_page' %}">Sign Up</a>
+    <a href="{% url 'accounts:signup' %}">Sign Up</a>
     <a href="{% url 'accounts:login' %}">Log In</a>
     {% endif %}
 

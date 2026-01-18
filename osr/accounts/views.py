@@ -63,7 +63,7 @@ def get_home(request, *args, **kwargs):
 # Not currently in use, using Django's default login view
 # If we revert to this, it doesn't currently work, and requires renaming to 'login' not 'my_login'
 @csrf_protect
-@safe_method_validator(".\\accounts\\login.html", ["GET", "HEAD", "OPTIONS"])
+@safe_method_validator(".\\accounts\\login.html", ["GET", "POST", "HEAD", "OPTIONS"])
 def my_login(request, *args, **kwargs):
     """
     Docstring for login
@@ -102,117 +102,52 @@ def my_login(request, *args, **kwargs):
     
     return render(request=request, template_name=".\\accounts\\login.html", context=context)
 
-# *DONE* Open login.html page
-# Not currently in use, using Django's default login view
-@safe_method_validator(".\\accounts\\login.html", ["GET", "HEAD", "OPTIONS"])
-def get_login(request, *args, **kwargs):
-    """
-    Docstring for get_login
-    
-    :param request: HTTP Request
-    
-    Returns the Login Page and Form
-    """
-    context = {}
-    form = UserLoginForm
-    context['form'] = UserLoginForm(request.GET)
-    context['form_action'] = "login/submit"
-    
-    return render(request=request, template_name=".\\accounts\\login.html", context=context)
-
-# POST Info
-# Validate User Information
-# *DONE* use django.contrib.auth.authenticate(username="Tax", password="secret") for authentication
-# *DONE* Then Open Homepage
-# Or if fails, use Django's `messages` framework to display
-@csrf_protect
-@safe_method_validator(".\\accounts\\login.html", ["POST", "HEAD", "OPTIONS"])
-def post_login(request, *args, **kwargs):
-    """
-    Docstring for post_login
-    
-    :param request: HTTP Request
-
-    Authenticates User and redirects to homepage upon success or displays failure message upon failure
-    """
-    context = {}
-    posted_data_dict = request.POST.copy()
-    
-    form = UserLoginForm(request.POST)
-    context['form'] = form
-    user = authenticate(request, username=posted_data_dict['username'], password=posted_data_dict['password'])
-    if user is not None:
-        logger.debug("User Authenticated")
-        messages.success(request, "User Logged In Succesfully")
-        login(request, user)
-        return redirect('accounts:get_home_page')
-    else:
-        logger.debug("User NOT Authenticated")
-        messages.error(request, "User Login Failed")
-        # handle invalid login
-        # then redirect with message
-        # return redirect('accounts:get_login_page')
-        return redirect('accounts:login')
-
-
 #&-----------------------------------------------------------------------------------------------------
 #^ START `SIGNUP` VIEWS
 #&-----------------------------------------------------------------------------------------------------
 
 # *DONE* Open signup.html
-@safe_method_validator(".\\accounts\\signup.html", ["GET", "HEAD", "OPTIONS"])
-def get_signup(request, *args, **kwargs):
+@csrf_protect
+@safe_method_validator(".\\accounts\\signup.html", ["GET", "POST", "HEAD", "OPTIONS"])
+def signup(request, *args, **kwargs):
     """
-    Docstring for get_signup
+    Docstring for signup
     
     :param request: HTTP Request
     
     Renders Signup Page and Form
     """
     context = {}
-    form = UserModelForm(request.GET)
-    # form = UserCreationForm(request.GET) # uses default Auth.User model
-    context['form'] = form
-    return render(request=request, template_name=".\\accounts\\signup.html", context=context)
-
-# POST Info
-# Validate User Information
-# Use the User.objects.create_user() function to create new users``
-# Authenticate the user
-# Bring user to home.html
-@csrf_protect
-@safe_method_validator(".\\accounts\\signup.html", ["POST", "HEAD", "OPTIONS"])
-def post_signup(request, *args, **kwargs):
-    """
-    Docstring for post_signup
-    
-    :param request: HTTP Request
-    
-    Creates new User and Redirects to Login on Success or Message on Failure
-    """
-    context = {}
-    posted_data_dict = request.POST.copy()
-    
-    form = UserModelForm(request.POST)
-    User = get_user_model()
-    
-    logger.debug("Received Signup POST")
-    if form.is_valid():
-        logger.debug("Form Valid")
-        user = User.objects.create_user(first_name=request.POST.get('first_name'), last_name=request.POST.get('last_name'), username=request.POST.get('username'), email=request.POST.get('email'), password=request.POST.get('password1'))
+    if(request.method == 'GET'):
+        form = UserModelForm(request.GET)
+        # form = UserCreationForm(request.GET) # uses default Auth.User model
+        context['form'] = form
+        return render(request=request, template_name=".\\accounts\\signup.html", context=context)
+    elif(request.method == "POST"):
+        posted_data_dict = request.POST.copy()
         
-        user.save()
-        messages.success(request, "User Was Succesfully Created")
-        # return redirect('accounts:get_login_page') # Assuming successful signup, redirect user to login
-        return redirect('accounts:login') # Assuming successful signup, redirect user to login
-    elif not form.is_valid:
-        messages.error(request, "User Was Not Created")
-        form = UserModelForm()
+        form = UserModelForm(request.POST)
+        User = get_user_model()
+        
+        logger.debug("Received Signup POST")
+        if form.is_valid():
+            logger.debug("Form Valid")
+            user = User.objects.create_user(first_name=request.POST.get('first_name'), last_name=request.POST.get('last_name'), username=request.POST.get('username'), email=request.POST.get('email'), password=request.POST.get('password1'))
+            
+            user.save()
+            messages.success(request, "User Was Succesfully Created")
+            # return redirect('accounts:get_login_page') # Assuming successful signup, redirect user to login
+            return redirect('accounts:login') # Assuming successful signup, redirect user to login
+        elif not form.is_valid:
+            messages.error(request, "User Was Not Created")
+            form = UserModelForm()
+        else:
+            messages.error(request, "User Was Not Created: Other Error")
+            form = UserModelForm()
+        context['form'] = form
+        return redirect('accounts:get_signup')
     else:
-        messages.error(request, "User Was Not Created: Other Error")
-        form = UserModelForm()
-    context['form'] = form
-    return redirect('accounts:get_signup_page')
+        return render(request=request, template_name=".\\accounts\\signup.html", context=context)
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `LOGOUT` VIEWS
