@@ -134,6 +134,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Login Redirect URL
+LOGIN_REDIRECT_URL = 'home/'
+
 # Logging
 LOGGING = {
     'version': 1,

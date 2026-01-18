@@ -4,7 +4,7 @@ import logging
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth import get_user_model, authenticate, logout, login
 from django.contrib.auth.forms import UserCreationForm
 from django.views.decorators.csrf import csrf_protect
 
@@ -58,6 +58,49 @@ def get_home(request, *args, **kwargs):
 #&-----------------------------------------------------------------------------------------------------
 #^ START `LOGIN` VIEWS
 #&-----------------------------------------------------------------------------------------------------
+
+# *DONE* Open login.html page
+# Not currently in use, using Django's default login view
+# If we revert to this, it doesn't currently work, and requires renaming to 'login' not 'my_login'
+@csrf_protect
+@safe_method_validator(".\\accounts\\login.html", ["GET", "HEAD", "OPTIONS"])
+def my_login(request, *args, **kwargs):
+    """
+    Docstring for login
+    
+    :param request: HTTP Request
+    
+    Returns the Login Page and Form
+    """
+    context = {}
+    
+    if(request.method == 'GET'):
+        form = UserLoginForm
+        context['form'] = UserLoginForm(request.GET)
+        context['form_action'] = "login/submit"
+    elif(request.method == "POST"):
+        logger.debug("POST login")
+        context = {}
+        posted_data_dict = request.POST.copy()
+        
+        form = UserLoginForm(request.POST)
+        context['form'] = form
+        user = authenticate(request, username=request.POST.get('username'), password=request.POST.get('password1'))
+        logger.debug("AUTHENTICATION attempted")
+        if user is not None:
+            logger.debug("User Authenticated")
+            messages.success(request, "User Logged In Succesfully")
+            login(request, user)
+            return redirect('accounts:get_home_page')
+        else:
+            logger.debug("User NOT Authenticated")
+            messages.error(request, "User Login Failed")
+            # handle invalid login
+            # then redirect with message
+            # return redirect('accounts:get_login_page')
+            return redirect('accounts:login')
+    
+    return render(request=request, template_name=".\\accounts\\login.html", context=context)
 
 # *DONE* Open login.html page
 # Not currently in use, using Django's default login view
@@ -151,18 +194,22 @@ def post_signup(request, *args, **kwargs):
     posted_data_dict = request.POST.copy()
     
     form = UserModelForm(request.POST)
-    logger.debug("post signup")
+    User = get_user_model()
+    
+    logger.debug("Received Signup POST")
     if form.is_valid():
-        form.save()
-        logger.debug("saved form")
+        logger.debug("Form Valid")
+        user = User.objects.create_user(first_name=request.POST.get('first_name'), last_name=request.POST.get('last_name'), username=request.POST.get('username'), email=request.POST.get('email'), password=request.POST.get('password1'))
+        
+        user.save()
         messages.success(request, "User Was Succesfully Created")
         # return redirect('accounts:get_login_page') # Assuming successful signup, redirect user to login
         return redirect('accounts:login') # Assuming successful signup, redirect user to login
     elif not form.is_valid:
         messages.error(request, "User Was Not Created")
-        logger.debug("Attempted to save invalid form!!")
         form = UserModelForm()
     else:
+        messages.error(request, "User Was Not Created: Other Error")
         form = UserModelForm()
     context['form'] = form
     return redirect('accounts:get_signup_page')
