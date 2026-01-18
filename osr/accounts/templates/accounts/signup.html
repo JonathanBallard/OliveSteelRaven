@@ -34,7 +34,7 @@
     {% else %}
     <p>You are not logged in.</p>
     <a href="{% url 'accounts:get_signup_page' %}">Sign Up</a>
-    <a href="{% url 'accounts:get_login_page' %}">Log In</a>
+    <a href="{% url 'accounts:login' %}">Log In</a>
     {% endif %}
 
     {% if messages %}

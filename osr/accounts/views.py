@@ -35,7 +35,8 @@ def get_root(request, *args, **kwargs):
     Else redirects to login
     """
     if(not request.user.is_authenticated):
-        return redirect('accounts:get_login_page')
+        # return redirect('accounts:get_login_page')
+        return redirect('accounts:login')
     else:
         return redirect('accounts:get_home_page')
 
@@ -59,6 +60,7 @@ def get_home(request, *args, **kwargs):
 #&-----------------------------------------------------------------------------------------------------
 
 # *DONE* Open login.html page
+# Not currently in use, using Django's default login view
 @safe_method_validator(".\\accounts\\login.html", ["GET", "HEAD", "OPTIONS"])
 def get_login(request, *args, **kwargs):
     """
@@ -106,7 +108,8 @@ def post_login(request, *args, **kwargs):
         messages.error(request, "User Login Failed")
         # handle invalid login
         # then redirect with message
-        return redirect('accounts:get_login_page')
+        # return redirect('accounts:get_login_page')
+        return redirect('accounts:login')
 
 
 #&-----------------------------------------------------------------------------------------------------
@@ -153,7 +156,8 @@ def post_signup(request, *args, **kwargs):
         form.save()
         logger.debug("saved form")
         messages.success(request, "User Was Succesfully Created")
-        return redirect('accounts:get_login_page') # Assuming successful signup, redirect user to login
+        # return redirect('accounts:get_login_page') # Assuming successful signup, redirect user to login
+        return redirect('accounts:login') # Assuming successful signup, redirect user to login
     elif not form.is_valid:
         messages.error(request, "User Was Not Created")
         logger.debug("Attempted to save invalid form!!")
@@ -182,5 +186,6 @@ def post_logout(request, *args, **kwargs):
     context = {}
     logout(request)
     messages.success(request, "User Was Logged Out")
-    return redirect('accounts:get_login_page')
+    return redirect('accounts:login')
+    # return redirect('accounts:get_login_page')
 
