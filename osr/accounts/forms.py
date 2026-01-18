@@ -9,3 +9,7 @@ class UserModelForm(ModelForm):
         model = get_user_model()
         fields = ["first_name", "last_name", "username", "email", "password"]
 
+class UserLoginForm(ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ["username", "password"]

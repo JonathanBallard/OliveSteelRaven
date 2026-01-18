@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, reverse, reverse_lazy
 from django.contrib.auth import views as auth_views
 
 # Import views from my apps
@@ -31,5 +31,5 @@ urlpatterns = [
     path('signup/', views.get_signup, name='get_signup_page'), # Display the sign-up page
     path('signup/submit', views.post_signup, name='post_signup'), # POST sign-up
     # path('logout/', views.post_logout, name='get_logout'), # POST logout
-    path('logout/', auth_views.LogoutView.as_view(next_page=""), name="logout") # The Default Logout View
+    path('logout/', auth_views.LogoutView.as_view(next_page=reverse_lazy('accounts:get_home_page')), name="logout") # The Default Logout View
 ]

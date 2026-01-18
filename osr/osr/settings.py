@@ -133,3 +133,26 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False, # Keep existing loggers enabled
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        '': { # This is the "root" logger, handling all messages
+            'handlers': ['console'],
+            'level': 'DEBUG', # Set to DEBUG to see all messages
+            'propagate': True,
+        },
+        'django': { # Controls Django's internal logging
+            'handlers': ['console'],
+            'level': 'INFO', # Or DEBUG if you want verbose Django internal logs
+            'propagate': False,
+        },
+    },
+}

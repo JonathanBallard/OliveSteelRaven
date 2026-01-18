@@ -39,8 +39,8 @@ class User(AbstractUser):
         ],
     )
 
-    # Store Django's hashed password in column "password_hash" (TEXT)
-    # password = models.TextField(db_column="password_hash")
+    # Store Django's hashed password in column "password" (TEXT)
+    # password = models.TextField(db_column="password")
 
     # Text column in SQL
     profile_image_url = models.TextField(null=True, blank=True, default="./assets/icons/users/default_user.png")
