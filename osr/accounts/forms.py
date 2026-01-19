@@ -6,7 +6,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
 class UserModelForm(UserCreationForm):
-    
     first_name = forms.CharField()
     last_name = forms.CharField()
     class Meta:

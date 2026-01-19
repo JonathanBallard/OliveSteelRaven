@@ -186,21 +186,20 @@ def account(request, *args, **kwargs):
     Renders account page and allows user to change some basic information
     """
     context = {}
-    form = UserUpdateForm
     user = request.user
+    form = UserUpdateForm
     
     if(not user.is_authenticated):
         return redirect('accounts:login')
     
     if(request.method == "GET"):
         # add all appropriate user info to context (to avoid passing hashed passwords)
-        for field in user:
-            if(field != "password" and field != "password1" and field != "password2"):
-                context["user"][field] = user[field]
-        
-        return render(request=request, template_name=".\\accounts\\account_page.html", context=context)
+        context['user'] = user
+        context['form'] = form
+        return render(request=request, template_name=".\\accounts\\account.html", context=context)
     elif(request.method == "POST"):
-        form = UserUpdateForm(request.POST)
+        form = UserUpdateForm(request.POST, instance=request.user)
+        context['form'] = form
         if(form.is_valid):
             messages.success(request, "User Account Information Updated!")
             form.save()
