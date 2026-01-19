@@ -187,12 +187,13 @@ def account(request, *args, **kwargs):
     """
     context = {}
     user = request.user
-    form = UserUpdateForm
+    
     
     if(not user.is_authenticated):
         return redirect('accounts:login')
     
     if(request.method == "GET"):
+        form = UserUpdateForm(instance=request.user)
         # add all appropriate user info to context (to avoid passing hashed passwords)
         context['user'] = user
         context['form'] = form
