@@ -23,17 +23,12 @@ from recipes import views
 app_name = 'recipes'
 
 urlpatterns = [
-    path('browse/', views.get_browse, name='get_browse_page'), # Display the browse page
-    path('account/', views.get_account, name='get_account_page'), # Display the account page
-    path('recipe/<str:recipe_id>/', views.get_recipe, name='get_recipe_page'), # Display the recipe details page
-    path('create/', views.get_create, name='get_create_page'), # Display the create page
-    path('create/submit', views.post_create, name='post_create'), # POST create
-    path('update/', views.get_update, name='get_update_page'), # Display the update page
-    path('update/submit', views.post_update, name='post_update'), # POST update
-    path('delete/', views.get_delete, name='get_delete_page'), # Display the delete page
-    path('delete/submit', views.post_delete, name='post_delete'), # POST delete
-    path('search/', views.get_search, name='get_search_page'), # Display the search page
-    path('search/submit', views.post_search, name='post_search'), # POST search
-    path('search_results/', views.get_search_results, name='get_search_results_page'), # Display the search results page
-    path('search/my_recipes/', views.get_my_recipes, name='get_my_recipes_page')
+    path('browse/', views.browse, name='browse'), # Display the browse page
+    path('recipe/<str:recipe_id>/', views.recipe, name='view_recipe'), # Display the recipe details page
+    path('create/', views.create, name='create_recipe'), # Display the create page
+    path('update/', views.update, name='update_recipe'), # Display the update page
+    path('delete/', views.delete, name='delete_recipe'), # Display the delete page
+    path('search/', views.search, name='search'), # Display the search page
+    path('search_results/', views.search_results, name='search_results'), # Display the search results page
+    path('search/my_recipes/', views.my_recipes, name='my_recipes')
 ]
