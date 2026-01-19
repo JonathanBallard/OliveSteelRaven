@@ -31,8 +31,7 @@ def root(request, *args, **kwargs):
     
     :param request: HTTP Request
     
-    If user logged in, redirects to homepage
-    Else redirects to login
+    GET: Logs user in, or redirects logged-in users to homepage
     """
     if(not request.user.is_authenticated):
         # return redirect('accounts:get_login_page')
@@ -50,7 +49,7 @@ def home(request, *args, **kwargs):
     
     :param request: HTTP Request
     
-    Returns the homepage.
+    GET: Renders homepage
     """
     context = {}
     return render(request=request, template_name=".\\accounts\\home.html", context=context)
@@ -70,7 +69,8 @@ def my_login(request, *args, **kwargs):
     
     :param request: HTTP Request
     
-    Returns the Login Page and Form
+    GET: Renders Login Form Template
+    POST: Logs user in
     """
     context = {}
     
@@ -115,7 +115,8 @@ def signup(request, *args, **kwargs):
     
     :param request: HTTP Request
     
-    Renders Signup Page and Form
+    GET: Renders Signup Form Template
+    POST: Creates New User
     """
     context = {}
     if(request.method == 'GET'):
@@ -163,7 +164,7 @@ def my_logout(request, *args, **kwargs):
     
     :param request: HTTP Request
     
-    Logs the user out. Currently not in use.
+    POST: Logs User Out - Currently not in use
     """
     context = {}
     logout(request)
@@ -183,7 +184,8 @@ def account(request, *args, **kwargs):
     
     :param request: HTTP Request
     
-    Renders account page and allows user to change some basic information
+    GET: Renders Account Details Update Form Template
+    POST: Updates User Account Details
     """
     context = {}
     user = request.user

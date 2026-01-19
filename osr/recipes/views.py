@@ -10,18 +10,14 @@ from common.utils import safe_method_validator
 
 # Create your views here.
 
-# GET Browse
-# GET Account
-# GET Recipe
-# GET Create
-# POST Create
-# GET Update
-# POST Update
-# GET Delete
-# POST Delete
-# GET Search
-# POST Search
-# GET Search Results
+# Browse
+# Account
+# Recipe
+# Create
+# Update
+# Delete
+# Search
+# Search Results
 
 # Open browse.html
 @safe_method_validator(".\\recipes\\browse.html", ["GET", "HEAD", "OPTIONS"])
