@@ -17,3 +17,8 @@ class UserLoginForm(ModelForm):
     class Meta:
         model = get_user_model()
         fields = ["username", "password"]
+
+class UserUpdateForm(ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ["first_name", "last_name", "email"]

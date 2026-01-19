@@ -24,14 +24,12 @@ from accounts import views
 app_name = 'accounts'
 
 urlpatterns = [
-    path('', views.get_root, name='get_root_page'), # Display the log-in page unless a user is logged in, in which case it shows the homepage
-    path('home/', views.get_home, name='get_home_page'), # Display the log-in page unless a user is logged in, in which case it shows the homepage
-    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html', next_page=reverse_lazy('accounts:get_home_page')), name='login'), # Django's Default Login View
-    # path('login/', views.login, name='login'), # Display the log-in page
-    # path('login/submit', views.post_login, name='post_login'), # POST login
+    path('', views.root, name='root_page'), # Display the log-in page unless a user is logged in, in which case it shows the homepage
+    path('home/', views.home, name='home_page'), # Display the log-in page unless a user is logged in, in which case it shows the homepage
     path('signup/', views.signup, name='signup'), # Display the sign-up page
-    # path('signup/', views.get_signup, name='get_signup_page'), # Display the sign-up page
-    # path('signup/submit', views.post_signup, name='post_signup'), # POST sign-up
-    path('logout/', auth_views.LogoutView.as_view(next_page=reverse_lazy('accounts:get_home_page')), name="logout") # Django's Default Logout View
-    # path('logout/', views.post_logout, name='get_logout'), # POST logout
+    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html', next_page=reverse_lazy('accounts:home_page')), name='login'), # Django's Default Login View
+    # path('login/', views.my_login, name='login'), # Display my log-in page
+    path('logout/', auth_views.LogoutView.as_view(next_page=reverse_lazy('accounts:home_page')), name="logout"), # Django's Default Logout View
+    # path('logout/', views.my_logout, name='logout'), # POST my logout
+    path('account/', views.account, name='account'), #type: ignore
 ]

@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model, authenticate, logout, login
 from django.contrib.auth.forms import UserCreationForm
 from django.views.decorators.csrf import csrf_protect
 
-from accounts.forms import UserModelForm, UserLoginForm
+from accounts.forms import UserModelForm, UserLoginForm, UserUpdateForm
 
 from common.utils import safe_method_validator
 
@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 @safe_method_validator("", ["GET", "HEAD", "OPTIONS"])
-def get_root(request, *args, **kwargs):
+def root(request, *args, **kwargs):
     """
     Docstring for get_root
     
@@ -38,13 +38,13 @@ def get_root(request, *args, **kwargs):
         # return redirect('accounts:get_login_page')
         return redirect('accounts:login')
     else:
-        return redirect('accounts:get_home_page')
+        return redirect('accounts:home_page')
 
 
 # *DONE* Check if user is logged in. If not, redirect to /login/
 # *DONE* Otherwise open home.html page
 @safe_method_validator(".\\accounts\\home.html", ["GET", "HEAD", "OPTIONS"])
-def get_home(request, *args, **kwargs):
+def home(request, *args, **kwargs):
     """
     Docstring for get_home
     
@@ -91,7 +91,7 @@ def my_login(request, *args, **kwargs):
             logger.debug("User Authenticated")
             messages.success(request, "User Logged In Succesfully")
             login(request, user)
-            return redirect('accounts:get_home_page')
+            return redirect('accounts:home_page')
         else:
             logger.debug("User NOT Authenticated")
             messages.error(request, "User Login Failed")
@@ -157,7 +157,7 @@ def signup(request, *args, **kwargs):
 # Currently not in use, instead using Django's built-in logout view
 @csrf_protect
 @safe_method_validator(".\\accounts\\signup.html", ["POST", "HEAD", "OPTIONS"])
-def post_logout(request, *args, **kwargs):
+def my_logout(request, *args, **kwargs):
     """
     Docstring for post_logout
     
@@ -171,3 +171,39 @@ def post_logout(request, *args, **kwargs):
     return redirect('accounts:login')
     # return redirect('accounts:get_login_page')
 
+#&-----------------------------------------------------------------------------------------------------
+#^ START `ACCOUNTS` VIEWS
+#&-----------------------------------------------------------------------------------------------------
+
+@csrf_protect
+@safe_method_validator(".\\accounts\\signup.html", ["GET", "POST", "HEAD", "OPTIONS"])
+def account(request, *args, **kwargs):
+    """
+    Docstring for account
+    
+    :param request: HTTP Request
+    
+    Renders account page and allows user to change some basic information
+    """
+    context = {}
+    form = UserUpdateForm
+    user = request.user
+    
+    if(not user.is_authenticated):
+        return redirect('accounts:login')
+    
+    if(request.method == "GET"):
+        # add all appropriate user info to context (to avoid passing hashed passwords)
+        for field in user:
+            if(field != "password" and field != "password1" and field != "password2"):
+                context["user"][field] = user[field]
+        
+        return render(request=request, template_name=".\\accounts\\account_page.html", context=context)
+    elif(request.method == "POST"):
+        form = UserUpdateForm(request.POST)
+        if(form.is_valid):
+            messages.success(request, "User Account Information Updated!")
+            form.save()
+        else:
+            messages.error(request, "Updating User Account Failed")
+        return redirect('accounts:account')
