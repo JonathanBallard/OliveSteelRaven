@@ -1,10 +1,25 @@
 
 # recipes\models.py
 
+from __future__ import annotations
+
+import re
+
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
 from django.core.validators import MaxValueValidator, MinValueValidator
+
+def normalize_ingredient_name(raw: str) -> str:
+    """
+    Normalization used for de-duping + searching.
+    V1: strip, collapse whitespace, lowercase.
+    """
+    if raw is None:
+        return ""
+    s = raw.strip()
+    s = re.sub(r"\s+", " ", s)
+    return s.lower()
 
 
 class Category(models.Model):
@@ -28,10 +43,28 @@ class Tag(models.Model):
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=120, unique=True)
+    """
+    Global ingredient catalog shared across all users.
+    Prevent duplicates with a normalized unique field.
+    """
+    name = models.CharField(max_length=120)
+    name_normalized = models.CharField(max_length=120, unique=True, db_index=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "ingredients"
+        indexes = [
+            # Useful for “contains”/prefix-ish queries on normalized names
+            models.Index(fields=["name_normalized"], name="idx_ing_norm"),
+        ]
+
+    def save(self, *args, **kwargs):
+        self.name = (self.name or "").strip()
+        if not self.name:
+            raise ValueError("Ingredient.name cannot be empty.")
+        self.name_normalized = normalize_ingredient_name(self.name)
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.name
@@ -50,13 +83,11 @@ class Recipe(models.Model):
 
     short_description = models.CharField(
         max_length=300,
-        null=True,
         blank=True,
         default="This is my new recipe.",
         help_text="Type a short description of 300 characters or less. This will show up when people search for your recipe."
     )
     long_description = models.TextField(
-        null=True,
         blank=True,
         default="Let me tell you a little about my recipe.",
         help_text="Type a description of your recipe. Talk about its history, origins, or your creative process here."
@@ -65,7 +96,6 @@ class Recipe(models.Model):
     # ✅ Single text box (textarea) for all steps/instructions
     # Store as plain text; users can separate steps with new lines, numbers, bullets, etc.
     instructions = models.TextField(
-        null=True,
         blank=True,
         default="",
         help_text="Type the full recipe instructions here. Use new lines for steps if you like.",
@@ -80,7 +110,8 @@ class Recipe(models.Model):
         related_name="recipes",
     )
 
-    prep_time_minutes = models.IntegerField()
+    prep_time_minutes = models.IntegerField(default=0)
+    
     difficulty = models.IntegerField(
         default=1,
         validators=[
@@ -147,8 +178,8 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, db_column="recipe_id")
     ingredient = models.ForeignKey(Ingredient, on_delete=models.RESTRICT, db_column="ingredient_id")
 
-    line_order = models.IntegerField(default=1)
-    quantity = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True)
+    line_order = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    quantity = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True, validators=[MinValueValidator(0)])
     unit_text = models.CharField(max_length=40, null=True, blank=True)
     prep_note = models.CharField(max_length=200, null=True, blank=True)
 
@@ -157,8 +188,8 @@ class RecipeIngredient(models.Model):
         constraints = [
             # Composite PK in SQL → UniqueConstraint in Django
             models.UniqueConstraint(
-                fields=["recipe", "ingredient", "line_order"],
-                name="recipe_ingredients_pk",
+                fields=["recipe", "line_order"],
+                name="uq_recipe_line_order_pk",
             ),
             models.CheckConstraint(
                 condition=Q(line_order__gt=0),
@@ -169,6 +200,12 @@ class RecipeIngredient(models.Model):
             models.Index(fields=["recipe"]),
             models.Index(fields=["ingredient"]),
         ]
+        
+    def __str__(self) -> str:
+        qty = f"{self.quantity:g} " if self.quantity is not None else ""
+        unit = f"{self.unit_text} " if self.unit_text else ""
+        return f"{self.recipe}: {qty}{unit}{self.ingredient.name}"
+        # return f"{self.recipe_id}: {qty}{unit}{self.ingredient.name}"
 
 
 class RecipeFavorite(models.Model):

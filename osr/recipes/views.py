@@ -4,7 +4,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import get_user_model, authenticate, logout, login
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.views.decorators.csrf import csrf_protect
+
+from .forms import RecipeForm, RecipeIngredientFormSet
 
 from common.utils import safe_method_validator
 
@@ -64,18 +68,35 @@ def create(request, *args, **kwargs):
     context = {}
     
     if(request.method == "GET"):
-        return render(request=request, template_name=".\\recipes\\create.html", context=context)
+        form = RecipeForm()
+        formset = RecipeIngredientFormSet(prefix="ingredients")
+
+        context = {
+            "form": form,
+            "formset": formset,
+        }
+        return render(request=request, template_name=".\\recipes\\recipe_form.html", context=context)
     # POST create recipe page
     # If POST fails, redirect to create recipe page
     # Otherwise get newly created recipe ID, and redirect to that details page
     elif(request.method == "POST"):
-        posted_data_dict = request.POST.copy()
-        recipe_id = 0 # get from posted_data_dict, then pass for the redirect
+        form = RecipeForm(request.POST)
+        formset = RecipeIngredientFormSet(request.POST, prefix="ingredients")
         
-        if recipe_id == 0:
-            return redirect('recipes:get_create_page')
-        return redirect('recipes:recipe', recipe_id=recipe_id) # Redirect to created recipe
-    return render(request=request, template_name=".\\recipes\\create.html", context=context)
+        if form.is_valid() and formset.is_valid():
+            with transaction.atomic():
+                recipe = form.save(commit=False)
+                recipe.owner = request.user
+                recipe.save()
+                
+                # Save M2M (tags) after recipe exists
+                form.save_m2m()
+                
+                # Attach recipe to formset and save ingredient lines
+                formset.instance = recipe
+                formset.save()
+        return redirect('recipes:recipe', pk=recipe.pk) # Redirect to created recipe
+    return render(request=request, template_name=".\\recipes\\recipe_form.html", context=context)
 
 
 
