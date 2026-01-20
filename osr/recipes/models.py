@@ -4,6 +4,7 @@
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Category(models.Model):
@@ -45,18 +46,20 @@ class Recipe(models.Model):
         related_name="recipes_authored",
     )
 
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=100)
 
     short_description = models.CharField(
-        max_length=500,
+        max_length=300,
         null=True,
         blank=True,
         default="This is my new recipe.",
+        help_text="Type a short description of 300 characters or less. This will show up when people search for your recipe."
     )
     long_description = models.TextField(
         null=True,
         blank=True,
         default="Let me tell you a little about my recipe.",
+        help_text="Type a description of your recipe. Talk about its history, origins, or your creative process here."
     )
 
     # ✅ Single text box (textarea) for all steps/instructions
@@ -78,6 +81,13 @@ class Recipe(models.Model):
     )
 
     prep_time_minutes = models.IntegerField()
+    difficulty = models.IntegerField(
+        default=1,
+        validators=[
+            MaxValueValidator(5),
+            MinValueValidator(1)
+        ]
+    )
 
     # SQL: integer CHECK (user_rating >= 1 AND user_rating <= 5), nullable
     user_rating = models.IntegerField(null=True, blank=True)

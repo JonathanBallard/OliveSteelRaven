@@ -1,5 +1,4 @@
 from django import forms
-from django.forms import ModelForm
 from django.forms.widgets import PasswordInput
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
@@ -11,12 +10,12 @@ class UserModelForm(UserCreationForm):
         model = get_user_model()
         fields = ["first_name", "last_name", "username", "email", "password1", "password2"]
 
-class UserLoginForm(ModelForm):
+class UserLoginForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ["username", "password"]
 
-class UserUpdateForm(ModelForm):
+class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ["first_name", "last_name", "email"]
