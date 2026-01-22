@@ -3,26 +3,71 @@
 from __future__ import annotations
 
 import re
+from typing import Iterable, List
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.forms import BaseInlineFormSet, inlineformset_factory
 
-from .models import Ingredient, Recipe, RecipeIngredient
+from .models import Ingredient, Recipe, RecipeIngredient, Tag
 
 
 _whitespace_re = re.compile(r"\s+")
 
 
+def _collapse_ws(s: str) -> str:
+    return _whitespace_re.sub(" ", (s or "").strip())
+
+
 def normalize_ingredient_name(raw: str) -> str:
     """Keep this consistent with Ingredient.name_normalized."""
-    s = (raw or "").strip()
-    s = _whitespace_re.sub(" ", s)
+    s = _collapse_ws(raw)
     return s.lower()
 
 
+def normalize_tag_name(raw: str) -> str:
+    """
+    Canonicalize tag input to reduce duplicates caused by spacing/case.
+    We store tags using collapsed whitespace (e.g. "meal prep"), and we match case-insensitively.
+    """
+    return _collapse_ws(raw)
+
+
 class RecipeForm(forms.ModelForm):
+    """
+    Supports:
+    - Selecting existing tags (via the tags M2M field)
+    - Creating up to 3 tags via free-text inputs (tag_1..tag_3)
+    - Deduping by normalized value (collapsed whitespace + case-insensitive match)
+    - Enforcing max 3 total tags per recipe (selected + newly created)
+    """
+
+    tag_1 = forms.CharField(
+        max_length=24,
+        required=False,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "New tag (optional)"}
+        ),
+        label="New tag 1",
+    )
+    tag_2 = forms.CharField(
+        max_length=24,
+        required=False,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "New tag (optional)"}
+        ),
+        label="New tag 2",
+    )
+    tag_3 = forms.CharField(
+        max_length=24,
+        required=False,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "New tag (optional)"}
+        ),
+        label="New tag 3",
+    )
+
     class Meta:
         model = Recipe
         fields = [
@@ -34,7 +79,10 @@ class RecipeForm(forms.ModelForm):
             "prep_time_minutes",
             "difficulty",
             "user_rating",
-            "tags",
+            "tags",   # existing tags (multi-select)
+            "tag_1",  # new tag inputs
+            "tag_2",
+            "tag_3",
         ]
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control"}),
@@ -56,6 +104,103 @@ class RecipeForm(forms.ModelForm):
             raise ValidationError("Prep time can’t be negative (unless your oven is a black hole).")
         return val
 
+    def _get_new_tag_inputs(self) -> List[str]:
+        raw_vals = [
+            self.cleaned_data.get("tag_1", ""),
+            self.cleaned_data.get("tag_2", ""),
+            self.cleaned_data.get("tag_3", ""),
+        ]
+
+        normalized: List[str] = []
+        seen = set()
+
+        for raw in raw_vals:
+            name = normalize_tag_name(raw)
+            if not name:
+                continue
+
+            key = name.lower()
+            if key in seen:
+                continue  # ignore duplicates across tag_1..tag_3
+            seen.add(key)
+            normalized.append(name)
+
+        return normalized
+
+    def clean(self):
+        cleaned = super().clean()
+
+        # Selected existing tags (may be empty)
+        selected_tags = cleaned.get("tags")
+        selected_count = len(selected_tags) if selected_tags is not None else 0
+
+        # New tags entered (0..3, de-duped)
+        new_tags = self._get_new_tag_inputs()
+
+        total = selected_count + len(new_tags)
+        if total > 3:
+            raise ValidationError("Please use at most 3 tags total per recipe.")
+
+        # Prevent redundant “new tag” if it matches a selected tag already
+        if selected_tags and new_tags:
+            selected_keys = {normalize_tag_name(t.name).lower() for t in selected_tags}
+            filtered = [t for t in new_tags if t.lower() not in selected_keys]
+
+            # If filtering changes count, re-check max constraint
+            if selected_count + len(filtered) > 3:
+                raise ValidationError("Please use at most 3 tags total per recipe.")
+
+            # Store back so save() uses the filtered list
+            cleaned["_new_tags_normalized"] = filtered
+        else:
+            cleaned["_new_tags_normalized"] = new_tags
+
+        return cleaned
+
+    def _resolve_tags(self, names: Iterable[str]) -> List[Tag]:
+        """
+        Given normalized tag names, return Tag objects:
+        - If an existing Tag matches case-insensitively, reuse it
+        - Otherwise create it (handling race conditions)
+        """
+        tags: List[Tag] = []
+        for name in names:
+            # Fast path: case-insensitive exact match
+            existing = Tag.objects.filter(name__iexact=name).first()
+            if existing is not None:
+                tags.append(existing)
+                continue
+
+            try:
+                tags.append(Tag.objects.create(name=name))
+            except IntegrityError:
+                # Another request created it concurrently (or unique constraint triggered)
+                tags.append(Tag.objects.get(name__iexact=name))
+        return tags
+
+    def save(self, commit: bool = True):
+        # Save the Recipe itself first (M2M needs a PK)
+        instance = super().save(commit=False)
+
+        # Collect tag intents
+        selected = list(self.cleaned_data.get("tags") or [])
+        new_names = list(self.cleaned_data.get("_new_tags_normalized") or [])
+
+        def _save_m2m():
+            # Resolve any new tags, then set the M2M with the combined list
+            extra = self._resolve_tags(new_names) if new_names else []
+            instance.tags.set([*selected, *extra])
+
+        if commit:
+            with transaction.atomic():
+                instance.save()
+                _save_m2m()
+        else:
+            # Defer M2M until caller invokes form.save_m2m()
+            self.save_m2m = _save_m2m  # type: ignore[attr-defined]
+
+        return instance
+
 
 class RecipeIngredientLineForm(forms.ModelForm):
     """
@@ -65,12 +210,11 @@ class RecipeIngredientLineForm(forms.ModelForm):
     Instead we accept ingredient_name and resolve it to the global Ingredient
     catalog (deduped by name_normalized).
     """
+
     ingredient_name = forms.CharField(
         max_length=120,
         required=True,
-        widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "e.g., sugar"}
-        ),
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "e.g., sugar"}),
     )
 
     class Meta:
@@ -79,7 +223,9 @@ class RecipeIngredientLineForm(forms.ModelForm):
         widgets = {
             "quantity": forms.NumberInput(attrs={"class": "form-control", "step": "any"}),
             "unit_text": forms.TextInput(attrs={"class": "form-control", "placeholder": "e.g., cup"}),
-            "prep_note": forms.TextInput(attrs={"class": "form-control", "placeholder": "e.g., finely chopped"}),
+            "prep_note": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "e.g., finely chopped"}
+            ),
             "line_order": forms.NumberInput(attrs={"class": "form-control", "min": 1}),
         }
 
@@ -116,7 +262,8 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
             return
 
         kept = [
-            f for f in self.forms
+            f
+            for f in self.forms
             if hasattr(f, "cleaned_data")
             and f.cleaned_data
             and not f.cleaned_data.get("DELETE", False)
@@ -128,7 +275,8 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
         instances = super().save(commit=False)
 
         kept_forms = [
-            f for f in self.forms
+            f
+            for f in self.forms
             if hasattr(f, "cleaned_data")
             and f.cleaned_data
             and not f.cleaned_data.get("DELETE", False)
@@ -169,6 +317,6 @@ RecipeIngredientFormSet = inlineformset_factory(
     model=RecipeIngredient,
     form=RecipeIngredientLineForm,
     formset=BaseRecipeIngredientFormSet,
-    extra=3,         # initial blank rows
-    can_delete=True, # allow removing ingredient lines
+    extra=3,  # initial blank rows
+    can_delete=True,  # allow removing ingredient lines
 )

@@ -4,14 +4,14 @@
 {% block content %}
 <div class="container py-4">
   <h1 class="mb-4">Create Recipe</h1>
-
+  
   <form method="post" novalidate>
     {% csrf_token %}
-
+    
     {% if form.non_field_errors %}
       <div class="alert alert-danger">{{ form.non_field_errors }}</div>
     {% endif %}
-
+    
     <div class="card mb-4">
       <div class="card-header">Recipe</div>
       <div class="card-body">
@@ -20,64 +20,88 @@
           {{ form.title }}
           <div class="text-danger small">{{ form.title.errors }}</div>
         </div>
-
+        
         <div class="mb-3">
           <label class="form-label" for="{{ form.short_description.id_for_label }}">Short description</label>
           {{ form.short_description }}
           <div class="form-text">{{ form.short_description.help_text }}</div>
           <div class="text-danger small">{{ form.short_description.errors }}</div>
         </div>
-
+        
         <div class="mb-3">
           <label class="form-label" for="{{ form.long_description.id_for_label }}">Long description</label>
           {{ form.long_description }}
           <div class="form-text">{{ form.long_description.help_text }}</div>
           <div class="text-danger small">{{ form.long_description.errors }}</div>
         </div>
-
+        
         <div class="mb-3">
           <label class="form-label" for="{{ form.instructions.id_for_label }}">Instructions</label>
           {{ form.instructions }}
           <div class="form-text">{{ form.instructions.help_text }}</div>
           <div class="text-danger small">{{ form.instructions.errors }}</div>
         </div>
-
+        
         <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label" for="{{ form.category.id_for_label }}">Category</label>
             {{ form.category }}
             <div class="text-danger small">{{ form.category.errors }}</div>
           </div>
-
+          
           <div class="col-md-3 mb-3">
             <label class="form-label" for="{{ form.prep_time_minutes.id_for_label }}">Prep time (minutes)</label>
             {{ form.prep_time_minutes }}
             <div class="text-danger small">{{ form.prep_time_minutes.errors }}</div>
           </div>
-
+          
           <div class="col-md-3 mb-3">
             <label class="form-label" for="{{ form.difficulty.id_for_label }}">Difficulty (1–5)</label>
             {{ form.difficulty }}
             <div class="text-danger small">{{ form.difficulty.errors }}</div>
           </div>
         </div>
-
-        <div class="row">
+        
           <div class="col-md-6 mb-3">
-            <label class="form-label" for="{{ form.user_rating.id_for_label }}">Your rating (optional)</label>
-            {{ form.user_rating }}
-            <div class="text-danger small">{{ form.user_rating.errors }}</div>
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <label class="form-label" for="{{ form.tags.id_for_label }}">Tags</label>
+            <label class="form-label" for="{{ form.tags.id_for_label }}">Tags (choose existing)</label>
             {{ form.tags }}
             <div class="text-danger small">{{ form.tags.errors }}</div>
+            
+            <div class="mt-3">
+              <div class="form-text mb-2">
+                Add new tags (optional). You can use <strong>up to 3 total</strong> tags per recipe (selected + new).
+              </div>
+              
+              <div class="row g-2">
+                <div class="col-md-4">
+                  <label class="form-label" for="{{ form.tag_1.id_for_label }}">New tag 1</label>
+                  {{ form.tag_1 }}
+                  <div class="text-danger small">{{ form.tag_1.errors }}</div>
+                </div>
+                
+                <div class="col-md-4">
+                  <label class="form-label" for="{{ form.tag_2.id_for_label }}">New tag 2</label>
+                  {{ form.tag_2 }}
+                  <div class="text-danger small">{{ form.tag_2.errors }}</div>
+                </div>
+                
+                <div class="col-md-4">
+                  <label class="form-label" for="{{ form.tag_3.id_for_label }}">New tag 3</label>
+                  {{ form.tag_3 }}
+                  <div class="text-danger small">{{ form.tag_3.errors }}</div>
+                </div>
+              </div>
+              
+              <div class="text-muted small mt-2">
+                Tip: if your new tag matches an existing one (case/spacing), we’ll reuse it.
+                No duplicate “Meal&nbsp;Prep” vs “meal   prep” tag turf wars.
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
+    
     <div class="card mb-4">
       <div class="card-header d-flex justify-content-between align-items-center">
         <span>Ingredients</span>
@@ -85,45 +109,45 @@
           + Add ingredient
         </button>
       </div>
-
+      
       <div class="card-body">
         {% if formset.non_form_errors %}
           <div class="alert alert-danger">{{ formset.non_form_errors }}</div>
         {% endif %}
-
+        
         {{ formset.management_form }}
-
+        
         <div id="ingredient-forms">
           {% for f in formset.forms %}
             <div class="border rounded p-3 mb-3 ingredient-form">
               {{ f.id }} {# hidden PK field when editing #}
               {{ f.line_order }} {# hidden (we manage it) #}
-
+              
               <div class="row g-2 align-items-end">
                 <div class="col-md-4">
                   <label class="form-label">Ingredient</label>
                   {{ f.ingredient_name }}
                   <div class="text-danger small">{{ f.ingredient_name.errors }}</div>
                 </div>
-
+                
                 <div class="col-md-2">
                   <label class="form-label">Quantity</label>
                   {{ f.quantity }}
                   <div class="text-danger small">{{ f.quantity.errors }}</div>
                 </div>
-
+                
                 <div class="col-md-2">
                   <label class="form-label">Unit</label>
                   {{ f.unit_text }}
                   <div class="text-danger small">{{ f.unit_text.errors }}</div>
                 </div>
-
+                
                 <div class="col-md-3">
                   <label class="form-label">Prep note</label>
                   {{ f.prep_note }}
                   <div class="text-danger small">{{ f.prep_note.errors }}</div>
                 </div>
-
+                
                 <div class="col-md-1 text-end">
                   {# Django provides DELETE field when can_delete=True #}
                   {% if f.DELETE %}
@@ -135,34 +159,34 @@
             </div>
           {% endfor %}
         </div>
-
+        
         {# Hidden empty form template (Django uses __prefix__ placeholders) #}
         <template id="empty-ingredient-form-template">
           <div class="border rounded p-3 mb-3 ingredient-form">
             {{ formset.empty_form.id }}
             {{ formset.empty_form.line_order }}
-
+            
             <div class="row g-2 align-items-end">
               <div class="col-md-4">
                 <label class="form-label">Ingredient</label>
                 {{ formset.empty_form.ingredient_name }}
               </div>
-
+              
               <div class="col-md-2">
                 <label class="form-label">Quantity</label>
                 {{ formset.empty_form.quantity }}
               </div>
-
+              
               <div class="col-md-2">
                 <label class="form-label">Unit</label>
                 {{ formset.empty_form.unit_text }}
               </div>
-
+              
               <div class="col-md-3">
                 <label class="form-label">Prep note</label>
                 {{ formset.empty_form.prep_note }}
               </div>
-
+              
               <div class="col-md-1 text-end">
                 {% if formset.empty_form.DELETE %}
                   <button type="button" class="btn btn-outline-danger btn-sm remove-ingredient-btn">Remove</button>
@@ -172,13 +196,13 @@
             </div>
           </div>
         </template>
-
+        
         <div class="text-muted small">
           Tip: ingredient names are shared globally, so “Sugar” and “sugar” won’t multiply like gremlins.
         </div>
       </div>
     </div>
-
+    
     <button class="btn btn-primary" type="submit">Save recipe</button>
   </form>
 </div>
@@ -188,16 +212,16 @@
     const addBtn = document.getElementById("add-ingredient-btn");
     const container = document.getElementById("ingredient-forms");
     const template = document.getElementById("empty-ingredient-form-template");
-
+    
     // Management form fields (prefix must match the one in the view: "ingredients")
     const totalFormsInput = document.getElementById("id_ingredients-TOTAL_FORMS");
-
+    
     function wireRemoveButton(formEl) {
       const removeBtn = formEl.querySelector(".remove-ingredient-btn");
       const deleteField = formEl.querySelector('input[type="checkbox"][name$="-DELETE"]');
-
+      
       if (!removeBtn) return;
-
+      
       removeBtn.addEventListener("click", () => {
         // If DELETE exists, mark for deletion and hide the block.
         // If DELETE doesn't exist (shouldn't happen here), we just remove it.
@@ -209,24 +233,24 @@
         }
       });
     }
-
+    
     // Wire existing remove buttons
     container.querySelectorAll(".ingredient-form").forEach(wireRemoveButton);
-
+    
     addBtn.addEventListener("click", () => {
       const formIndex = parseInt(totalFormsInput.value, 10);
-
+      
       // Clone template HTML and replace __prefix__ with the form index
       const html = template.innerHTML.replaceAll("__prefix__", String(formIndex));
-
+      
       // Convert HTML string to DOM nodes
       const wrapper = document.createElement("div");
       wrapper.innerHTML = html.trim();
       const newFormEl = wrapper.firstElementChild;
-
+      
       container.appendChild(newFormEl);
       wireRemoveButton(newFormEl);
-
+      
       // Increment TOTAL_FORMS so Django accepts the new form
       totalFormsInput.value = formIndex + 1;
     });

@@ -33,6 +33,18 @@ class Category(models.Model):
 
 
 class Tag(models.Model):
+    """
+    Docstring for Tag
+    
+    Tags will be checkboxes for users to check per recipe. Max of 3 each.
+    
+    Tags:
+        Vegan
+        Meat-Free
+        Gluten-Free
+        Low/No Sugar
+        
+    """
     name = models.CharField(max_length=24, unique=True)
 
     class Meta:
@@ -234,5 +246,5 @@ class RecipeFavorite(models.Model):
         ]
 
     def __str__(self) -> str:
-        return f"{self.user_id} ♥ {self.recipe_id}"
+        return f"{self.user.pk} & {self.recipe.pk}"
 

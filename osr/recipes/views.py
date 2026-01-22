@@ -1,13 +1,15 @@
 import logging
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model, authenticate, logout, login
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.views.decorators.csrf import csrf_protect
 
+from .models import Recipe
 from .forms import RecipeForm, RecipeIngredientFormSet
 
 from common.utils import safe_method_validator
@@ -38,7 +40,7 @@ def browse(request, *args, **kwargs):
 
 # Render recipe.html
 @safe_method_validator(".\\recipes\\recipe.html", ["GET", "HEAD", "OPTIONS"])
-def recipe(request, *args, **kwargs):
+def recipe(request, recipe_id, *args, **kwargs):
     """
     Docstring for recipe
     
@@ -47,6 +49,7 @@ def recipe(request, *args, **kwargs):
     GET: Renders the Recipe Details Page
     """
     context = {}
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
     return render(request=request, template_name=".\\recipes\\recipe.html", context=context)
 
 #&-----------------------------------------------------------------------------------------------------
@@ -108,7 +111,7 @@ def create(request, *args, **kwargs):
 # Render update.html
 @csrf_protect
 @safe_method_validator(".\\recipes\\update.html", ["POST", "GET", "HEAD", "OPTIONS"])
-def update(request, *args, **kwargs):
+def update(request, recipe_id=0, *args, **kwargs):
     """
     Docstring for update
     
@@ -125,6 +128,8 @@ def update(request, *args, **kwargs):
     # if POST fails, redirect to update recipe page
     # Otherwise redirect to updated recipe details pages
     elif(request.method == "POST"):
+        recipe = get_object_or_404(Recipe, pk=recipe_id, owner=request.user)
+        
         posted_data_dict = request.POST.copy()
         recipe_id = 0 # get from posted_data_dict, then pass for the redirect
         
