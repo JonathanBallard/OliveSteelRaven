@@ -1,0 +1,127 @@
+{# templates/recipes/search.html #}
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Search · RecipeBook{% endblock %}
+
+{% block content %}
+<section class="search-hero">
+  <div class="search-inner">
+    <div class="container">
+
+      <h2 class="page-title">Search Recipes</h2>
+
+      <div class="search-card p-3 p-md-4 mb-4">
+        <form method="get" action="{% url 'recipes:search' %}" class="row g-2 g-md-3 align-items-end">
+
+          {# Search by title OR ingredient (single text box that your view can interpret) #}
+          <div class="col-12 col-lg-8">
+            <label class="form-label search-label" for="q">Title or Ingredient</label>
+            <input
+              type="text"
+              class="form-control"
+              id="q"
+              name="q"
+              placeholder='e.g., "garlic", "tacos", or "definitely-not-burnt"'
+              value="{{ request.GET.q|default_if_none:'' }}"
+            >
+            <div class="form-text text-white-50">
+              Searches recipe titles and ingredients.
+            </div>
+          </div>
+
+          {# Category dropdown populated from Category model #}
+          <div class="col-12 col-sm-6 col-lg-3">
+            <label class="form-label search-label" for="category">Category</label>
+            <select class="form-select" id="category" name="category_id">
+              <option value="">All Categories</option>
+              {% for category in categories %}
+                <option
+                  value="{{ category.id }}"
+                  {% if request.GET.category_id|stringformat:"s" == category.id|stringformat:"s" %}selected{% endif %}
+                >
+                  {{ category.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col-12 col-sm-6 col-lg-1 d-grid">
+            <button type="submit" class="btn btn-light fw-semibold">
+              Go
+            </button>
+          </div>
+
+        </form>
+
+        {# Optional: active filters summary #}
+        {% if query or selected_category %}
+          <div class="mt-3 text-center">
+            {% if query %}
+              <span class="badge text-bg-light">Query: “{{ query }}”</span>
+            {% endif %}
+            {% if selected_category %}
+              <span class="badge text-bg-secondary ms-2">Category: {{ selected_category.name }}</span>
+            {% endif %}
+            {% if results_count is not None %}
+              <span class="badge text-bg-dark ms-2">{{ results_count }} found</span>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+
+      {# Results #}
+      {% if recipes %}
+        <div class="row g-3">
+          {# Mobile: 1 per row. md+: 2 per row. lg+: 3 per row. #}
+          {% for recipe in recipes %}
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+              <a class="result-card w-100 text-decoration-none"
+                 href="{% url 'recipes:view_recipe' recipe_id=recipe.id %}"
+                 title="{{ recipe.title }}">
+
+                <div class="thumb">
+                  {% if recipe.picture_url %}
+                    <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}">
+                  {% else %}
+                    <img src="{% static 'images/recipe-thumb-default.png' %}" alt="Default recipe thumbnail">
+                  {% endif %}
+                </div>
+
+                <div class="p-3">
+                  <p class="result-title text-truncate">{{ recipe.title }}</p>
+
+                  {% if recipe.short_description %}
+                    <div class="result-meta text-truncate">{{ recipe.short_description }}</div>
+                  {% endif %}
+
+                  <div class="result-meta mt-2">
+                    {% if recipe.category %}
+                      <span class="me-2">📁 {{ recipe.category.name }}</span>
+                    {% endif %}
+                    {% if recipe.total_time_minutes %}
+                      <span>⏱ {{ recipe.total_time_minutes }} min</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+
+      {% else %}
+        {% if request.GET.q or request.GET.category_id %}
+          <div class="alert alert-info mb-0">
+            No recipes matched your search. Try fewer filters… or offer the database a snack.
+          </div>
+        {% else %}
+          <div class="alert alert-secondary mb-0">
+            Search by recipe title, ingredient, and/or category.
+          </div>
+        {% endif %}
+      {% endif %}
+
+    </div>
+  </div>
+</section>
+{% endblock %}

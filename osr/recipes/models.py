@@ -93,6 +93,7 @@ class Recipe(models.Model):
     )
 
     title = models.CharField(max_length=100)
+    picture_url = models.URLField(max_length=400, default="default.png")
 
     short_description = models.CharField(
         max_length=300,

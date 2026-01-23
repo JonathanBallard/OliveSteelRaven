@@ -1,5 +1,6 @@
 import logging
 
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib import messages
@@ -11,6 +12,7 @@ from django.views.decorators.csrf import csrf_protect
 
 from .models import Recipe, Category, Tag
 from .forms import RecipeForm, RecipeIngredientFormSet
+from .utils import normalize_name
 
 from common.utils import safe_method_validator
 
@@ -261,6 +263,7 @@ def delete(request, recipe_id, *args, **kwargs):
 
 # Open search.html
 @csrf_protect
+@login_required
 @safe_method_validator(".\\recipes\\search.html", ["POST", "GET", "HEAD", "OPTIONS"])
 def search(request, *args, **kwargs):
     """
@@ -271,17 +274,51 @@ def search(request, *args, **kwargs):
     GET: Renders the Search Form Template
     POST: Searches for matching recipes
     """
-    context = {}
-    if(request.method == "GET"):
-        return render(request=request, template_name=".\\recipes\\search.html", context=context)
-    
-    # POST search
-    # Return search_results
-    elif(request.method == "POST"):
-        posted_data_dict = request.POST.copy()
-        return search_results(request, context) #Get search results with passed context
-    
-    return render(request=request, template_name=".\\recipes\\search.html", context=context)
+    q_raw = (request.GET.get("q") or "").strip()
+    q_norm = normalize_name(q_raw) if q_raw else ""
+    category_id = (request.GET.get("category_id") or "").strip()
+
+    categories = Category.objects.all()  # ordered via Meta
+    selected_category = None
+
+    # Base queryset: ALL recipes
+    qs = Recipe.objects.select_related("category")
+
+    filters = Q()
+
+    # Category filter
+    if category_id:
+        selected_category = get_object_or_404(Category, pk=category_id)
+        filters &= Q(category_id=selected_category.id)
+
+    # Title OR ingredient search
+    if q_raw:
+        filters &= (
+            Q(title__icontains=q_raw)
+            | Q(ingredients__name_normalized__icontains=q_norm)
+            | Q(ingredients__name__icontains=q_raw)
+        )
+
+    # Only hit the DB when at least one filter is provided
+    if q_raw or category_id:
+        recipes = (
+            qs.filter(filters)
+            .distinct()
+            .order_by("title")
+        )
+        results_count = recipes.count()
+    else:
+        recipes = Recipe.objects.none()
+        results_count = None
+
+    context = {
+        "categories": categories,
+        "recipes": recipes,
+        "query": q_raw or None,
+        "selected_category": selected_category,
+        "results_count": results_count,
+    }
+    return render(request, "recipes/search.html", context)
 
 
 # Retreive information from search
