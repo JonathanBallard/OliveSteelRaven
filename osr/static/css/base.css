@@ -1,6 +1,10 @@
 * {
     border: 1px, solid, red;
 }
+
+#previewImg { max-width: 300px; max-height: 300px; }
+
+
   /* Same background behavior as Categories */
 .search-hero {
     min-height: 100vh;

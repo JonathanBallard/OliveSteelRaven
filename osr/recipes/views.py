@@ -113,7 +113,7 @@ def create(request, *args, **kwargs):
     # If POST fails, redirect to create recipe page
     # Otherwise get newly created recipe ID, and redirect to that details page
     elif request.method == "POST":
-        form = RecipeForm(request.POST)
+        form = RecipeForm(request.POST, request.FILES)
         formset = RecipeIngredientFormSet(request.POST, prefix="ingredients")
 
         if form.is_valid() and formset.is_valid():
@@ -165,18 +165,19 @@ def update(request, recipe_id=0, *args, **kwargs):
     :param request: HTTP Request
     :param recipe_id: PK of the recipe we're updating
 
-    GET: Renders the Update Recipe Form Template
-    POST: Updates the Recipe Form
+    GET: Renders the Update Recipe Form Template (pre-populated)
+    POST: Updates the Recipe Form (including image uploads)
     """
     # Always enforce ownership (both GET + POST)
     recipe = get_object_or_404(Recipe, pk=recipe_id, owner=request.user)
 
     if request.method == "GET":
+        # ✅ FIX: On GET, do NOT bind request.POST/request.FILES; just use instance
         form = RecipeForm(instance=recipe)
         formset = RecipeIngredientFormSet(instance=recipe, prefix="ingredients")
 
         context = {
-            "recipe": recipe,   # optional, but handy for template links/titles
+            "recipe": recipe,   # handy for template links/titles
             "form": form,
             "formset": formset,
         }
@@ -187,18 +188,19 @@ def update(request, recipe_id=0, *args, **kwargs):
         )
 
     elif request.method == "POST":
-        form = RecipeForm(request.POST, instance=recipe)
+        # ✅ FIX: Include request.FILES so image updates are processed
+        form = RecipeForm(request.POST, request.FILES, instance=recipe)
         formset = RecipeIngredientFormSet(request.POST, instance=recipe, prefix="ingredients")
 
         if form.is_valid() and formset.is_valid():
             with transaction.atomic():
-                updated_recipe = form.save()     # saves the Recipe fields
-                form.save_m2m()                  # saves tags M2M
-                formset.save()                   # saves ingredient lines (and deletions)
+                updated_recipe = form.save()  # saves Recipe fields
+                form.save_m2m()               # saves tags M2M
+                formset.save()                # saves ingredient lines (and deletions)
 
             return redirect("recipes:view_recipe", recipe_id=updated_recipe.pk)
 
-        # ❌ INVALID — re-render template with bound forms (NO redirect)
+        # INVALID — re-render template with bound forms (NO redirect)
         messages.error(request, "Please fix the errors below.")
 
         context = {
@@ -289,7 +291,7 @@ def search(request, *args, **kwargs):
     # Category filter
     if category_id:
         selected_category = get_object_or_404(Category, pk=category_id)
-        filters &= Q(category_id=selected_category.id)
+        filters &= Q(category_id=selected_category.id) #type: ignore
 
     # Title OR ingredient search
     if q_raw:

@@ -82,9 +82,9 @@
 
                 <div class="thumb">
                   {% if recipe.picture_url %}
-                    <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}">
+                    <img src="{{ recipe.recipe_image }}" alt="{{ recipe.title }}">
                   {% else %}
-                    <img src="{% static 'images/recipe-thumb-default.png' %}" alt="Default recipe thumbnail">
+                    <img src="{% static 'images/recipe-default.jpg' %}" alt="Default recipe thumbnail">
                   {% endif %}
                 </div>
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Iterable, List
 
 from django import forms
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.forms import BaseInlineFormSet, inlineformset_factory
@@ -60,11 +61,17 @@ class RecipeForm(forms.ModelForm):
         required=False,
         widget=forms.SelectMultiple(attrs={"class": "form-select"}),
     )
+    
+    image = forms.ImageField(
+        required=False,
+        widget=forms.ClearableFileInput(attrs={"class": "form-control"})
+    )
 
     class Meta:
         model = Recipe
         fields = [
             "title",
+            "recipe_image",
             "short_description",
             "long_description",
             "instructions",
@@ -170,6 +177,26 @@ class RecipeForm(forms.ModelForm):
                 # Another request created it concurrently (or unique constraint triggered)
                 tags.append(Tag.objects.get(name__iexact=name))
         return tags
+    
+    def clean_image(self):
+        image = self.cleaned_data.get("image")
+
+        if not image:
+            return image  # image is optional
+        
+        valid_mime_types = ["image/jpeg", "image/png", "image/webp"]
+
+        if image.content_type not in valid_mime_types:
+            raise forms.ValidationError("Only JPEG, PNG, or WEBP images are allowed.")
+
+        max_size = settings.MAX_IMAGE_SIZE_MB * 1024 * 1024
+
+        if image.size > max_size:
+            raise forms.ValidationError(
+                f"Image file too large (max {settings.MAX_IMAGE_SIZE_MB} MB)."
+            )
+
+        return image
 
     def save(self, commit: bool = True):
         # Save the Recipe itself first (M2M needs a PK)

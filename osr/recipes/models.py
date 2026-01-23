@@ -4,11 +4,14 @@
 from __future__ import annotations
 
 import re
+from PIL import Image
+from io import BytesIO
 
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.files.base import ContentFile
 
 def normalize_ingredient_name(raw: str) -> str:
     """
@@ -93,8 +96,9 @@ class Recipe(models.Model):
     )
 
     title = models.CharField(max_length=100)
-    picture_url = models.URLField(max_length=400, default="default.png")
-
+    
+    recipe_image = models.ImageField(upload_to="recipe_images/", blank=True, null=True)
+    
     short_description = models.CharField(
         max_length=300,
         blank=True,
@@ -154,6 +158,33 @@ class Recipe(models.Model):
         through="RecipeIngredient",
         related_name="recipes",
     )
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if not self.recipe_image:
+            return
+
+        img = Image.open(self.recipe_image)
+
+        # Convert to RGB if needed (PNG/WebP safety)
+        if img.mode not in ("RGB", "RGBA"):
+            img = img.convert("RGB")
+
+        # Resize to 200x200 (center-cropped, no distortion)
+        img.thumbnail((settings.RECIPE_IMAGE_SIZE, settings.RECIPE_IMAGE_SIZE), Image.LANCZOS) #type: ignore
+
+        buffer = BytesIO()
+        img.save(buffer, format="JPEG", quality=85)
+        buffer.seek(0)
+
+        # Replace the file
+        self.recipe_image.save(
+            self.recipe_image.name,
+            ContentFile(buffer.read()),
+            save=False,
+        )
+
+        super().save(update_fields=["recipe_image"])
 
     class Meta:
         db_table = "recipes"

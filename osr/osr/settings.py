@@ -21,6 +21,18 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# Recipe image max size in mb
+MAX_IMAGE_SIZE_MB = 1
+
+# Recipe image size in pixels
+RECIPE_IMAGE_SIZE = 400
+
+# Global upload size limit
+DATA_UPLOAD_MAX_MEMORY_SIZE = 2097152 # 2mb
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
