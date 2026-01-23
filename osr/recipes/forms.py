@@ -15,23 +15,19 @@ from .models import Ingredient, Recipe, RecipeIngredient, Tag, Category
 
 _whitespace_re = re.compile(r"\s+")
 
-
-def _collapse_ws(s: str) -> str:
-    return _whitespace_re.sub(" ", (s or "").strip())
-
-
-def normalize_ingredient_name(raw: str) -> str:
-    """Keep this consistent with Ingredient.name_normalized."""
-    s = _collapse_ws(raw)
-    return s.lower()
-
-
-def normalize_tag_name(raw: str) -> str:
+def normalize_name(raw: str) -> str:
     """
-    Canonicalize tag input to reduce duplicates caused by spacing/case.
-    We store tags using collapsed whitespace (e.g. "meal prep"), and we match case-insensitively.
+    Canonicalize user-entered names (ingredients, tags, etc.)
+    by collapsing whitespace and normalizing case.
+
+    Examples:
+        "  Meal   Prep " -> "meal prep"
+        "Onion POWDER"   -> "onion powder"
     """
-    return _collapse_ws(raw)
+    if not raw:
+        return ""
+    return _whitespace_re.sub(" ", raw.strip()).lower()
+
 
 
 class RecipeForm(forms.ModelForm):
@@ -128,7 +124,7 @@ class RecipeForm(forms.ModelForm):
         seen = set()
 
         for raw in raw_vals:
-            name = normalize_tag_name(raw)
+            name = normalize_name(raw)
             if not name:
                 continue
 
@@ -156,7 +152,7 @@ class RecipeForm(forms.ModelForm):
 
         # Prevent redundant “new tag” if it matches a selected tag already
         if selected_tags and new_tags:
-            selected_keys = {normalize_tag_name(t.name).lower() for t in selected_tags}
+            selected_keys = {normalize_name(t.name) for t in selected_tags}
             filtered = [t for t in new_tags if t.lower() not in selected_keys]
 
             # If filtering changes count, re-check max constraint
@@ -313,7 +309,7 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
         # Resolve Ingredient FK for each form
         for form in kept_forms:
             pretty = form.cleaned_data["ingredient_name"].strip()
-            norm = normalize_ingredient_name(pretty)
+            norm = normalize_name(pretty)
 
             ingredient = Ingredient.objects.filter(name_normalized=norm).first()
             if ingredient is None:
