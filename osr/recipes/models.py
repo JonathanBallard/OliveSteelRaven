@@ -27,6 +27,7 @@ class Category(models.Model):
 
     class Meta:
         db_table = "categories"
+        ordering = ["name"]
 
     def __str__(self) -> str:
         return self.name
@@ -143,6 +144,7 @@ class Recipe(models.Model):
         Tag,
         through="RecipeTag",
         related_name="recipes",
+        blank=True,
     )
 
     # M:N via rich junction recipe_ingredients

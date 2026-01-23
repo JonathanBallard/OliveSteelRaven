@@ -50,6 +50,7 @@ def recipe(request, recipe_id, *args, **kwargs):
     """
     context = {}
     recipe = get_object_or_404(Recipe, pk=recipe_id)
+    context['recipe'] = Recipe.objects.get(pk=recipe_id)
     return render(request=request, template_name=".\\recipes\\recipe.html", context=context)
 
 #&-----------------------------------------------------------------------------------------------------
@@ -58,6 +59,7 @@ def recipe(request, recipe_id, *args, **kwargs):
 
 # Render create.html
 @csrf_protect
+@login_required
 @safe_method_validator(".\\recipes\\create.html", ["POST", "GET", "HEAD", "OPTIONS"])
 def create(request, *args, **kwargs):
     """
@@ -82,23 +84,39 @@ def create(request, *args, **kwargs):
     # POST create recipe page
     # If POST fails, redirect to create recipe page
     # Otherwise get newly created recipe ID, and redirect to that details page
-    elif(request.method == "POST"):
+    elif request.method == "POST":
         form = RecipeForm(request.POST)
         formset = RecipeIngredientFormSet(request.POST, prefix="ingredients")
-        
+
         if form.is_valid() and formset.is_valid():
             with transaction.atomic():
                 recipe = form.save(commit=False)
                 recipe.owner = request.user
                 recipe.save()
-                
-                # Save M2M (tags) after recipe exists
+
+                # Save M2M (tags)
                 form.save_m2m()
-                
-                # Attach recipe to formset and save ingredient lines
+
+                # Attach recipe to ingredient formset and save
                 formset.instance = recipe
                 formset.save()
-        return redirect('recipes:recipe', pk=recipe.pk) # Redirect to created recipe
+
+            return redirect("recipes:view_recipe", recipe_id=recipe.pk)
+
+        # ❌ INVALID — re-render template with bound forms (NO redirect)
+        messages.error(request, "Please fix the errors below.")
+
+        context = {
+            "form": form,
+            "formset": formset,
+        }
+        return render(
+            request=request,
+            template_name=".\\recipes\\recipe_form.html",
+            context=context,
+            status=400,
+        )
+
     return render(request=request, template_name=".\\recipes\\recipe_form.html", context=context)
 
 
@@ -110,33 +128,66 @@ def create(request, *args, **kwargs):
 
 # Render update.html
 @csrf_protect
+@login_required
 @safe_method_validator(".\\recipes\\update.html", ["POST", "GET", "HEAD", "OPTIONS"])
 def update(request, recipe_id=0, *args, **kwargs):
     """
-    Docstring for update
-    
     :param request: HTTP Request
-    
+
     GET: Renders the Update Recipe Form Template
     POST: Updates the Recipe Form
     """
-    context = {}
-    if(request.method == "GET"):
-        return render(request=request, template_name=".\\recipes\\update.html", context=context)
-    
-    # POST updated recipe
-    # if POST fails, redirect to update recipe page
-    # Otherwise redirect to updated recipe details pages
-    elif(request.method == "POST"):
-        recipe = get_object_or_404(Recipe, pk=recipe_id, owner=request.user)
-        
-        posted_data_dict = request.POST.copy()
-        recipe_id = 0 # get from posted_data_dict, then pass for the redirect
-        
-        if recipe_id == 0:
-            return redirect('recipes:update')
-        return redirect('recipes:recipe', recipe_id=recipe_id) # Redirect to updated recipe
-    return render(request=request, template_name=".\\recipes\\update.html", context=context)
+    # Always enforce ownership (both GET + POST)
+    recipe = get_object_or_404(Recipe, pk=recipe_id, owner=request.user)
+
+    if request.method == "GET":
+        form = RecipeForm(instance=recipe)
+        formset = RecipeIngredientFormSet(instance=recipe, prefix="ingredients")
+
+        context = {
+            "recipe": recipe,   # optional, but handy for template links/titles
+            "form": form,
+            "formset": formset,
+        }
+        return render(
+            request=request,
+            template_name=".\\recipes\\recipe_form.html",
+            context=context,
+        )
+
+    elif request.method == "POST":
+        form = RecipeForm(request.POST, instance=recipe)
+        formset = RecipeIngredientFormSet(request.POST, instance=recipe, prefix="ingredients")
+
+        if form.is_valid() and formset.is_valid():
+            with transaction.atomic():
+                updated_recipe = form.save()     # saves the Recipe fields
+                form.save_m2m()                  # saves tags M2M
+                formset.save()                   # saves ingredient lines (and deletions)
+
+            return redirect("recipes:view_recipe", recipe_id=updated_recipe.pk)
+
+        # ❌ INVALID — re-render template with bound forms (NO redirect)
+        messages.error(request, "Please fix the errors below.")
+
+        context = {
+            "recipe": recipe,
+            "form": form,
+            "formset": formset,
+        }
+        return render(
+            request=request,
+            template_name=".\\recipes\\recipe_form.html",
+            context=context,
+            status=400,
+        )
+
+    return render(
+        request=request,
+        template_name=".\\recipes\\recipe_form.html",
+        context={},
+    )
+
 
 
 #&-----------------------------------------------------------------------------------------------------
@@ -145,8 +196,9 @@ def update(request, recipe_id=0, *args, **kwargs):
 
 # Render delete.html
 @csrf_protect
+@login_required
 @safe_method_validator(".\\recipes\\delete.html", ["POST", "GET", "HEAD", "OPTIONS"])
-def delete(request, *args, **kwargs):
+def delete(request, recipe_id, *args, **kwargs):
     """
     Docstring for delete
     
@@ -156,16 +208,19 @@ def delete(request, *args, **kwargs):
     POST: Deletes Recipe
     """
     context = {}
+    recipe = get_object_or_404(Recipe, pk=recipe_id, owner=request.user)
+    
     if(request.method == "GET"):
-        return render(request=request, template_name=".\\recipes\\delete.html", context=context)
+        return redirect('recipes:my_recipes')
     
     # POST delete
     # Ensure recipe deleted
     # Then redirect to my recipes
     elif(request.method == "POST"):
+        recipe.delete()
         posted_data_dict = request.POST.copy()
         return redirect('recipes:my_recipes') # Return to my recipes
-    return render(request=request, template_name=".\\recipes\\delete.html", context=context)
+    return redirect('recipes:my_recipes')
 
 
 
@@ -214,6 +269,7 @@ def search_results(request, *args, **kwargs):
 # Open my recipes
 # Return search results for authenticated user
 @csrf_protect
+@login_required
 @safe_method_validator(".\\recipes\\search_results.html", ["GET", "POST", "HEAD", "OPTIONS"])
 def my_recipes(request, *args, **kwargs):
     """
@@ -226,5 +282,7 @@ def my_recipes(request, *args, **kwargs):
     """
     posted_data_dict = request.POST.copy()
     context = {}
-    return render(request=request, template_name=".\\recipes\\search_results.html", context=context)
+    # return render(request=request, template_name=".\\recipes\\search_results.html", context=context)
+    return redirect('recipes:create_recipe') #~! TEMPORARY REDIRECT
+
 

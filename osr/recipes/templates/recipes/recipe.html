@@ -1,0 +1,134 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ recipe.title }}</title>
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'accounts:home_page' %}">MySite</a>
+  </div>
+</nav>
+
+<div class="container pb-5">
+
+  <!-- Title + meta -->
+  <div class="mb-4">
+    <h1 class="mb-1">{{ recipe.title }}</h1>
+
+    <div class="text-muted">
+      {% if recipe.category %}
+        <span class="me-3">📂 {{ recipe.category.name }}</span>
+      {% endif %}
+      <span class="me-3">⏱ {{ recipe.prep_time_minutes }} min</span>
+      <span>⭐ Difficulty {{ recipe.difficulty }}/5</span>
+    </div>
+  </div>
+
+  <!-- Descriptions -->
+  {% if recipe.short_description %}
+    <p class="lead">{{ recipe.short_description }}</p>
+  {% endif %}
+
+  {% if recipe.long_description %}
+    <p>{{ recipe.long_description }}</p>
+  {% endif %}
+
+  <hr>
+
+  <!-- Ingredients -->
+  <section class="mb-4">
+    <h3>Ingredients</h3>
+
+    <ul class="list-group list-group-flush">
+      {% for line in recipe.recipeingredient_set.all %}
+        <li class="list-group-item px-0">
+          {% if line.quantity %}
+            {{ line.quantity|floatformat:"-3" }}
+          {% endif %}
+          {% if line.unit_text %}
+            {{ line.unit_text }}
+          {% endif %}
+          {{ line.ingredient.name }}
+          {% if line.prep_note %}
+            <span class="text-muted">— {{ line.prep_note }}</span>
+          {% endif %}
+        </li>
+      {% empty %}
+        <li class="list-group-item text-muted">
+          No ingredients listed.
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <hr>
+
+  <!-- Instructions -->
+  <section class="mb-4">
+    <h3>Instructions</h3>
+
+    {% if recipe.instructions %}
+      <pre class="bg-light p-3 rounded">{{ recipe.instructions }}</pre>
+    {% else %}
+      <p class="text-muted">No instructions provided.</p>
+    {% endif %}
+  </section>
+
+  <!-- Tags -->
+  {% if recipe.tags.exists %}
+    <section class="mb-4">
+      <h5>Tags</h5>
+      <div>
+        {% for tag in recipe.tags.all %}
+          <span class="badge bg-secondary me-1">{{ tag.name }}</span>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  <hr>
+
+  <!-- Footer / actions -->
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="text-muted small">
+      Created {{ recipe.created_at|date:"M j, Y" }}
+    </div>
+
+    {% if user.is_authenticated and recipe.owner == user %}
+      <div>
+        <a
+          href="{% url 'recipes:update_recipe' recipe.id %}"
+          class="btn btn-outline-secondary btn-sm"
+        >
+          Edit
+        </a>
+        {% comment %} <a
+          href="{% url 'recipes:delete_recipe' recipe.id %}"
+          class="btn btn-outline-danger btn-sm"
+        >
+          Delete
+        </a> {% endcomment %}
+        <form action="{% url 'recipes:delete_recipe' recipe.id %}" method="post">
+            {% csrf_token %}
+            <p>Delete This Recipe?</p>
+            <input type="submit" value="Delete {{recipe}}">
+        </form>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

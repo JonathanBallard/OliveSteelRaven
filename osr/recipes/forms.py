@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.forms import BaseInlineFormSet, inlineformset_factory
 
-from .models import Ingredient, Recipe, RecipeIngredient, Tag
+from .models import Ingredient, Recipe, RecipeIngredient, Tag, Category
 
 
 _whitespace_re = re.compile(r"\s+")
@@ -42,6 +42,13 @@ class RecipeForm(forms.ModelForm):
     - Deduping by normalized value (collapsed whitespace + case-insensitive match)
     - Enforcing max 3 total tags per recipe (selected + newly created)
     """
+    
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.order_by("name"),
+        empty_label="-Select a Category-",
+        required=True,
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
 
     tag_1 = forms.CharField(
         max_length=24,
@@ -66,6 +73,12 @@ class RecipeForm(forms.ModelForm):
             attrs={"class": "form-control", "placeholder": "New tag (optional)"}
         ),
         label="New tag 3",
+    )
+    
+    tags = forms.ModelMultipleChoiceField(
+        queryset=Tag.objects.order_by("name"),
+        required=False,
+        widget=forms.SelectMultiple(attrs={"class": "form-select"}),
     )
 
     class Meta:
@@ -198,7 +211,7 @@ class RecipeForm(forms.ModelForm):
         else:
             # Defer M2M until caller invokes form.save_m2m()
             self.save_m2m = _save_m2m  # type: ignore[attr-defined]
-
+    
         return instance
 
 
@@ -231,6 +244,9 @@ class RecipeIngredientLineForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        
+        if "DELETE" in self.fields:
+            self.fields["DELETE"].widget = forms.HiddenInput()
 
         # When editing existing lines, prefill ingredient_name from FK
         if self.instance and self.instance.pk and getattr(self.instance, "ingredient_id", None):
@@ -254,6 +270,14 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
     - assigns line_order based on the order the forms appear on the page
     - resolves ingredient_name -> Ingredient FK (create if missing; dedupe globally)
     """
+    
+    def add_fields(self, form, index):
+        super().add_fields(form, index)
+
+        # can_delete=True adds this field at the formset level,
+        # so we hide it here (not in the form __init__).
+        if "DELETE" in form.fields:
+            form.fields["DELETE"].widget = forms.HiddenInput()
 
     def clean(self):
         super().clean()
