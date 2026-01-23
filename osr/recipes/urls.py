@@ -23,11 +23,12 @@ from recipes import views
 app_name = 'recipes'
 
 urlpatterns = [
-    path('browse/', views.browse, name='browse'), # Display the browse page
-    path('recipe/<str:recipe_id>/', views.recipe, name='view_recipe'), # Display the recipe details page
+    path('categories/', views.categories, name='categories'), # Display the categories page
+    path('categories/<str:category_id>/', views.recipe_by_category, name='recipe_by_category'), # Search for every recipe in a particular category
+    path('recipe/<int:recipe_id>/', views.recipe, name='view_recipe'), # Display the recipe details page
     path('create/', views.create, name='create_recipe'), # Display the create page
-    path('update/<str:recipe_id>/', views.update, name='update_recipe'), # Display the update page
-    path('delete/<str:recipe_id>/', views.delete, name='delete_recipe'), # Display the delete page
+    path('update/<int:recipe_id>/', views.update, name='update_recipe'), # Display the update page
+    path('delete/<int:recipe_id>/', views.delete, name='delete_recipe'), # Display the delete page
     path('search/', views.search, name='search'), # Display the search page
     path('search_results/', views.search_results, name='search_results'), # Display the search results page
     path('search/my_recipes/', views.my_recipes, name='my_recipes')

@@ -156,3 +156,15 @@ updated_at - datetime
 #### Things to Consider Doing Differently
 
 1. Use Django's Forms and Templates
+
+#### Where did I use AI?
+
+Note: Each piece of AI generated code was reviewed and edited.
+
+1. I used AI generated comments, forms, templates, and models to varying extents.
+Models: I designed my own Schema, and created my own models.
+I then asked AI to edit those models as the project progressed.
+Forms: I built the `accounts` app forms first, and later asked AI to rework them.
+Templates: I had AI generate templates for me to use during testing.
+I then worked from those stubs to create the final templates.
+2. I relied heavily on AI to generate Docstring stubs and comment my code.

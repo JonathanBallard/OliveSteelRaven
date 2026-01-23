@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.views.decorators.csrf import csrf_protect
 
-from .models import Recipe
+from .models import Recipe, Category, Tag
 from .forms import RecipeForm, RecipeIngredientFormSet
 
 from common.utils import safe_method_validator
@@ -25,26 +25,51 @@ from common.utils import safe_method_validator
 # Search
 # Search Results
 
-# Open browse.html
-@safe_method_validator(".\\recipes\\browse.html", ["GET", "HEAD", "OPTIONS"])
-def browse(request, *args, **kwargs):
+# *DONE* Render categories.html
+@safe_method_validator(".\\recipes\\categories.html", ["GET", "HEAD", "OPTIONS"])
+def categories(request, *args, **kwargs):
     """
-    Docstring for browse
+    Docstring for categories
     
     :param request: HTTP Request
     
     GET: Renders the Browse Categories Template
     """
-    context = {}
-    return render(request=request, template_name=".\\recipes\\browse.html", context=context)
+    context = {"categories": Category.objects.all().order_by("name")}
+    return render(request=request, template_name=".\\recipes\\categories.html", context=context)
 
-# Render recipe.html
+# *DONE* Open search results for single category
+# *DONE* Search database for that category
+# *DONE* Render Search Results with data
+@safe_method_validator(".\\recipes\\categories.html", ["GET", "HEAD", "OPTIONS"])
+def recipe_by_category(request, category_id, *args, **kwargs):
+    """
+    Docstring for recipe_by_category
+    
+    :param request: HTTP Request
+    :param category_id: PK of the category that we're displaying the search results for
+    
+    GET: Renders the Browse Categories Template
+    """
+    
+    category_recipes = Recipe.objects.filter(category_id = category_id)
+    category_name = Category.objects.get(pk=category_id).name
+    
+    context = {
+        "search_category": category_id,
+        "category_name": category_name,
+        "results": category_recipes,
+    }
+    return render(request=request, template_name=".\\recipes\\search_results.html", context=context)
+
+# *DONE* Render recipe.html
 @safe_method_validator(".\\recipes\\recipe.html", ["GET", "HEAD", "OPTIONS"])
 def recipe(request, recipe_id, *args, **kwargs):
     """
     Docstring for recipe
     
     :param request: HTTP Request
+    :param recipe_id: PK of the recipe whose details are being rendered
     
     GET: Renders the Recipe Details Page
     """
@@ -57,7 +82,8 @@ def recipe(request, recipe_id, *args, **kwargs):
 #^ START `CREATE` VIEWS
 #&-----------------------------------------------------------------------------------------------------
 
-# Render create.html
+# *DONE* Render create.html
+# *DONE* Create new Recipe
 @csrf_protect
 @login_required
 @safe_method_validator(".\\recipes\\create.html", ["POST", "GET", "HEAD", "OPTIONS"])
@@ -126,13 +152,16 @@ def create(request, *args, **kwargs):
 #^ START `UPDATE` VIEWS
 #&-----------------------------------------------------------------------------------------------------
 
-# Render update.html
+# *DONE* Render update.html
+# *DONE* Ensure user is recipe's owner
+# *DONE* Post results
 @csrf_protect
 @login_required
 @safe_method_validator(".\\recipes\\update.html", ["POST", "GET", "HEAD", "OPTIONS"])
 def update(request, recipe_id=0, *args, **kwargs):
     """
     :param request: HTTP Request
+    :param recipe_id: PK of the recipe we're updating
 
     GET: Renders the Update Recipe Form Template
     POST: Updates the Recipe Form
@@ -194,7 +223,8 @@ def update(request, recipe_id=0, *args, **kwargs):
 #^ START `DELETE` VIEWS
 #&-----------------------------------------------------------------------------------------------------
 
-# Render delete.html
+# *DONE* Render delete.html
+# *DONE* Delete Recipe if user is owner
 @csrf_protect
 @login_required
 @safe_method_validator(".\\recipes\\delete.html", ["POST", "GET", "HEAD", "OPTIONS"])
@@ -203,6 +233,7 @@ def delete(request, recipe_id, *args, **kwargs):
     Docstring for delete
     
     :param request: HTTP Request
+    :param recipe_id: PK of the recipe we're deleting
     
     GET: Renders the Deletion Confirmation Template
     POST: Deletes Recipe
@@ -253,7 +284,9 @@ def search(request, *args, **kwargs):
     return render(request=request, template_name=".\\recipes\\search.html", context=context)
 
 
-# Render search_results.html
+# Retreive information from search
+# Search Database
+# Render Results in search_results.html
 @safe_method_validator(".\\recipes\\search_results.html", ["GET", "HEAD", "OPTIONS"])
 def search_results(request, *args, **kwargs):
     """
@@ -266,8 +299,8 @@ def search_results(request, *args, **kwargs):
     context = {}
     return render(request=request, template_name=".\\recipes\\search_results.html", context=context)
 
-# Open my recipes
-# Return search results for authenticated user
+# *DONE* Render my recipes
+# *DONE* Return search results for authenticated user
 @csrf_protect
 @login_required
 @safe_method_validator(".\\recipes\\search_results.html", ["GET", "POST", "HEAD", "OPTIONS"])
@@ -282,7 +315,12 @@ def my_recipes(request, *args, **kwargs):
     """
     posted_data_dict = request.POST.copy()
     context = {}
-    # return render(request=request, template_name=".\\recipes\\search_results.html", context=context)
-    return redirect('recipes:create_recipe') #~! TEMPORARY REDIRECT
+    if(not request.user.is_authenticated):
+        return redirect('account:login')
+    else:
+        my_recipes = Recipe.objects.filter(owner=request.user)
+        context['results'] = my_recipes
+    return render(request=request, template_name=".\\recipes\\search_results.html", context=context)
+    # return redirect('recipes:create_recipe') #~! TEMPORARY REDIRECT
 
 

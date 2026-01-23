@@ -1,0 +1,45 @@
+{# templates/recipes/categories.html #}
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Categories{% endblock %}
+
+{% block content %}
+<section class="categories-hero">
+  <div class="categories-inner">
+    <div class="container">
+
+      <h2 class="page-title">Recipe Categories</h2>
+
+      {% if categories %}
+        <div class="row g-3 justify-content-center">
+          {% for category in categories %}
+            {# Mobile: 2 per row (col-6). Desktop lg+: 6 per row (col-lg-2). #}
+            <div class="col-6 col-sm-4 col-lg-2 d-flex">
+              <a class="cat-card w-100"
+                 href="{% url 'recipes:recipe_by_category' category_id=category.id %}"
+                 title="{{ category.name }}">
+                <div class="cat-card-body">
+                  <div class="cat-icon">
+                    {# If you later add per-category icons, swap this to category.image/icon field. #}
+                    <img
+                    src="{% static 'icons/categories/' %}{{ category.name|slugify }}.png"
+                    alt="{{ category.name }} icon"
+                    onerror="this.onerror=null; this.src='{% static 'icons/categories/default.png' %}';">
+                  </div>
+                  <div class="cat-label">{{ category.name }}</div>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="alert alert-info mb-0">
+          No categories yet.
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</section>
+{% endblock %}
