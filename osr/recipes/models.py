@@ -154,31 +154,43 @@ class Recipe(models.Model):
     )
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-
+        
         if not self.recipe_image:
             return
-
+        
         img = Image.open(self.recipe_image)
-
-        # Convert to RGB if needed (PNG/WebP safety)
-        if img.mode not in ("RGB", "RGBA"):
+        
+        # ✅ JPEG can't store alpha. If PNG/WebP has transparency, flatten to white.
+        if img.mode in ("RGBA", "LA"):
+            bg = Image.new("RGB", img.size, (255, 255, 255))
+            alpha = img.split()[-1]
+            bg.paste(img, mask=alpha)
+            img = bg
+        elif img.mode != "RGB":
             img = img.convert("RGB")
-
-        # Resize to 200x200 (center-cropped, no distortion)
-        img.thumbnail((settings.RECIPE_IMAGE_SIZE, settings.RECIPE_IMAGE_SIZE), Image.LANCZOS) #type: ignore
-
+            
+        # Resize (no distortion)
+        img.thumbnail(
+            (settings.RECIPE_IMAGE_SIZE, settings.RECIPE_IMAGE_SIZE),
+            Image.LANCZOS,  # type: ignore
+        )
+        
         buffer = BytesIO()
         img.save(buffer, format="JPEG", quality=85)
         buffer.seek(0)
-
-        # Replace the file
+        
+        # Replace the file (force .jpg extension so file type matches content)
+        base, _dot, _ext = self.recipe_image.name.rpartition(".")
+        new_name = f"{base}.jpg" if base else "recipe.jpg"
+        
         self.recipe_image.save(
-            self.recipe_image.name,
+            new_name,
             ContentFile(buffer.read()),
             save=False,
         )
-
+        
         super().save(update_fields=["recipe_image"])
+
 
     class Meta:
         db_table = "recipes"
