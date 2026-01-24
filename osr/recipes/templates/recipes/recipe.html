@@ -55,7 +55,7 @@
     <h3>Ingredients</h3>
 
     <ul class="list-group list-group-flush">
-      {% for line in recipe.recipeingredient_set.all %}
+      {% for line in recipe.ingredient_lines %}
         <li class="list-group-item px-0">
           {% if line.quantity %}
             {{ line.quantity|floatformat:"-3" }}

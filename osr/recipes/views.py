@@ -1,6 +1,6 @@
 import logging
 
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed
 from django.contrib import messages
@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.views.decorators.csrf import csrf_protect
 
-from .models import Recipe, Category, Tag
+from .models import Recipe, Category, Tag, RecipeIngredient, Ingredient
 from .forms import RecipeForm, RecipeIngredientFormSet
 from .utils import normalize_name
 
@@ -78,17 +78,31 @@ def recipe_by_category(request, category_id, *args, **kwargs):
 @safe_method_validator(".\\recipes\\recipe.html", ["GET", "HEAD", "OPTIONS"])
 def recipe(request, recipe_id, *args, **kwargs):
     """
-    Docstring for recipe
-    
-    :param request: HTTP Request
-    :param recipe_id: PK of the recipe whose details are being rendered
-    
     GET: Renders the Recipe Details Page
     """
-    context = {}
-    recipe = get_object_or_404(Recipe, pk=recipe_id)
-    context['recipe'] = Recipe.objects.get(pk=recipe_id)
-    return render(request=request, template_name=".\\recipes\\recipe.html", context=context)
+    # Prefetch tags + ingredient lines (through model) in a bounded number of queries
+    recipe_obj = get_object_or_404(
+        Recipe.objects
+        .select_related("category", "owner")
+        .prefetch_related("tags")
+        .prefetch_related(
+            Prefetch(
+                "recipeingredient_set",
+                queryset=RecipeIngredient.objects
+                    .select_related("ingredient")
+                    .order_by("line_order"),
+                to_attr="ingredient_lines",
+            )
+        ),
+        pk=recipe_id,
+    )
+    
+    context = {"recipe": recipe_obj}
+    return render(
+        request=request,
+        template_name=".\\recipes\\recipe.html",
+        context=context,
+    )
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `CREATE` VIEWS
@@ -113,7 +127,7 @@ def create(request, *args, **kwargs):
     if(request.method == "GET"):
         form = RecipeForm()
         formset = RecipeIngredientFormSet(prefix="ingredients")
-
+        
         context = {
             "form": form,
             "formset": formset,
@@ -125,25 +139,26 @@ def create(request, *args, **kwargs):
     elif request.method == "POST":
         form = RecipeForm(request.POST, request.FILES)
         formset = RecipeIngredientFormSet(request.POST, prefix="ingredients")
-
+        
         if form.is_valid() and formset.is_valid():
             with transaction.atomic():
                 recipe = form.save(commit=False)
                 recipe.owner = request.user
                 recipe.save()
-
+                
                 # Save M2M (tags)
+                form.instance = recipe
                 form.save_m2m()
-
+                
                 # Attach recipe to ingredient formset and save
                 formset.instance = recipe
                 formset.save()
-
+                
             return redirect("recipes:view_recipe", recipe_id=recipe.pk)
-
+        
         # ❌ INVALID — re-render template with bound forms (NO redirect)
         messages.error(request, "Please fix the errors below.")
-
+        
         context = {
             "form": form,
             "formset": formset,
@@ -154,7 +169,7 @@ def create(request, *args, **kwargs):
             context=context,
             status=400,
         )
-
+        
     return render(request=request, template_name=".\\recipes\\recipe_form.html", context=context)
 
 
