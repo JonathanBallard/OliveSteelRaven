@@ -62,7 +62,6 @@ class Ingredient(models.Model):
     class Meta:
         db_table = "ingredients"
         indexes = [
-            # Useful for “contains”/prefix-ish queries on normalized names
             models.Index(fields=["name_normalized"], name="idx_ing_norm"),
         ]
         

@@ -316,27 +316,42 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
         for i, form in enumerate(kept_forms, start=1):
             form.instance.line_order = i
             
-        # Resolve Ingredient FK for each form
+        norms: list[str] = []
         for form in kept_forms:
             raw = (form.cleaned_data.get("ingredient_name") or "").strip()
             norm = normalize_name(raw)
-            
+
             if not norm:
                 raise ValidationError("Ingredient name can't be blank.")
-            
-            # Canonical display name (consistent casing/whitespace)
-            pretty = norm.title()
-            
-            ingredient = Ingredient.objects.filter(name_normalized=norm).first()
+
+            form.cleaned_data["_ingredient_norm"] = norm  # stash for reuse below
+            norms.append(norm)
+
+        # De-dupe norms to keep queries small
+        unique_norms = list(dict.fromkeys(norms))  # preserves order
+
+        # 1) Fetch all existing Ingredients in one query
+        existing = Ingredient.objects.filter(name_normalized__in=unique_norms)
+        by_norm = {ing.name_normalized: ing for ing in existing}
+
+        # 2) Bulk create missing (ignore_conflicts handles races)
+        missing_norms = [n for n in unique_norms if n not in by_norm]
+        if missing_norms:
+            Ingredient.objects.bulk_create(
+                [Ingredient(name=n.title(), name_normalized=n) for n in missing_norms],
+                ignore_conflicts=True,
+            )
+
+            # 3) Re-fetch missing to obtain PKs (one query)
+            created = Ingredient.objects.filter(name_normalized__in=missing_norms)
+            by_norm.update({ing.name_normalized: ing for ing in created})
+
+        # 4) Assign resolved Ingredient FK to each form instance
+        for form in kept_forms:
+            norm = form.cleaned_data["_ingredient_norm"]
+            ingredient = by_norm.get(norm)
             if ingredient is None:
-                try:
-                    ingredient = Ingredient.objects.create(
-                        name=pretty,
-                        name_normalized=norm,
-                    )
-                except IntegrityError:
-                    ingredient = Ingredient.objects.get(name_normalized=norm)
-                    
+                raise ValidationError(f"Could not resolve ingredient: {norm}")
             form.instance.ingredient = ingredient
             
         if commit:
