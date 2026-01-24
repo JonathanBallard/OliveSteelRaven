@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model, authenticate, logout, login
 from django.contrib.auth.forms import UserCreationForm
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.decorators import login_required
 
 from accounts.forms import UserModelForm, UserLoginForm, UserUpdateForm
 
@@ -157,6 +158,7 @@ def signup(request, *args, **kwargs):
 # logout
 # Currently not in use, instead using Django's built-in logout view
 @csrf_protect
+@login_required
 @safe_method_validator(".\\accounts\\signup.html", ["POST", "HEAD", "OPTIONS"])
 def my_logout(request, *args, **kwargs):
     """

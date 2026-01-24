@@ -2,7 +2,7 @@ import logging
 
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model, authenticate, logout, login
@@ -27,6 +27,11 @@ from common.utils import safe_method_validator
 # Search
 # Search Results
 
+
+#&-----------------------------------------------------------------------------------------------------
+#^ START `CATEGORIES` VIEWS
+#&-----------------------------------------------------------------------------------------------------
+
 # *DONE* Render categories.html
 @safe_method_validator(".\\recipes\\categories.html", ["GET", "HEAD", "OPTIONS"])
 def categories(request, *args, **kwargs):
@@ -39,6 +44,7 @@ def categories(request, *args, **kwargs):
     """
     context = {"categories": Category.objects.all().order_by("name")}
     return render(request=request, template_name=".\\recipes\\categories.html", context=context)
+
 
 # *DONE* Open search results for single category
 # *DONE* Search database for that category
@@ -63,6 +69,10 @@ def recipe_by_category(request, category_id, *args, **kwargs):
         "results": category_recipes,
     }
     return render(request=request, template_name=".\\recipes\\search_results.html", context=context)
+
+#&-----------------------------------------------------------------------------------------------------
+#^ START `RECIPE` VIEWS
+#&-----------------------------------------------------------------------------------------------------
 
 # *DONE* Render recipe.html
 @safe_method_validator(".\\recipes\\recipe.html", ["GET", "HEAD", "OPTIONS"])
@@ -214,12 +224,9 @@ def update(request, recipe_id=0, *args, **kwargs):
             context=context,
             status=400,
         )
-
-    return render(
-        request=request,
-        template_name=".\\recipes\\recipe_form.html",
-        context={},
-    )
+    
+    # Just in case safe_method_validator fails or is later removed
+    return HttpResponseNotAllowed(["GET", "POST"])
 
 
 
@@ -276,7 +283,18 @@ def search(request, *args, **kwargs):
     GET: Renders the Search Form Template
     POST: Searches for matching recipes
     """
+    
+    # --- Search guardrails ---
+    MIN_Q_LEN = 2
+    MAX_Q_LEN = 64
+    
     q_raw = (request.GET.get("q") or "").strip()
+    q_raw = q_raw[:MAX_Q_LEN]
+    
+    # Ignore ultra-short queries (e.g. "a") to avoid noisy/expensive searches
+    if len(q_raw) < MIN_Q_LEN:
+        q_raw = ""
+    
     q_norm = normalize_name(q_raw) if q_raw else ""
     category_id = (request.GET.get("category_id") or "").strip()
 
