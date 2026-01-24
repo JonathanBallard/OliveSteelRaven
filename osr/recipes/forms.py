@@ -102,6 +102,10 @@ class RecipeForm(forms.ModelForm):
             return val
         if val < 0:
             raise ValidationError("Prep time can’t be negative (unless your oven is a black hole).")
+        try:
+            val = int(val)
+        except:
+            raise ValidationError("Prep time must be a number of minutes. No text please!")
         return val
     
     def _get_new_tag_inputs(self) -> List[str]:
@@ -275,18 +279,18 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
     
     def add_fields(self, form, index):
         super().add_fields(form, index)
-
+        
         # can_delete=True adds this field at the formset level,
         # so we hide it here (not in the form __init__).
         if "DELETE" in form.fields:
             form.fields["DELETE"].widget = forms.HiddenInput()
-
+            
     def clean(self):
         super().clean()
-
+        
         if any(self.errors):
             return
-
+        
         kept = [
             f
             for f in self.forms
@@ -296,10 +300,10 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
         ]
         if not kept:
             raise ValidationError("Please add at least one ingredient.")
-
+        
     def save(self, commit: bool = True):
         instances = super().save(commit=False)
-
+        
         kept_forms = [
             f
             for f in self.forms
@@ -307,16 +311,22 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
             and f.cleaned_data
             and not f.cleaned_data.get("DELETE", False)
         ]
-
+        
         # Auto line_order: 1..N in UI order
         for i, form in enumerate(kept_forms, start=1):
             form.instance.line_order = i
-
+            
         # Resolve Ingredient FK for each form
         for form in kept_forms:
-            pretty = form.cleaned_data["ingredient_name"].strip()
-            norm = normalize_name(pretty)
-
+            raw = (form.cleaned_data.get("ingredient_name") or "").strip()
+            norm = normalize_name(raw)
+            
+            if not norm:
+                raise ValidationError("Ingredient name can't be blank.")
+            
+            # Canonical display name (consistent casing/whitespace)
+            pretty = norm.title()
+            
             ingredient = Ingredient.objects.filter(name_normalized=norm).first()
             if ingredient is None:
                 try:
@@ -325,16 +335,15 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
                         name_normalized=norm,
                     )
                 except IntegrityError:
-                    # Another request created it concurrently.
                     ingredient = Ingredient.objects.get(name_normalized=norm)
-
+                    
             form.instance.ingredient = ingredient
-
+            
         if commit:
             for inst in instances:
                 inst.save()
             self.save_m2m()
-
+            
         return instances
 
 

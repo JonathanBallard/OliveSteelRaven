@@ -13,16 +13,7 @@ from django.db.models import Q
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.files.base import ContentFile
 
-def normalize_ingredient_name(raw: str) -> str:
-    """
-    Normalization used for de-duping + searching.
-    V1: strip, collapse whitespace, lowercase.
-    """
-    if raw is None:
-        return ""
-    s = raw.strip()
-    s = re.sub(r"\s+", " ", s)
-    return s.lower()
+from .utils import normalize_name
 
 
 class Category(models.Model):
@@ -65,23 +56,29 @@ class Ingredient(models.Model):
     """
     name = models.CharField(max_length=120)
     name_normalized = models.CharField(max_length=120, unique=True, db_index=True)
-
+    
     created_at = models.DateTimeField(auto_now_add=True)
-
+    
     class Meta:
         db_table = "ingredients"
         indexes = [
             # Useful for “contains”/prefix-ish queries on normalized names
             models.Index(fields=["name_normalized"], name="idx_ing_norm"),
         ]
-
+        
     def save(self, *args, **kwargs):
-        self.name = (self.name or "").strip()
-        if not self.name:
+        raw = (self.name or "").strip()
+        if not raw:
             raise ValueError("Ingredient.name cannot be empty.")
-        self.name_normalized = normalize_ingredient_name(self.name)
+        
+        norm = normalize_name(raw)
+        
+        # Canonical display name: consistent casing/whitespace
+        self.name_normalized = norm
+        self.name = norm.title()
+        
         super().save(*args, **kwargs)
-
+        
     def __str__(self) -> str:
         return self.name
 
