@@ -30,7 +30,7 @@ class RecipeForm(forms.ModelForm):
         required=True,
         widget=forms.Select(attrs={"class": "form-select"}),
     )
-
+    
     tag_1 = forms.CharField(
         max_length=24,
         required=False,
@@ -95,7 +95,7 @@ class RecipeForm(forms.ModelForm):
             "user_rating": forms.NumberInput(attrs={"class": "form-control", "min": 1, "max": 5}),
             "tags": forms.SelectMultiple(attrs={"class": "form-select"}),
         }
-
+        
     def clean_prep_time_minutes(self):
         val = self.cleaned_data.get("prep_time_minutes")
         if val is None:
@@ -103,60 +103,55 @@ class RecipeForm(forms.ModelForm):
         if val < 0:
             raise ValidationError("Prep time can’t be negative (unless your oven is a black hole).")
         return val
-
+    
     def _get_new_tag_inputs(self) -> List[str]:
         raw_vals = [
             self.cleaned_data.get("tag_1", ""),
             self.cleaned_data.get("tag_2", ""),
             self.cleaned_data.get("tag_3", ""),
         ]
-
+        
         normalized: List[str] = []
         seen = set()
-
+        
         for raw in raw_vals:
             name = normalize_name(raw)
             if not name:
                 continue
-
+            
             key = name.lower()
             if key in seen:
                 continue  # ignore duplicates across tag_1..tag_3
             seen.add(key)
             normalized.append(name)
-
+            
         return normalized
-
+    
     def clean(self):
         cleaned = super().clean()
-
-        # Selected existing tags (may be empty)
-        selected_tags = cleaned.get("tags")
-        selected_count = len(selected_tags) if selected_tags is not None else 0
-
-        # New tags entered (0..3, de-duped)
+        
+        # Selected existing tags (QuerySet-like; may be empty/None)
+        selected_tags = list(cleaned.get("tags") or [])
+        selected_count = len(selected_tags)
+        
+        # New tags entered (0..3, normalized + de-duped across tag_1..tag_3)
         new_tags = self._get_new_tag_inputs()
-
+        
+        # Remove any "new" tags that are already selected (case/space-insensitive)
+        # normalize_name() already lowercases, so compare normalized strings directly.
+        if selected_tags and new_tags:
+            selected_keys = {normalize_name(t.name) for t in selected_tags}
+            new_tags = [t for t in new_tags if t not in selected_keys]
+            
+        # Enforce max constraint AFTER de-dupe between selected + new
         total = selected_count + len(new_tags)
         if total > 3:
             raise ValidationError("Please use at most 3 tags total per recipe.")
-
-        # Prevent redundant “new tag” if it matches a selected tag already
-        if selected_tags and new_tags:
-            selected_keys = {normalize_name(t.name) for t in selected_tags}
-            filtered = [t for t in new_tags if t.lower() not in selected_keys]
-
-            # If filtering changes count, re-check max constraint
-            if selected_count + len(filtered) > 3:
-                raise ValidationError("Please use at most 3 tags total per recipe.")
-
-            # Store back so save() uses the filtered list
-            cleaned["_new_tags_normalized"] = filtered
-        else:
-            cleaned["_new_tags_normalized"] = new_tags
-
+        
+        # Store back so save() uses the filtered list
+        cleaned["_new_tags_normalized"] = new_tags
         return cleaned
-
+    
     def _resolve_tags(self, names: Iterable[str]) -> List[Tag]:
         """
         Given normalized tag names, return Tag objects:
@@ -170,7 +165,7 @@ class RecipeForm(forms.ModelForm):
             if existing is not None:
                 tags.append(existing)
                 continue
-
+            
             try:
                 tags.append(Tag.objects.create(name=name))
             except IntegrityError:
@@ -180,37 +175,37 @@ class RecipeForm(forms.ModelForm):
     
     def clean_image(self):
         image = self.cleaned_data.get("image")
-
+        
         if not image:
             return image  # image is optional
         
         valid_mime_types = ["image/jpeg", "image/png", "image/webp"]
-
+        
         if image.content_type not in valid_mime_types:
             raise forms.ValidationError("Only JPEG, PNG, or WEBP images are allowed.")
-
+        
         max_size = settings.MAX_IMAGE_SIZE_MB * 1024 * 1024
-
+        
         if image.size > max_size:
             raise forms.ValidationError(
                 f"Image file too large (max {settings.MAX_IMAGE_SIZE_MB} MB)."
             )
-
+            
         return image
-
+    
     def save(self, commit: bool = True):
         # Save the Recipe itself first (M2M needs a PK)
         instance = super().save(commit=False)
-
+        
         # Collect tag intents
         selected = list(self.cleaned_data.get("tags") or [])
         new_names = list(self.cleaned_data.get("_new_tags_normalized") or [])
-
+        
         def _save_m2m():
             # Resolve any new tags, then set the M2M with the combined list
             extra = self._resolve_tags(new_names) if new_names else []
             instance.tags.set([*selected, *extra])
-
+            
         if commit:
             with transaction.atomic():
                 instance.save()
