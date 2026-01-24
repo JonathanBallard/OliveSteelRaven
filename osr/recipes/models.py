@@ -10,6 +10,7 @@ from io import BytesIO
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
+from django.db.models.constraints import Deferrable
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.files.base import ContentFile
 
@@ -229,6 +230,7 @@ class RecipeIngredient(models.Model):
             models.UniqueConstraint(
                 fields=["recipe", "line_order"],
                 name="uq_recipe_line_order_pk",
+                deferrable=Deferrable.DEFERRED,
             ),
             models.CheckConstraint(
                 condition=Q(line_order__gt=0),
