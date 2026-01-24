@@ -55,15 +55,12 @@ class Ingredient(models.Model):
     Prevent duplicates with a normalized unique field.
     """
     name = models.CharField(max_length=120)
-    name_normalized = models.CharField(max_length=120, unique=True, db_index=True)
+    name_normalized = models.CharField(max_length=120, unique=True)
     
     created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         db_table = "ingredients"
-        indexes = [
-            models.Index(fields=["name_normalized"], name="idx_ing_norm"),
-        ]
         
     def save(self, *args, **kwargs):
         raw = (self.name or "").strip()
