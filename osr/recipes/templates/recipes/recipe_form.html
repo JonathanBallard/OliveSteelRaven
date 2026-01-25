@@ -2,11 +2,11 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}
+
 <title>
-  {% if form.instance.pk %}Edit Recipe{% else %}Create Recipe{% endif %}
+  {% block title %}{% if form.instance.pk %}Edit Recipe{% else %}Create Recipe{% endif %}{% endblock %}
 </title>
-{% endblock %}
+
 
 <body>
 {% block header %}
