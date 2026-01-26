@@ -99,13 +99,7 @@ class LoginTests(TestCase):
     #&-----------------------------------------------------------------------------------------------------
     
     def test_anonymous_account(self):
-        """
-        Docstring for test_anonymous_account
-        
-        Using assertEqual(resp.status_code, 302) here is
-        our best bet, since we built-in a redirect
-        path specifically for anonymous users.
-        """
         resp = self.client.get(self.account_url)
         
+        # Shows anonymous user redirected to login
         self.assertEqual(resp.status_code, 302)
