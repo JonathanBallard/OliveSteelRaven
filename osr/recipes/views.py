@@ -59,16 +59,32 @@ def recipe_by_category(request, category_id, *args, **kwargs):
     
     GET: Renders the Browse Categories Template
     """
+    qs = Recipe.objects.select_related("category")
     
     category_recipes = Recipe.objects.filter(category_id = category_id)
     category_name = Category.objects.get(pk=category_id).name
+    filters = Q()
     
+    selected_category = get_object_or_404(Category, pk=category_id)
+    filters &= Q(category_id=selected_category.id) #type: ignore
+    
+    if category_id:
+        recipes = (
+            qs.filter(filters)
+            .distinct()
+            .order_by("title")
+        )
+        results_count = recipes.count()
+    else:
+        recipes = Recipe.objects.none()
+        results_count = None
     context = {
-        "search_category": category_id,
-        "category_name": category_name,
-        "results": category_recipes,
+        "categories": categories,
+        "recipes": recipes,
+        "selected_category": selected_category,
+        "results_count": results_count,
     }
-    return render(request=request, template_name=".\\recipes\\search_results.html", context=context)
+    return render(request, "recipes/search.html", context)
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `RECIPE` VIEWS
