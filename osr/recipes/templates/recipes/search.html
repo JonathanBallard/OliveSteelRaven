@@ -81,10 +81,14 @@
                  title="{{ recipe.title }}">
 
                 <div class="thumb">
-                  {% if recipe.picture_url %}
-                    <img src="{{ recipe.recipe_image }}" alt="{{ recipe.title }}">
+                  {% if recipe.recipe_image %}
+                    {% if recipe.recipe_image.errors %}
+                      <img src="{% static 'images/recipe_default.png' %}" alt="Default recipe thumbnail">
+                    {% else %}
+                      <img src="{{ recipe.recipe_image.url }}" alt="{{ recipe.title }}">
+                    {% endif %}
                   {% else %}
-                    <img src="{% static 'images/recipe-default.jpg' %}" alt="Default recipe thumbnail">
+                    <img src="{% static 'images/recipe_default.png' %}" alt="Default recipe thumbnail">
                   {% endif %}
                 </div>
 

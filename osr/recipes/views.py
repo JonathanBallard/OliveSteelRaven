@@ -61,6 +61,8 @@ def recipe_by_category(request, category_id, *args, **kwargs):
     """
     qs = Recipe.objects.select_related("category")
     
+    categories = Category.objects.all()  # ordered via Meta
+    
     category_recipes = Recipe.objects.filter(category_id = category_id)
     category_name = Category.objects.get(pk=category_id).name
     filters = Q()
