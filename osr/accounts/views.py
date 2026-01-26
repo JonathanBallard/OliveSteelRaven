@@ -3,8 +3,10 @@ import logging
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
+from django.urls import path, include, reverse, reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import get_user_model, authenticate, logout, login
+from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import UserCreationForm
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
@@ -61,7 +63,7 @@ def home(request, *args, **kwargs):
 
 # *DONE* Open login.html page
 # Not currently in use, using Django's default login view
-# If we revert to this, it doesn't currently work, and requires renaming to 'login' not 'my_login'
+#! If we revert to this, it doesn't currently work, and requires renaming to 'login' not 'my_login'
 @csrf_protect
 @safe_method_validator(".\\accounts\\login.html", ["GET", "POST", "HEAD", "OPTIONS"])
 def my_login(request, *args, **kwargs):
@@ -74,6 +76,9 @@ def my_login(request, *args, **kwargs):
     POST: Logs user in
     """
     context = {}
+    
+    if(request.user.is_authenticated):
+        return redirect("accounts:account")
     
     if(request.method == 'GET'):
         form = UserLoginForm
@@ -102,6 +107,15 @@ def my_login(request, *args, **kwargs):
             return redirect('accounts:login')
     
     return render(request=request, template_name=".\\accounts\\login.html", context=context)
+
+@csrf_protect
+@safe_method_validator(".\\accounts\\login.html", ["GET", "POST", "HEAD", "OPTIONS"])
+def login_redirect(request, *args, **kwargs):
+    if(request.user.is_authenticated):
+        return redirect("accounts:account")
+    else:
+        return redirect('accounts:login_form')
+
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `SIGNUP` VIEWS
@@ -147,7 +161,7 @@ def signup(request, *args, **kwargs):
             messages.error(request, "User Was Not Created: Other Error")
             form = UserModelForm()
         context['form'] = form
-        return redirect('accounts:get_signup')
+        return redirect('accounts:signup')
     else:
         return render(request=request, template_name=".\\accounts\\signup.html", context=context)
 
@@ -159,7 +173,7 @@ def signup(request, *args, **kwargs):
 # Currently not in use, instead using Django's built-in logout view
 @csrf_protect
 @login_required
-@safe_method_validator(".\\accounts\\signup.html", ["POST", "HEAD", "OPTIONS"])
+@safe_method_validator(".\\accounts\\login.html", ["POST", "HEAD", "OPTIONS"])
 def my_logout(request, *args, **kwargs):
     """
     Docstring for post_logout
@@ -179,6 +193,7 @@ def my_logout(request, *args, **kwargs):
 #&-----------------------------------------------------------------------------------------------------
 
 @csrf_protect
+@login_required #type: ignore
 @safe_method_validator(".\\accounts\\signup.html", ["GET", "POST", "HEAD", "OPTIONS"])
 def account(request, *args, **kwargs):
     """
