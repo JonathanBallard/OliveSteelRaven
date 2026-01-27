@@ -1,0 +1,31 @@
+{# templates/partials/navbar.html #}
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'accounts:home_page' %}">MySite</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:home_page' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'recipes:categories' %}">Browse Recipes</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'recipes:search' %}">Search</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'recipes:create_recipe' %}">Create Recipe</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:account' %}">Account</a></li>
+            </ul>
+        </div>
+        {% if user.is_authenticated %}
+            <p>You are logged in as {{ user.username }}.</p>
+            <form action="{% url 'accounts:logout' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">Log Out</button>
+            </form>
+        {% else %}
+            <p>You are not logged in.</p>
+            <a href="{% url 'accounts:signup' %}">Sign Up</a>
+            <a href="{% url 'accounts:login' %}">Log In</a>
+        {% endif %}
+    </div>
+    
+</nav>

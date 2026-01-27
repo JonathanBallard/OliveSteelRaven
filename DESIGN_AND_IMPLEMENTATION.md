@@ -161,7 +161,7 @@ updated_at - datetime
 
 Note: Each piece of AI generated code was reviewed and edited.
 
-1. I used AI generated comments, forms, templates, and models to varying extents.
+1. I used AI generation to assist me with comments, forms, templates, and models to varying extents.
 Models: I designed my own Schema, and created my own models.
 I then asked AI to edit those models as the project progressed.
 Forms: I built the `accounts` app forms first, and later asked AI to rework them.

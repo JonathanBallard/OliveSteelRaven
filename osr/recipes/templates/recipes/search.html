@@ -77,8 +77,8 @@
           {% for recipe in recipes %}
             <div class="col-12 col-md-6 col-lg-4 d-flex">
               <a class="result-card w-100 text-decoration-none"
-                 href="{% url 'recipes:view_recipe' recipe_id=recipe.id %}"
-                 title="{{ recipe.title }}">
+                href="{% url 'recipes:view_recipe' recipe_id=recipe.id %}"
+                title="{{ recipe.title }}">
 
                 <div class="thumb">
                   {% if recipe.recipe_image %}
