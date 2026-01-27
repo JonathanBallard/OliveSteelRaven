@@ -2,28 +2,8 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}{% if form.instance.pk %}Edit Recipe{% else %}Create Recipe{% endif %}{% endblock %}
 
-<title>
-  {% block title %}{% if form.instance.pk %}Edit Recipe{% else %}Create Recipe{% endif %}{% endblock %}
-</title>
-
-
-<body>
-{% block header %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'accounts:home_page' %}">RecipeBook</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navMenu">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="{% url 'accounts:home_page' %}">Home</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-{% endblock %}
 {% block content %}
 <div class="container py-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
@@ -206,11 +186,6 @@
                 {{ form.tag_3 }}
                 <div class="text-danger small">{{ form.tag_3.errors }}</div>
               </div>
-            </div>
-
-            <div class="text-muted small mt-2">
-              Tip: if your new tag matches an existing one (case/spacing), we’ll reuse it.
-              No duplicate “Meal&nbsp;Prep” vs “meal   prep” tag turf wars.
             </div>
           </div>
         </div>
