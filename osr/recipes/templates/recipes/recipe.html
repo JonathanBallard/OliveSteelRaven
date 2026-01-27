@@ -13,7 +13,7 @@
         <span class="me-3">📂 {{ recipe.category.name }}</span>
       {% endif %}
       <span class="me-3">⏱ {{ recipe.prep_time_minutes }} min</span>
-      <span>Difficulty: {{ recipe.difficulty }}/5 {% for _ in ""|center:recipe.difficulty %}🧠{% endfor %}</span>
+      <span>Difficulty: {% for _ in ""|center:recipe.difficulty %}🧠{% endfor %}</span>
     </div>
   </div>
 
