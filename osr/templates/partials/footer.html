@@ -1,0 +1,45 @@
+{# templates/partials/footer.html #}
+<footer class="bg-dark text-light py-2 mt-auto border-top border-secondary">
+  <div class="container">
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-2 small">
+
+      <!-- Left: contact -->
+      <div>
+        <a class="text-light text-decoration-none" href="mailto:contact@recipebook.com">
+          contact@recipebook.com
+        </a>
+      </div>
+
+      <!-- Middle: social icons -->
+      <div class="d-flex align-items-center gap-3">
+        <a
+          class="text-light text-decoration-none"
+          href="https://github.com/JonathanBallard/OliveSteelRaven"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+          title="GitHub"
+        >
+          <i class="bi bi-github fs-5"></i>
+        </a>
+
+        <a
+          class="text-light text-decoration-none"
+          href="https://www.linkedin.com/in/jonathan-marshall-ballard/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn"
+          title="LinkedIn"
+        >
+          <i class="bi bi-linkedin fs-5"></i>
+        </a>
+      </div>
+
+      <!-- Right: copyright -->
+      <div class="text-md-end">
+        &copy; Jonathan Ballard {% now "Y" %}
+      </div>
+
+    </div>
+  </div>
+</footer>
