@@ -22,6 +22,7 @@
                 <div class="cat-card-body">
                   <div class="cat-icon">
                     {# If you later add per-category icons, swap this to category.image/icon field. #}
+                    {# Category names with spaces or special characters should have their image files named "Soups-Stews.png" for Category "Soups & Stews" #}
                     <img
                     src="{% static 'icons/categories/' %}{{ category.name|slugify }}.png"
                     alt="{{ category.name }} icon"

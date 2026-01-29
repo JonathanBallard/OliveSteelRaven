@@ -22,6 +22,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 APP_NAME = "RecipeBook"
+CONTACT_EMAIL = "2ravenstech@gmail.com"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
