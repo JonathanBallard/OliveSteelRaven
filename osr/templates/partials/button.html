@@ -1,0 +1,40 @@
+{# templates/partials/ui/button.html #}
+{# Usage examples:
+  Link:
+    {% include "partials/ui/button.html" with href=some_url label="Search" icon="bi-search" btn_class="btn btn-outline-light btn-sm" %}
+  Submit:
+    {% include "partials/ui/button.html" with type="submit" label="Save" icon="bi-check2" btn_class="btn btn-primary" %}
+  Disabled:
+    {% include "partials/ui/button.html" with href="#" label="Coming Soon" disabled=True btn_class="btn btn-secondary btn-sm" %}
+#}
+
+{% with
+  _label=label|default:"Button"
+  _btn_class=btn_class|default:"btn btn-primary"
+  _type=type|default:"button" %}
+  {% if href %}
+    <a
+      href="{{ href }}"
+      class="{{ _btn_class }}{% if disabled %} disabled{% endif %}"
+      {% if disabled %}aria-disabled="true" tabindex="-1"{% endif %}
+      {% if attrs %}{{ attrs|safe }}{% endif %}
+    >
+      {% if icon %}
+        <i class="bi {{ icon }} me-1" aria-hidden="true"></i>
+      {% endif %}
+      {{ _label }}
+    </a>
+  {% else %}
+    <button
+      type="{{ _type }}"
+      class="{{ _btn_class }}"
+      {% if disabled %}disabled aria-disabled="true"{% endif %}
+      {% if attrs %}{{ attrs|safe }}{% endif %}
+    >
+      {% if icon %}
+        <i class="bi {{ icon }} me-1" aria-hidden="true"></i>
+      {% endif %}
+      {{ _label }}
+    </button>
+  {% endif %}
+{% endwith %}
