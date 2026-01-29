@@ -367,6 +367,6 @@ RecipeIngredientFormSet = inlineformset_factory(
     model=RecipeIngredient,
     form=RecipeIngredientLineForm,
     formset=BaseRecipeIngredientFormSet,
-    extra=3,  # initial blank rows
+    extra=1,  # initial blank rows
     can_delete=True,  # allow removing ingredient lines
 )

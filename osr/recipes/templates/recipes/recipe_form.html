@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block title %}{% if form.instance.pk %}Edit Recipe{% else %}Create Recipe{% endif %} · RecipeBook{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/add_ingredient_button.css' %}">{% endblock %}
 
 {% block content %}
 <div class="container py-4">
@@ -285,10 +286,6 @@
             </div>
           </div>
         </template>
-
-        <div class="text-muted small">
-          Tip: ingredient names are shared globally, so “Sugar” and “sugar” won’t multiply like gremlins.
-        </div>
       </div>
     </div>
 
@@ -327,8 +324,3 @@
     <script defer src="{% static 'recipes/js/recipe_form/ingredients.js' %}"></script>
     <script defer src="{% static 'recipes/js/recipe_form/image_dropzone.js' %}"></script>
 {% endblock %}
-
-
-
-</body>
-</html>

@@ -1,0 +1,68 @@
+/* --- Ingredient add/remove micro-animations --- */
+
+/* Add: fade in + slight slide down */
+.ingredient-just-added {
+  animation: ingredient-pop-in 200ms ease-out both;
+}
+
+/* Optional: a gentle highlight that fades (keep or delete) */
+.ingredient-just-added::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 0.5rem;
+  opacity: 0;
+  animation: ingredient-soft-glow 600ms ease-out both;
+  pointer-events: none;
+}
+
+/* Remove: fade out + slight slide up */
+.ingredient-removing {
+  animation: ingredient-pop-out 180ms ease-in both;
+}
+
+/* Needed for the ::after positioning */
+.ingredient-form {
+  position: relative;
+}
+
+@keyframes ingredient-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ingredient-pop-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes ingredient-soft-glow {
+  0% {
+    opacity: 0.18;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ingredient-just-added,
+  .ingredient-removing {
+    animation: none;
+  }
+  .ingredient-just-added::after {
+    animation: none;
+  }
+}
