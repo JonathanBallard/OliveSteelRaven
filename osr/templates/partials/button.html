@@ -1,40 +1,67 @@
 {# templates/partials/ui/button.html #}
+{% comment %}
 {# Usage examples:
-  Link:
-    {% include "partials/ui/button.html" with href=some_url label="Search" icon="bi-search" btn_class="btn btn-outline-light btn-sm" %}
-  Submit:
-    {% include "partials/ui/button.html" with type="submit" label="Save" icon="bi-check2" btn_class="btn btn-primary" %}
-  Disabled:
-    {% include "partials/ui/button.html" with href="#" label="Coming Soon" disabled=True btn_class="btn btn-secondary btn-sm" %}
-#}
+  Normal Buttons:
+  {% static "icons/buttons/Create.png" as btn_img %}
+  {% include "partials/ui/button.html" with 
+    img_src=btn_img 
+    label="Create" 
+    href=create_url 
+    btn_class="btn btn-icon btn-success btn-sm"
+  %}
 
-{% with
-  _label=label|default:"Button"
-  _btn_class=btn_class|default:"btn btn-primary"
-  _type=type|default:"button" %}
+  Submit/Update Form Buttons:
+  {% static "icons/buttons/CreateRecipeSubmit.png" as btn_img %}
+  {% include "partials/ui/button.html" with
+    type="submit"
+    label="Create Recipe"
+    img_src=btn_img 
+    btn_class="btn icon-only-btn btn-success btn-sm"
+  %}
+#} 
+{% endcomment %}
+
+{% with label_text=label|default:"Button" button_class=btn_class|default:"btn p-0 border-0 bg-transparent" button_type=type|default:"button" %}
   {% if href %}
     <a
       href="{{ href }}"
-      class="{{ _btn_class }}{% if disabled %} disabled{% endif %}"
+      class="{{ button_class }}{% if disabled %} disabled{% endif %}"
       {% if disabled %}aria-disabled="true" tabindex="-1"{% endif %}
       {% if attrs %}{{ attrs|safe }}{% endif %}
+      title="{{ label_text }}"
     >
-      {% if icon %}
-        <i class="bi {{ icon }} me-1" aria-hidden="true"></i>
+      {% if img_src %}
+        <img
+          src="{{ img_src }}"
+          alt="{{ img_alt|default:label_text }}"
+          class="btn-image"
+          id="{{ img_id|default:'' }}"
+        />
+      {% else %}
+        {{ label_text }}
       {% endif %}
-      {{ _label }}
+      <span class="visually-hidden">{{ label_text }}</span>
     </a>
   {% else %}
     <button
-      type="{{ _type }}"
-      class="{{ _btn_class }}"
+      type="{{ button_type }}"
+      class="{{ button_class }}"
       {% if disabled %}disabled aria-disabled="true"{% endif %}
       {% if attrs %}{{ attrs|safe }}{% endif %}
+      title="{{ label_text }}"
     >
-      {% if icon %}
-        <i class="bi {{ icon }} me-1" aria-hidden="true"></i>
+      {% if img_src %}
+        <img
+          src="{{ img_src }}"
+          alt="{{ img_alt|default:label_text }}"
+          class="btn-image"
+        />
+      {% else %}
+        {{ label_text }}
       {% endif %}
-      {{ _label }}
+      <span class="visually-hidden">{{ label_text }}</span>
     </button>
   {% endif %}
 {% endwith %}
+
+

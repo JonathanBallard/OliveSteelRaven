@@ -1,0 +1,44 @@
+
+.btn-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.icon-only-btn {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 20px;
+}
+
+.btn-image {
+  display: block;
+  height: 55px;       
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.btn-image-md .btn-image {
+  height: 60px; 
+}
+
+.btn-image-lg {
+  display: block;
+  height: 90px;       
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.btn-image-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.btn-image-lg .btn-image {
+  height: 100px;
+}

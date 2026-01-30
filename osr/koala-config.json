@@ -1,0 +1,8 @@
+{
+  "ignore": [
+    "osr_env",
+    "temp_folder",
+    "*.tmp",
+	"*.env"
+  ]
+}
