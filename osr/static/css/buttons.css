@@ -6,17 +6,19 @@
 }
 
 .icon-only-btn {
-  display: block;
-  width: 100%;
+  display: inline-flex;
+  padding: 0px;
+  width: auto;
   height: auto;
   max-height: 20px;
+  flex: 0 0 auto;
 }
 
 .btn-image {
+  align-self: center;
   display: block;
-  height: 55px;       
+  height: 40px;  /* match your other form buttons */
   width: auto;
-  max-width: 100%;
   object-fit: contain;
 }
 
@@ -25,8 +27,8 @@
 }
 
 .btn-image-lg {
-  display: block;
-  height: 90px;       
+  display: inline-flex;
+  height: 40px;       
   width: auto;
   max-width: 100%;
   object-fit: contain;
@@ -40,5 +42,5 @@
 }
 
 .btn-image-lg .btn-image {
-  height: 100px;
+  height: 40px;
 }
