@@ -57,7 +57,9 @@ def home(request, *args, **kwargs):
     """
     context = {}
     hero_recipe = Recipe.objects.get(pk=0)
+    recipes = Recipe.objects.order_by('?')[:3] # Pick 3 random Recipe objects
     context['hero_recipe'] = hero_recipe
+    context['recipes'] = recipes
     return render(request=request, template_name=".\\accounts\\home.html", context=context)
 
 #&-----------------------------------------------------------------------------------------------------

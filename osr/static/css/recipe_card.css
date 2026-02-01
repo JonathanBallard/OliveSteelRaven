@@ -1,0 +1,15 @@
+.recipe-card-clickable:hover {
+    transform: translateY(-25px);
+    -webkit-transform: translateY(-25px);
+    -moz-transform: translateY(-25px);
+    -ms-transform: translateY(-25px);
+    -o-transform: translateY(-25px);
+}
+
+.recipe-card-clickable {
+    transition: transform 350ms ease;
+    -webkit-transition: transform 350ms ease;
+    -moz-transition: transform 350ms ease;
+    -ms-transition: transform 350ms ease;
+    -o-transition: transform 350ms ease;
+}

@@ -9,5 +9,12 @@
     {% include "partials/hero.html" with image_url=hero_recipe.recipe_image.url title=hero_recipe.title subtitle=hero_recipe.short_description cta_label="Make this recipe now!" cta_url=hero_recipe_url %}
 
     {% comment %} include  top 3-6 recipes in card format {% endcomment %}
+    <div class="row g-3">
+        {% for recipe in recipes %}
+            <div class="col-12 col-md-6 col-lg-4">
+            {% include "partials/recipe_card.html" with recipe=recipe %}
+            </div>
+        {% endfor %}
+        </div>
 </div>
 {% endblock %}
