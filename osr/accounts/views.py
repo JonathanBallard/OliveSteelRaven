@@ -11,6 +11,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 
+from recipes.models import Recipe, Category, Tag, RecipeIngredient, Ingredient
 from accounts.forms import UserModelForm, UserLoginForm, UserUpdateForm
 
 from common.utils import safe_method_validator
@@ -55,6 +56,8 @@ def home(request, *args, **kwargs):
     GET: Renders homepage
     """
     context = {}
+    hero_recipe = Recipe.objects.get(pk=0)
+    context['hero_recipe'] = hero_recipe
     return render(request=request, template_name=".\\accounts\\home.html", context=context)
 
 #&-----------------------------------------------------------------------------------------------------

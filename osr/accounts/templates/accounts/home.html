@@ -5,6 +5,8 @@
 {% block title %}RecipeBook{% endblock %}
 <div class="container mt-4">
     {% comment %} include hero {% endcomment %}
+    {% url "recipes:view_recipe" hero_recipe.pk as hero_recipe_url %}
+    {% include "partials/hero.html" with image_url=hero_recipe.recipe_image.url title=hero_recipe.title subtitle=hero_recipe.short_description cta_label="Make this recipe now!" cta_url=hero_recipe_url %}
 
     {% comment %} include  top 3-6 recipes in card format {% endcomment %}
 </div>

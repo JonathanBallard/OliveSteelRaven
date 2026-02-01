@@ -1,0 +1,39 @@
+{# templates/partials/hero.html #}
+<section class="bg-dark text-light py-4 py-md-5 border-bottom border-secondary">
+  <div class="container">
+    <div class="row align-items-center g-4">
+
+      {# TEXT COLUMN #}
+      <div class="{% if image_url %}col-lg-7{% else %}col-12{% endif %}">
+        <h1 class="display-6 fw-semibold mb-2">
+          {{ title|default:"RecipeBook" }}
+        </h1>
+
+        {% if subtitle %}
+          <p class="lead mb-3 text-light opacity-75">
+            {{ subtitle }}
+          </p>
+        {% endif %}
+
+        {% if cta_url and cta_label %}
+          <a class="btn btn-outline-light" href="{{ cta_url }}">
+            {{ cta_label }}
+          </a>
+        {% endif %}
+      </div>
+
+      {# OPTIONAL IMAGE COLUMN #}
+      {% if image_url %}
+        <div class="col-lg-5 text-center text-lg-end">
+          <img
+            src="{{ image_url }}"
+            alt="{{ image_alt|default:title }}"
+            class="img-fluid rounded shadow-sm"
+            style="max-height: 220px;"
+          >
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</section>
