@@ -27,7 +27,7 @@ def safe_method_validator(backup_render_template_path, safe_methods_list, requir
             if request.method not in safe_methods_list:
                 return render(request=request, template_name=backup_render_template_path, context=context)
             elif(requires_authentication and not request.user.is_authenticated):
-                return HttpResponseForbidden("This requires an authenticated user -> Blocked by: `accounts` views.py -> safe_method_validator()")
+                return HttpResponseForbidden(f"This requires an authenticated user -> Blocked by: `accounts` views.py {str(view_func)} -> safe_method_validator()")
             elif(request.method in safe_methods_list):
                 return view_func(request, *args, **kwargs)
             else:

@@ -3,6 +3,7 @@ import logging
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
+from django.conf import settings
 from django.urls import path, include, reverse, reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import get_user_model, authenticate, logout, login
@@ -27,7 +28,7 @@ from common.utils import safe_method_validator
 
 logger = logging.getLogger(__name__)
 
-
+# *DONE* Check if user is logged in. If not, redirect to /login/
 @safe_method_validator("", ["GET", "HEAD", "OPTIONS"])
 def root(request, *args, **kwargs):
     """
@@ -44,7 +45,6 @@ def root(request, *args, **kwargs):
         return redirect('accounts:home_page')
 
 
-# *DONE* Check if user is logged in. If not, redirect to /login/
 # *DONE* Otherwise open home.html page
 @safe_method_validator(".\\accounts\\home.html", ["GET", "HEAD", "OPTIONS"])
 def home(request, *args, **kwargs):
@@ -56,7 +56,7 @@ def home(request, *args, **kwargs):
     GET: Renders homepage
     """
     context = {}
-    hero_recipe = Recipe.objects.get(pk=0)
+    hero_recipe = Recipe.objects.get(pk=settings.HERO_RECIPE_PK)
     recipes = Recipe.objects.order_by('?')[:3] # Pick 3 random Recipe objects
     context['hero_recipe'] = hero_recipe
     context['recipes'] = recipes

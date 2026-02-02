@@ -1,22 +1,70 @@
-/* HERO Partial */
+
+/*~ =====================================  */
+/*^              HERO Partial              */
+/*~ =====================================  */
+
 .hero-img{
     width: 100%;
     height: auto;        /* key: preserve aspect ratio */
     max-width: 100%;
     object-fit: contain; /* safe if any other rules interfere */
+    
 }
 
 .hero-clickable {
     background-color: #212529;
-    transition:
-    transform 160ms ease,
-    box-shadow 160ms ease,
-    background-color 160ms ease;
+    transition:    transform 160ms ease,    box-shadow 160ms ease,    background-color 160ms ease;
+    -webkit-transition:    transform 160ms ease,    box-shadow 160ms ease,    background-color 160ms ease;
+    -moz-transition:    transform 160ms ease,    box-shadow 160ms ease,    background-color 160ms ease;
+    -ms-transition:    transform 160ms ease,    box-shadow 160ms ease,    background-color 160ms ease;
+    -o-transition:    transform 160ms ease,    box-shadow 160ms ease,    background-color 160ms ease;
+    border: 1px solid black;
 }
 
 .hero-clickable:hover {
-    transform: translateY(-2px);
-    box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.35),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    transform: translateY(-10px);
+    box-shadow:    0 6px 18px rgba(0, 0, 0, 0.35),    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    -webkit-transform: translateY(-10px);
+    -moz-transform: translateY(-10px);
+    -ms-transform: translateY(-10px);
+    -o-transform: translateY(-10px);
+}
+
+/*~ =======================================  */
+/*^              NavBar Partial              */
+/*~ =======================================  */
+
+.navbar-btn-img {
+    align-self: center;
+    display: block;
+    height: 60px;
+    width: auto;
+    object-fit: contain;
+
+}
+
+.navbar-btn-img-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.navbar-btn {
+    margin-left: 6px;
+    margin-right: 6px;
+    border: 1px solid black;
+}
+
+.navbar-btn:hover {
+    transition: translateX(8px);
+    box-shadow:    0 12px 24px rgba(0, 0, 0, 0.35), inset 0 0 0 3px rgba(255, 255, 255, 0.05);
+    -webkit-transition: translateX(8px);
+    -moz-transition: translateX(8px);
+    -ms-transition: translateX(8px);
+    -o-transition: translateX(8px);
+}
+
+.btn-label {
+    size: 1.125rem;
 }

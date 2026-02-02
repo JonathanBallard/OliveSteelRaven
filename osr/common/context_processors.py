@@ -15,6 +15,7 @@ def global_settings(request):
         "DEVELOPER_LINKEDIN": getattr(settings, "DEVELOPER_LINKEDIN", "https://www.linkedin.com/in/jonathanbal"),
         
         # Defaults
+        "HERO_RECIPE_PK": getattr(settings, "HERO_RECIPE_PK", 0),
         "DEFAULT_USER_IMAGE": getattr(settings, "DEFAULT_USER_IMAGE", "default_user.png"),
         "DEFAULT_RECIPE_IMAGE": getattr(settings, "DEFAULT_RECIPE_IMAGE", "default_recipe.png"),
         "RECIPE_IMAGE_SIZE": getattr(settings, "RECIPE_IMAGE_SIZE", 400),

@@ -8,12 +8,46 @@
         </button>
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item navbar-btn align-items-center justify-content-center">
+                    {% comment %} <a class="nav-link" href="{% url 'accounts:home_page' %}">Home</a> {% endcomment %}
+                    {% url "accounts:home_page" as home_url %}
+                    {% static "icons/buttons/Home.png" as home_button_img %}
+                    {% include "partials/button.html" with href=home_url label="Home" img_src=home_button_img img_alt="Home" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+                </li>
+                <li class="nav-item navbar-btn">
+                    {% comment %} <a class="nav-link" href="{% url 'recipes:categories' %}">Browse</a> {% endcomment %}
+                    {% url "recipes:categories" as categories_url %}
+                    {% static "icons/buttons/Categories.png" as categories_button_img %}
+                    {% include "partials/button.html" with href=categories_url label="Browse" img_src=categories_button_img img_alt="Browse" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+                </li>
+                <li class="nav-item navbar-btn">
+                    {% comment %} <a class="nav-link" href="{% url 'recipes:search' %}">Search</a> {% endcomment %}
+                    {% url "recipes:search" as search_url %}
+                    {% static "icons/buttons/Search.png" as search_button_img %}
+                    {% include "partials/button.html" with href=search_url label="Search" img_src=search_button_img img_alt="Search" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+                </li>
+                <li class="nav-item navbar-btn">
+                    {% comment %} <a class="nav-link" href="{% url 'recipes:create_recipe' %}">Create</a> {% endcomment %}
+                    {% url "recipes:create_recipe" as create_url %}
+                    {% static "icons/buttons/Create.png" as create_button_img %}
+                    {% include "partials/button.html" with href=create_url label="Create" img_src=create_button_img img_alt="Create" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+                </li>
+                <li class="nav-item navbar-btn">
+                    {% comment %} <a class="nav-link" href="{% url 'accounts:account' %}">Account</a> {% endcomment %}
+                    {% url "accounts:account" as account_url %}
+                    {% static "icons/buttons/Account.png" as account_button_img %}
+                    {% include "partials/button.html" with href=account_url label="Account" img_src=account_button_img img_alt="Account" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+                </li>
+            </ul>
+            {% comment %} 
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link" href="{% url 'accounts:home_page' %}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'recipes:categories' %}">Browse Recipes</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'recipes:search' %}">Search</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'recipes:create_recipe' %}">Create Recipe</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'accounts:account' %}">Account</a></li>
             </ul>
+            {% endcomment %}
         </div>
         {% if user.is_authenticated %}
             <p>You are logged in as {{ user.username }}.</p>

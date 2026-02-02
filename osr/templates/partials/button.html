@@ -21,7 +21,7 @@
 #} 
 {% endcomment %}
 
-{% with label_text=label|default:"Button" button_class=btn_class|default:"btn p-0 border-0 bg-transparent" button_type=type|default:"button" %}
+{% with label_text=label|default:"Button" button_class=btn_class|default:"btn p-0 border-0 bg-transparent" button_type=type|default:"button" image_class=img_class|default:"btn-image" %}
   {% if href %}
     <a
       href="{{ href }}"
@@ -31,14 +31,17 @@
       title="{{ label_text }}"
     >
       {% if img_src %}
+      
         <img
           src="{{ img_src }}"
           alt="{{ img_alt|default:label_text }}"
-          class="btn-image"
+          class="{{ image_class }}"
           id="{{ img_id|default:'' }}"
         />
+        <h6 class="btn-label">{{ label_text }}</h6>
+        
       {% else %}
-        {{ label_text }}
+        <h6 class="btn-label">{{ label_text }}</h6>
       {% endif %}
       <span class="visually-hidden">{{ label_text }}</span>
     </a>

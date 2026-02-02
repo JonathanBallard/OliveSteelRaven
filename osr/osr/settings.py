@@ -39,6 +39,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Defaults
 DEFAULT_USER_IMAGE = "default_user.png"
 DEFAULT_RECIPE_IMAGE = "default_recipe.png"
+HERO_RECIPE_PK = 0
 
 MAX_TAGS_PER_RECIPE = 3 # Currently hardcoded to 3
 MAX_INGREDIENTS_PER_RECIPE = 30 # Not currently enforced

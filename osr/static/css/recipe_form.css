@@ -1,10 +1,7 @@
 
-/* Form Buttons */
-.btn-icon {
-  width: 18px;
-  height: 18px;
-  object-fit: contain;
-}
+/*~ =====================================  */
+/*^              Form Buttons              */
+/*~ =====================================  */
 
 .icon-only-btn {
   display: inline-flex;
@@ -29,10 +26,10 @@
 
 .btn-image-lg {
   display: inline-flex;
-  height: 40px;       
+  height: 40px;
   width: auto;
-  max-width: 100%;
   object-fit: contain;
+  max-width: 100%;
 }
 
 .btn-image-wrap {
@@ -47,7 +44,9 @@
 }
 
 
-
+/*~ ======================================  */
+/*^       Ingredient Micro Animations       */
+/*~ ======================================  */
 /* --- Ingredient add/remove micro-animations --- */
 /* Add: fade in + slight slide down */
 .ingredient-just-added {
