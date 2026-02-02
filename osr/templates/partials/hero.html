@@ -1,33 +1,78 @@
 {# templates/partials/hero.html #}
-<section class="bg-dark text-light py-4 py-md-5 border-bottom border-secondary">
-  <div class="container">
+<section class="hero hero-clickable bg-dark text-light py-4 py-md-5 border-bottom border-secondary">
+  <div class="container position-relative">
+    {% if hero_url %}
+      <a
+        href="{{ hero_url }}"
+        class="stretched-link"
+        aria-label="{{ hero_aria_label|default:recipe.title|default:'Open' }}"
+      ></a>
+    {% endif %}
     <div class="row align-items-center g-4">
 
       {# TEXT COLUMN #}
-      <div class="{% if image_url %}col-lg-5{% else %}col-12{% endif %}">
-        <h1 class="display-5 fw-semibold mb-2">
-          {{ title|default:"RecipeBook" }}
+      <div class="{% if recipe.recipe_image.url %}col-lg-5{% else %}col-12{% endif %}">
+        <h1 class="display-6 fw-semibold mb-2">
+          {{ recipe.title|default:"Hero Recipe" }}
         </h1>
 
-        {% if subtitle %}
+        {% comment %} 
+        {% if recipe.difficulty %}
+          <div class="d-flex justify-content-center mb-2">
+            <span class="text-warning" aria-label="Difficulty">
+              Difficulty: {% for _ in ""|center:recipe.difficulty %}🧠{% endfor %}
+            </span>
+          </div>
+        {% endif %} 
+        {% endcomment %}
+
+        {% comment %} {# META PILLS ROW (tag left, prep right) #} {% endcomment %}
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div>
+            {% if recipe.tags.all %}
+              {% for tag in recipe.tags.all|slice:":1" %}
+                <span class="badge rounded-pill text-bg-warning text-dark">
+                  {{ tag.name }}
+                </span>
+              {% endfor %}
+            {% endif %}
+            {% if recipe.category %}
+              <span class="badge rounded-pill text-bg-warning text-dark">
+                {{ recipe.category.name }}
+              </span>
+            {% endif %}
+          </div>
+
+          <div>
+            {% if recipe.prep_time_minutes %}
+              <span class="badge rounded-pill text-bg-secondary">
+                {{ recipe.prep_time_minutes }} min prep
+              </span>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if recipe.short_description %}
           <p class="lead mb-3 text-light opacity-75">
-            {{ subtitle }}
+            {{ recipe.short_description }}
           </p>
         {% endif %}
 
+        {% comment %} 
         {% if cta_url and cta_label %}
           <a class="btn btn-outline-light" href="{{ cta_url }}">
             {{ cta_label }}
           </a>
         {% endif %}
+        {% endcomment %}
       </div>
 
       {# OPTIONAL IMAGE COLUMN #}
-      {% if image_url %}
+      {% if recipe.recipe_image.url %}
         <div class="col-lg-7 text-center text-lg-end">
           <img
-            src="{{ image_url }}"
-            alt="{{ image_alt|default:title }}"
+            src="{{ recipe.recipe_image.url }}"
+            alt="{{ image_alt|default:recipe.title }}"
             class="img-fluid rounded shadow-sm hero-img"
             style="max-height: {{ HERO_MAX_IMAGE_SIZE }}px;"
           >

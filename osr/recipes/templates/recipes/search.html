@@ -6,8 +6,8 @@
 {% block extra_css %}<link rel="stylesheet" href="{% static 'css/search.css' %}">{% endblock %}
 {% block content %}
 <section class="search-hero">
-  <div class="search-inner">
-    <div class="container">
+  <div class="search-inner background">
+    <div class="container ">
 
       <h2 class="page-title">Search Recipes</h2>
 
@@ -79,40 +79,8 @@
         <div class="row g-3">
           {# Mobile: 1 per row. md+: 2 per row. lg+: 3 per row. #}
           {% for recipe in recipes %}
-            <div class="col-12 col-md-6 col-lg-4 d-flex">
-              <a class="result-card w-100 text-decoration-none"
-                href="{% url 'recipes:view_recipe' recipe_id=recipe.id %}"
-                title="{{ recipe.title }}">
-
-                <div class="thumb">
-                  {% if recipe.recipe_image %}
-                    {% if recipe.recipe_image.errors %}
-                      <img src="{% static 'images/recipe_default.png' %}" alt="Default recipe thumbnail">
-                    {% else %}
-                      <img src="{{ recipe.recipe_image.url }}" alt="{{ recipe.title }}">
-                    {% endif %}
-                  {% else %}
-                    <img src="{% static 'images/recipe_default.png' %}" alt="Default recipe thumbnail">
-                  {% endif %}
-                </div>
-
-                <div class="p-3">
-                  <p class="result-title text-truncate">{{ recipe.title }}</p>
-
-                  {% if recipe.short_description %}
-                    <div class="result-meta text-truncate">{{ recipe.short_description }}</div>
-                  {% endif %}
-
-                  <div class="result-meta mt-2">
-                    {% if recipe.category %}
-                      <span class="me-2">📁 {{ recipe.category.name }}</span>
-                    {% endif %}
-                    {% if recipe.total_time_minutes %}
-                      <span>⏱ {{ recipe.total_time_minutes }} min</span>
-                    {% endif %}
-                  </div>
-                </div>
-              </a>
+            <div class="col-12 col-md-6 col-lg-4">
+              {% include "partials/recipe_card.html" with recipe=recipe %}
             </div>
           {% endfor %}
         </div>

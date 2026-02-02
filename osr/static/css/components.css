@@ -5,3 +5,18 @@
     max-width: 100%;
     object-fit: contain; /* safe if any other rules interfere */
 }
+
+.hero-clickable {
+    background-color: #212529;
+    transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+.hero-clickable:hover {
+    transform: translateY(-2px);
+    box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}

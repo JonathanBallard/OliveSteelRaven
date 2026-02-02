@@ -36,13 +36,22 @@
     border: 1px solid rgba(255,255,255,0.08);
     overflow: hidden;
     box-shadow: 0 6px 16px rgba(0,0,0,0.35);
-    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    transition: transform 350ms ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    -webkit-transition: transform 350ms ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    -moz-transition: transform 350ms ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    -ms-transition: transform 350ms ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    -o-transition: transform 350ms ease, box-shadow 0.12s ease, border-color 0.12s ease;
     height: 100%;
 }
+
 .cat-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-25px);
     box-shadow: 0 10px 22px rgba(0,0,0,0.45);
     border-color: rgba(255,255,255,0.18);
+    -webkit-transform: translateY(-25px);
+    -moz-transform: translateY(-25px);
+    -ms-transform: translateY(-25px);
+    -o-transform: translateY(-25px);
 }
 
 .cat-card-body {
