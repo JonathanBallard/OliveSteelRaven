@@ -1,0 +1,7 @@
+/* HERO Partial */
+.hero-img{
+    width: 100%;
+    height: auto;        /* key: preserve aspect ratio */
+    max-width: 100%;
+    object-fit: contain; /* safe if any other rules interfere */
+}

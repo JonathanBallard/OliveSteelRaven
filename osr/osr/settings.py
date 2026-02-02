@@ -45,6 +45,7 @@ MAX_INGREDIENTS_PER_RECIPE = 30 # Not currently enforced
 ENABLE_RECIPE_IMAGES = True
 
 # Recipe image size in pixels
+HERO_MAX_IMAGE_SIZE = 400
 RECIPE_IMAGE_SIZE = 400
 #& ==================================================
 #^ END Template Variables

@@ -1,5 +1,54 @@
-/* --- Ingredient add/remove micro-animations --- */
 
+/* Form Buttons */
+.btn-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.icon-only-btn {
+  display: inline-flex;
+  padding: 0px;
+  width: auto;
+  height: auto;
+  max-height: 20px;
+  flex: 0 0 auto;
+}
+
+.btn-image {
+  align-self: center;
+  display: block;
+  height: 40px;  /* match your other form buttons */
+  width: auto;
+  object-fit: contain;
+}
+
+.btn-image-md .btn-image {
+  height: 60px; 
+}
+
+.btn-image-lg {
+  display: inline-flex;
+  height: 40px;       
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.btn-image-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.btn-image-lg .btn-image {
+  height: 40px;
+}
+
+
+
+/* --- Ingredient add/remove micro-animations --- */
 /* Add: fade in + slight slide down */
 .ingredient-just-added {
   animation: ingredient-pop-in 200ms ease-out both;

@@ -4,8 +4,8 @@
     <div class="row align-items-center g-4">
 
       {# TEXT COLUMN #}
-      <div class="{% if image_url %}col-lg-7{% else %}col-12{% endif %}">
-        <h1 class="display-6 fw-semibold mb-2">
+      <div class="{% if image_url %}col-lg-5{% else %}col-12{% endif %}">
+        <h1 class="display-5 fw-semibold mb-2">
           {{ title|default:"RecipeBook" }}
         </h1>
 
@@ -24,12 +24,12 @@
 
       {# OPTIONAL IMAGE COLUMN #}
       {% if image_url %}
-        <div class="col-lg-5 text-center text-lg-end">
+        <div class="col-lg-7 text-center text-lg-end">
           <img
             src="{{ image_url }}"
             alt="{{ image_alt|default:title }}"
-            class="img-fluid rounded shadow-sm"
-            style="max-height: 220px;"
+            class="img-fluid rounded shadow-sm hero-img"
+            style="max-height: {{ HERO_MAX_IMAGE_SIZE }}px;"
           >
         </div>
       {% endif %}

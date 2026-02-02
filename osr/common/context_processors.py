@@ -18,6 +18,7 @@ def global_settings(request):
         "DEFAULT_USER_IMAGE": getattr(settings, "DEFAULT_USER_IMAGE", "default_user.png"),
         "DEFAULT_RECIPE_IMAGE": getattr(settings, "DEFAULT_RECIPE_IMAGE", "default_recipe.png"),
         "RECIPE_IMAGE_SIZE": getattr(settings, "RECIPE_IMAGE_SIZE", 400),
+        "HERO_MAX_IMAGE_SIZE": getattr(settings, "HERO_MAX_IMAGE_SIZE", 500),
         "ENABLE_RECIPE_IMAGES": getattr(settings, "ENABLE_RECIPE_IMAGES", True),
         
         "MAX_TAGS_PER_RECIPE": getattr(settings, "MAX_TAGS_PER_RECIPE", 3),
