@@ -32,14 +32,23 @@
     ></a>
 
     {# TITLE (now plain text; the stretched link handles click) #}
-    <h5 class="text-center text-uppercase fw-bold mb-2" style="letter-spacing:.06em;">
+    <h5 class="text-center fw-bold mb-2" style="letter-spacing:.06em;">
       {{ recipe.title }}
     </h5>
 
+    {% comment %} 
     {# STAR STRIP (visual placeholder) #}
     <div class="d-flex justify-content-center mb-2">
       <span class="text-warning" aria-label="Rating">
         ★★★★★
+      </span>
+    </div> 
+    {% endcomment %}
+
+    {# Difficulty #}
+    <div class="d-flex justify-content-center mb-2">
+      <span class="text-warning" aria-label="Difficulty">
+        Difficulty: {% for _ in ""|center:recipe.difficulty %}🧠{% endfor %}
       </span>
     </div>
 
