@@ -27,6 +27,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 APP_NAME = "RecipeBook"
 DEVELOPER_NAME = "Jonathan Ballard"
 CONTACT_EMAIL = "2ravenstech@gmail.com"
+GITHUB_LINK = "https://github.com/JonathanBallard/OliveSteelRaven"
+DEVELOPER_LINKEDIN = "https://www.linkedin.com/in/jonathanbal"
 
 # Paths
 MEDIA_URL = "/media/"
@@ -35,8 +37,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 #! Everything below that's part of `Template Variables` is currently hardcoded - need update app to pull from here
 # Defaults
-DEFAULT_USER_IMAGE = ""
-DEFAULT_RECIPE_IMAGE = ""
+DEFAULT_USER_IMAGE = "default_user.png"
+DEFAULT_RECIPE_IMAGE = "default_recipe.png"
 
 MAX_TAGS_PER_RECIPE = 3 # Currently hardcoded to 3
 MAX_INGREDIENTS_PER_RECIPE = 30 # Not currently enforced
@@ -110,6 +112,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                "common.context_processors.global_settings",
             ],
         },
     },

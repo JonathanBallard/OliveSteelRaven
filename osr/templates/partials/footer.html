@@ -5,8 +5,8 @@
 
       <!-- Left: contact -->
       <div>
-        <a class="text-light text-decoration-none" href="mailto:contact@recipebook.com">
-          contact@recipebook.com
+        <a class="text-light text-decoration-none" href="mailto:{{ CONTACT_EMAIL }}">
+          {{ CONTACT_EMAIL }}
         </a>
       </div>
 
@@ -14,7 +14,7 @@
       <div class="d-flex align-items-center gap-3">
         <a
           class="text-light text-decoration-none"
-          href="https://github.com/JonathanBallard/OliveSteelRaven"
+          href="{{ GITHUB_LINK }}"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="GitHub"
@@ -25,7 +25,7 @@
 
         <a
           class="text-light text-decoration-none"
-          href="https://www.linkedin.com/in/jonathan-marshall-ballard/"
+          href="{{ DEVELOPER_LINKEDIN }}"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="LinkedIn"
@@ -37,7 +37,7 @@
 
       <!-- Right: copyright -->
       <div class="text-md-end">
-        &copy; Jonathan Ballard {% now "Y" %}
+        &copy; {{ DEVELOPER_NAME }} {% now "Y" %}
       </div>
 
     </div>
