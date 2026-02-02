@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
-{% block content%}
+{% block title %}Home · RecipeBook{% endblock %}
 
-{% block title %}RecipeBook{% endblock %}
+{% block content%}
 <div class="container mt-4">
     {% comment %} include hero {% endcomment %}
     {% url "recipes:view_recipe" hero_recipe.pk as hero_recipe_url %}

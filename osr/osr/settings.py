@@ -21,17 +21,35 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+#& ==================================================
+#^ Available in Templates - Pass to Context Processor
+#& ==================================================
 APP_NAME = "RecipeBook"
+DEVELOPER_NAME = "Jonathan Ballard"
 CONTACT_EMAIL = "2ravenstech@gmail.com"
 
+# Paths
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# Recipe image max size in mb
-MAX_IMAGE_SIZE_MB = 1
+
+#! Everything below that's part of `Template Variables` is currently hardcoded - need update app to pull from here
+# Defaults
+DEFAULT_USER_IMAGE = ""
+DEFAULT_RECIPE_IMAGE = ""
+
+MAX_TAGS_PER_RECIPE = 3 # Currently hardcoded to 3
+MAX_INGREDIENTS_PER_RECIPE = 30 # Not currently enforced
+ENABLE_RECIPE_IMAGES = True
 
 # Recipe image size in pixels
 RECIPE_IMAGE_SIZE = 400
+#& ==================================================
+#^ END Template Variables
+#& ==================================================
+
+# Recipe image max size in mb
+MAX_IMAGE_SIZE_MB = 1
 
 # Global upload size limit
 DATA_UPLOAD_MAX_MEMORY_SIZE = 2097152 # 2mb
