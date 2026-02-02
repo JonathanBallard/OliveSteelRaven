@@ -1,64 +1,97 @@
-{# templates/partials/navbar.html #}
-{% load static %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    {# templates/partials/navbar.html #}
+    {% load static %}
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'accounts:home_page' %}">RecipeBook</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+
+        {# Hamburger toggler for <lg #}
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navMenu"
+                aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navMenu">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item navbar-btn align-items-center justify-content-center">
-                    {% comment %} <a class="nav-link" href="{% url 'accounts:home_page' %}">Home</a> {% endcomment %}
-                    {% url "accounts:home_page" as home_url %}
-                    {% static "icons/buttons/Home.png" as home_button_img %}
-                    {% include "partials/button.html" with href=home_url label="Home" img_src=home_button_img img_alt="Home" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
-                </li>
-                <li class="nav-item navbar-btn">
-                    {% comment %} <a class="nav-link" href="{% url 'recipes:categories' %}">Browse</a> {% endcomment %}
-                    {% url "recipes:categories" as categories_url %}
-                    {% static "icons/buttons/Categories.png" as categories_button_img %}
-                    {% include "partials/button.html" with href=categories_url label="Browse" img_src=categories_button_img img_alt="Browse" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
-                </li>
-                <li class="nav-item navbar-btn">
-                    {% comment %} <a class="nav-link" href="{% url 'recipes:search' %}">Search</a> {% endcomment %}
-                    {% url "recipes:search" as search_url %}
-                    {% static "icons/buttons/Search.png" as search_button_img %}
-                    {% include "partials/button.html" with href=search_url label="Search" img_src=search_button_img img_alt="Search" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
-                </li>
-                <li class="nav-item navbar-btn">
-                    {% comment %} <a class="nav-link" href="{% url 'recipes:create_recipe' %}">Create</a> {% endcomment %}
-                    {% url "recipes:create_recipe" as create_url %}
-                    {% static "icons/buttons/Create.png" as create_button_img %}
-                    {% include "partials/button.html" with href=create_url label="Create" img_src=create_button_img img_alt="Create" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
-                </li>
-                <li class="nav-item navbar-btn">
-                    {% comment %} <a class="nav-link" href="{% url 'accounts:account' %}">Account</a> {% endcomment %}
-                    {% url "accounts:account" as account_url %}
-                    {% static "icons/buttons/Account.png" as account_button_img %}
-                    {% include "partials/button.html" with href=account_url label="Account" img_src=account_button_img img_alt="Account" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
-                </li>
-            </ul>
+
             {% comment %} 
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:home_page' %}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'recipes:categories' %}">Browse Recipes</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'recipes:search' %}">Search</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'recipes:create_recipe' %}">Create Recipe</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:account' %}">Account</a></li>
-            </ul>
+            ===========================
+            MOBILE NAV (text only)
+            Visible on <lg
+            ===========================
             {% endcomment %}
-        </div>
-        {% if user.is_authenticated %}
-            <p>You are logged in as {{ user.username }}.</p>
-            <form action="{% url 'accounts:logout' %}" method="POST">
+        <ul class="navbar-nav me-auto mb-2 d-lg-none">
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:home_page' %}">Home</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'recipes:categories' %}">Browse</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'recipes:search' %}">Search</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'recipes:create_recipe' %}">Create</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:account' %}">Account</a>
+            </li>
+        </ul>
+
+            {% comment %}
+            ===========================
+            DESKTOP NAV (image buttons)
+            Visible on lg+
+            ===========================
+            {% endcomment %}
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none d-lg-flex align-items-center gap-2">
+
+            <li class="nav-item navbar-btn">
+            {% url "accounts:home_page" as home_url %}
+            {% static "icons/buttons/Home.png" as home_button_img %}
+            {% include "partials/button.html" with href=home_url label="Home" img_src=home_button_img img_alt="Home" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+            </li>
+
+            <li class="nav-item navbar-btn">
+            {% url "recipes:categories" as categories_url %}
+            {% static "icons/buttons/Categories.png" as categories_button_img %}
+            {% include "partials/button.html" with href=categories_url label="Browse" img_src=categories_button_img img_alt="Browse" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+            </li>
+
+            <li class="nav-item navbar-btn">
+            {% url "recipes:search" as search_url %}
+            {% static "icons/buttons/Search.png" as search_button_img %}
+            {% include "partials/button.html" with href=search_url label="Search" img_src=search_button_img img_alt="Search" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+            </li>
+
+            <li class="nav-item navbar-btn">
+            {% url "recipes:create_recipe" as create_url %}
+            {% static "icons/buttons/Create.png" as create_button_img %}
+            {% include "partials/button.html" with href=create_url label="Create" img_src=create_button_img img_alt="Create" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+            </li>
+
+            <li class="nav-item navbar-btn">
+            {% url "accounts:account" as account_url %}
+            {% static "icons/buttons/Account.png" as account_button_img %}
+            {% include "partials/button.html" with href=account_url label="Account" img_src=account_button_img img_alt="Account" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+            </li>
+
+        </ul>
+        <div class="ms-lg-auto mt-3 mt-lg-0 d-flex flex-column flex-lg-row align-items-lg-center gap-2">
+            {% if user.is_authenticated %}
+            <span class="small text-muted">Logged in as <strong>{{ user.username }}</strong></span>
+
+            <form action="{% url 'accounts:logout' %}" method="POST" class="m-0">
                 {% csrf_token %}
-                <button type="submit">Log Out</button>
+                <button type="submit" class="btn btn-sm btn-outline-secondary">Log Out</button>
             </form>
-        {% else %}
-            <p>You are not logged in.</p>
-            <a href="{% url 'accounts:signup' %}">Sign Up</a>
-            <a href="{% url 'accounts:login' %}">Log In</a>
-        {% endif %}
+            {% else %}
+            <span class="small text-muted">Not logged in</span>
+            <a class="btn btn-sm btn-outline-primary" href="{% url 'accounts:signup' %}">Sign Up</a>
+            <a class="btn btn-sm btn-primary" href="{% url 'accounts:login' %}">Log In</a>
+            {% endif %}
+        </div>
+
+        </div>
     </div>
-</nav>
+    </nav>

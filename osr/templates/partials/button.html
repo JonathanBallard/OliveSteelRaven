@@ -1,9 +1,9 @@
-{# templates/partials/ui/button.html #}
+{# templates/partials/button.html #}
 {% comment %}
 {# Usage examples:
   Normal Buttons:
   {% static "icons/buttons/Create.png" as btn_img %}
-  {% include "partials/ui/button.html" with 
+  {% include "partials/button.html" with 
     img_src=btn_img 
     label="Create" 
     href=create_url 
@@ -12,7 +12,7 @@
 
   Submit/Update Form Buttons:
   {% static "icons/buttons/CreateRecipeSubmit.png" as btn_img %}
-  {% include "partials/ui/button.html" with
+  {% include "partials/button.html" with
     type="submit"
     label="Create Recipe"
     img_src=btn_img 
@@ -21,34 +21,38 @@
 #} 
 {% endcomment %}
 
-{% with label_text=label|default:"Button" button_class=btn_class|default:"btn p-0 border-0 bg-transparent" button_type=type|default:"button" image_class=img_class|default:"btn-image" %}
-  {% if href %}
+{% with label_text=label|default:"Button" show_label=show_lbl|default:True show_border=show_btn_border|default:False button_border=btn_border|default:"" button_class=btn_class|default:"btn p-0 border-0 bg-transparent" button_type=type|default:"button" image_class=img_class|default:"btn-image" %}
+    {% if href %}
     <a
       href="{{ href }}"
-      class="{{ button_class }}{% if disabled %} disabled{% endif %}"
+      class="{{ button_class }}{% if disabled %} disabled{% endif %}{% if show_border %} {{ button_border }}{% endif %}"
       {% if disabled %}aria-disabled="true" tabindex="-1"{% endif %}
       {% if attrs %}{{ attrs|safe }}{% endif %}
       title="{{ label_text }}"
     >
       {% if img_src %}
-      
         <img
           src="{{ img_src }}"
           alt="{{ img_alt|default:label_text }}"
           class="{{ image_class }}"
-          id="{{ img_id|default:'' }}"
+          {% if img_id %}id="{{ img_id }}"{% endif %}
         />
-        <h6 class="btn-label">{{ label_text }}</h6>
-        
+        {% if show_label %}
+          <span class="btn-label">{{ label_text }}</span>
+        {% endif %}
       {% else %}
-        <h6 class="btn-label">{{ label_text }}</h6>
+        {% if show_label %}
+          <span class="btn-label">{{ label_text }}</span>
+        {% endif %}
       {% endif %}
+
       <span class="visually-hidden">{{ label_text }}</span>
     </a>
+
   {% else %}
     <button
       type="{{ button_type }}"
-      class="{{ button_class }}"
+      class="{{ button_class }}{% if show_border %} {{ button_border }}{% endif %}"
       {% if disabled %}disabled aria-disabled="true"{% endif %}
       {% if attrs %}{{ attrs|safe }}{% endif %}
       title="{{ label_text }}"
@@ -57,14 +61,22 @@
         <img
           src="{{ img_src }}"
           alt="{{ img_alt|default:label_text }}"
-          class="btn-image"
+          class="{{ image_class }}"
+          {% if img_id %}id="{{ img_id }}"{% endif %}
         />
+        {% if show_label %}
+          <span class="btn-label">{{ label_text }}</span>
+        {% endif %}
       {% else %}
-        {{ label_text }}
+        {% if show_label %}
+          {{ label_text }}
+        {% endif %}
       {% endif %}
+
       <span class="visually-hidden">{{ label_text }}</span>
     </button>
   {% endif %}
+
 {% endwith %}
 
 

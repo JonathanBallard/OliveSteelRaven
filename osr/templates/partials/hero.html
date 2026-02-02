@@ -11,7 +11,8 @@
     <div class="row align-items-center g-4">
 
       {# TEXT COLUMN #}
-      <div class="{% if recipe.recipe_image.url %}col-lg-5{% else %}col-12{% endif %}">
+      <div class="{% if recipe.recipe_image %}col-lg-5{% else %}col-12{% endif %}">
+        
         <h1 class="display-6 fw-semibold mb-2">
           {{ recipe.title|default:"Hero Recipe" }}
         </h1>

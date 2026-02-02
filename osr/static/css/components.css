@@ -13,17 +13,17 @@
 
 .hero-clickable {
     background-color: #212529;
-    transition:    transform 160ms ease,    box-shadow 160ms ease,    background-color 160ms ease;
-    -webkit-transition:    transform 160ms ease,    box-shadow 160ms ease,    background-color 160ms ease;
-    -moz-transition:    transform 160ms ease,    box-shadow 160ms ease,    background-color 160ms ease;
-    -ms-transition:    transform 160ms ease,    box-shadow 160ms ease,    background-color 160ms ease;
-    -o-transition:    transform 160ms ease,    box-shadow 160ms ease,    background-color 160ms ease;
+    transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+    -webkit-transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+    -moz-transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+    -ms-transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+    -o-transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
     border: 1px solid black;
 }
 
 .hero-clickable:hover {
     transform: translateY(-10px);
-    box-shadow:    0 6px 18px rgba(0, 0, 0, 0.35),    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
     -webkit-transform: translateY(-10px);
     -moz-transform: translateY(-10px);
     -ms-transform: translateY(-10px);
@@ -58,7 +58,7 @@
 
 .navbar-btn:hover {
     transition: translateX(8px);
-    box-shadow:    0 12px 24px rgba(0, 0, 0, 0.35), inset 0 0 0 3px rgba(255, 255, 255, 0.05);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35), inset 0 0 0 3px rgba(255, 255, 255, 0.05);
     -webkit-transition: translateX(8px);
     -moz-transition: translateX(8px);
     -ms-transition: translateX(8px);
@@ -67,4 +67,79 @@
 
 .btn-label {
     size: 1.125rem;
+}
+
+
+/*~ ==========================================================  */
+/*^              Recipe Form Buttons (Edit/Delete)              */
+/*~ ==========================================================  */
+
+
+.recipe-btn {
+    margin-left: 6px;
+    margin-right: 6px;
+    border: 1px solid black;
+}
+
+.recipe-btn:hover {
+    transition: translateX(8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35), inset 0 0 0 3px rgba(255, 255, 255, 0.05);
+    -webkit-transition: translateX(8px);
+    -moz-transition: translateX(8px);
+    -ms-transition: translateX(8px);
+    -o-transition: translateX(8px);
+}
+
+/* Action button container */
+.recipe-actions {
+    min-height: 80px; /* gives "bottom" meaning */
+}
+
+/* Button group */
+.recipe-action-buttons {
+    display: flex;
+    align-items: flex-end;
+}
+
+.recipe-btn-image-wrap {
+    display: inline-flex;
+    flex-direction: column;   /* image over label */
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+}
+
+/* Image size */
+.recipe-btn-img {
+    display: block;
+    height: 80px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Label BELOW image, controlled spacing */
+.btn-label {
+    display: block;
+    margin-top: 4px;
+    font-size: 1.4rem; 
+    line-height: 1.1;
+    text-align: center;
+    color: #f8f9fa;
+}
+
+.btn_border {
+    border: 3px solid black;
+    background-color: #041e38;
+}
+
+.btn_border:hover {
+    border: 3px solid rgb(226, 226, 226);
+    transition: translateX(8px);
+    box-shadow: 0 12px 24px rgba(145, 178, 207, 0.35), inset 0 0 0 3px rgba(255, 255, 255, 0.05);
+    -webkit-transition: translateX(8px);
+    -moz-transition: translateX(8px);
+    -ms-transition: translateX(8px);
+    -o-transition: translateX(8px);
 }
