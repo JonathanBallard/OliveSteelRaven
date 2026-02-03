@@ -21,7 +21,7 @@
 #} 
 {% endcomment %}
 
-{% with label_text=label|default:"Button" show_label=show_lbl|default:True show_border=show_btn_border|default:False button_border=btn_border|default:"" button_class=btn_class|default:"btn p-0 border-0 bg-transparent" button_type=type|default:"button" image_class=img_class|default:"btn-image" %}
+{% with label_text=label|default:"Button" show_label=show_lbl|default:False show_border=show_btn_border|default:False button_border=btn_border|default:"" button_class=btn_class|default:"btn p-0 border-0 bg-transparent" button_type=type|default:"button" image_class=img_class|default:"btn-image" %}
     {% if href %}
     <a
       href="{{ href }}"

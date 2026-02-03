@@ -49,31 +49,31 @@
             <li class="nav-item navbar-btn">
             {% url "accounts:home_page" as home_url %}
             {% static "icons/buttons/Home.png" as home_button_img %}
-            {% include "partials/button.html" with href=home_url label="Home" img_src=home_button_img img_alt="Home" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+            {% include "partials/button.html" with href=home_url label="Home" show_lbl=True img_src=home_button_img img_alt="Home" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
             </li>
 
             <li class="nav-item navbar-btn">
             {% url "recipes:categories" as categories_url %}
             {% static "icons/buttons/Categories.png" as categories_button_img %}
-            {% include "partials/button.html" with href=categories_url label="Browse" img_src=categories_button_img img_alt="Browse" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+            {% include "partials/button.html" with href=categories_url label="Browse" show_lbl=True img_src=categories_button_img img_alt="Browse" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
             </li>
 
             <li class="nav-item navbar-btn">
             {% url "recipes:search" as search_url %}
             {% static "icons/buttons/Search.png" as search_button_img %}
-            {% include "partials/button.html" with href=search_url label="Search" img_src=search_button_img img_alt="Search" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+            {% include "partials/button.html" with href=search_url label="Search" show_lbl=True img_src=search_button_img img_alt="Search" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
             </li>
 
             <li class="nav-item navbar-btn">
             {% url "recipes:create_recipe" as create_url %}
             {% static "icons/buttons/Create.png" as create_button_img %}
-            {% include "partials/button.html" with href=create_url label="Create" img_src=create_button_img img_alt="Create" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+            {% include "partials/button.html" with href=create_url label="Create" show_lbl=True img_src=create_button_img img_alt="Create" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
             </li>
 
             <li class="nav-item navbar-btn">
             {% url "accounts:account" as account_url %}
             {% static "icons/buttons/Account.png" as account_button_img %}
-            {% include "partials/button.html" with href=account_url label="Account" img_src=account_button_img img_alt="Account" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
+            {% include "partials/button.html" with href=account_url label="Account" show_lbl=True img_src=account_button_img img_alt="Account" img_class="navbar-btn-img" btn_class="btn p-0 border-0 bg-transparent d-inline-flex flex-column align-items-center navbar-btn-image-wrap" %}
             </li>
 
         </ul>

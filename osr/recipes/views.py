@@ -149,6 +149,7 @@ def create(request, *args, **kwargs):
         context = {
             "form": form,
             "formset": formset,
+            "is_update": False,
         }
         return render(request=request, template_name=".\\recipes\\recipe_form.html", context=context)
     # POST create recipe page
@@ -223,6 +224,7 @@ def update(request, recipe_id=0, *args, **kwargs):
             "recipe": recipe,   # handy for template links/titles
             "form": form,
             "formset": formset,
+            "is_update": True,
         }
         return render(
             request=request,

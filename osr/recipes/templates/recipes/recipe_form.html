@@ -302,7 +302,7 @@
     </div>
 
     <div class="d-flex gap-2 align-items-center justify-content-center flex-wrap">
-      {% if form.instance %}
+      {% if is_update %}
         {% static "icons/buttons/UpdateRecipeSubmit.png" as update_submit_img %}
         {% include "partials/button.html" with type="submit" img_alt="Update recipe button" label="Update Recipe" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap" img_src=update_submit_img %}
       {% else %}
