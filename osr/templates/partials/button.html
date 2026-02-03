@@ -21,7 +21,7 @@
 #} 
 {% endcomment %}
 
-{% with label_text=label|default:"Button" show_label=show_lbl|default:False show_border=show_btn_border|default:False button_border=btn_border|default:"" button_class=btn_class|default:"btn p-0 border-0 bg-transparent" button_type=type|default:"button" image_class=img_class|default:"btn-image" %}
+{% with label_text=label|default:"Button" show_label=show_lbl|default:False show_border=show_btn_border|default:False button_border=btn_border|default:"" button_class=btn_class|default:"btn p-0 border-0 bg-transparent" button_type=type|default:"button" image_class=img_class|default:"btn-image" data_bs_toggle=data_toggle|default:False data_bs_target=data_target|default:False data_bs_url=data_url|default:False data_bs_title=data_title|default:False %}
     {% if href %}
     <a
       href="{{ href }}"
@@ -29,6 +29,10 @@
       {% if disabled %}aria-disabled="true" tabindex="-1"{% endif %}
       {% if attrs %}{{ attrs|safe }}{% endif %}
       title="{{ label_text }}"
+      {% if data_bs_toggle %}data-bs-toggle="{{ data_bs_toggle }}"{% endif %}
+      {% if data_bs_target %}data-bs-target="{{ data_bs_target }}"{% endif %}
+      {% if data_bs_url %}data-delete-url="{{ data_bs_url }}"{% endif %}
+      {% if data_bs_title %}data-recipe-title="{{ data_bs_title }}"{% endif %}
     >
       {% if img_src %}
         <img
@@ -56,6 +60,10 @@
       {% if disabled %}disabled aria-disabled="true"{% endif %}
       {% if attrs %}{{ attrs|safe }}{% endif %}
       title="{{ label_text }}"
+      {% if data_bs_toggle %}data-bs-toggle="{{ data_bs_toggle }}"{% endif %}
+      {% if data_bs_target %}data-bs-target="{{ data_bs_target }}"{% endif %}
+      {% if data_bs_url %}data-delete-url="{{ data_bs_url }}"{% endif %}
+      {% if data_bs_title %}data-recipe-title="{{ data_bs_title }}"{% endif %}
     >
       {% if img_src %}
         <img
