@@ -231,3 +231,29 @@ def account(request, *args, **kwargs):
         else:
             messages.error(request, "Updating User Account Failed")
         return redirect('accounts:account')
+
+
+@csrf_protect
+@login_required #type: ignore
+@safe_method_validator(".\\accounts\\account.html", ["GET", "POST", "HEAD", "OPTIONS"])
+def change_password(request, *args, **kwargs):
+    """
+    Docstring for account
+    
+    :param request: HTTP Request
+    
+    GET: Redirects to account
+    POST: Sends email to change password
+    """
+    context = {}
+    user = request.user
+    
+    if(not user.is_authenticated):
+        return redirect('accounts:login')
+    
+    if(request.method == "GET"):
+        return redirect('accounts:account')
+    elif(request.method == "POST"):
+        return redirect('accounts:account')
+
+

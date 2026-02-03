@@ -408,9 +408,18 @@ def my_recipes(request, *args, **kwargs):
     if(not request.user.is_authenticated):
         return redirect('account:login')
     else:
-        my_recipes = Recipe.objects.filter(owner=request.user)
-        context['results'] = my_recipes
-    return render(request=request, template_name=".\\recipes\\search_results.html", context=context)
+        my_recipes = Recipe.objects.filter(owner=request.user.pk)
+        context['recipes'] = my_recipes
+        results_count = my_recipes.count()
+        categories = Category.objects.all()  # ordered via Meta
+        context = {
+            "categories": categories,
+            "recipes": my_recipes,
+            "query": None,
+            "selected_category": None,
+            "results_count": results_count,
+        }
+    return render(request=request, template_name=".\\recipes\\search.html", context=context)
     # return redirect('recipes:create_recipe') #~! TEMPORARY REDIRECT
 
 
