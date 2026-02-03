@@ -3,7 +3,7 @@
 {% block title %}Home · RecipeBook{% endblock %}
 
 {% block content%}
-<div class="container mt-4">
+<div class="container mt-4 content-container">
     {% comment %} include hero {% endcomment %}
     {% url "recipes:view_recipe" hero_recipe.pk as hero_recipe_url %}
     {% include "partials/hero.html" with recipe=hero_recipe cta_label="Make this recipe now!" cta_url=hero_recipe_url hero_url=hero_recipe_url hero_aria_label="View this recipe" %}

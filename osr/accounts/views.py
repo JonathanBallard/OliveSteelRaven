@@ -199,10 +199,36 @@ def my_logout(request, *args, **kwargs):
 
 @csrf_protect
 @login_required #type: ignore
-@safe_method_validator(".\\accounts\\signup.html", ["GET", "POST", "HEAD", "OPTIONS"])
+@safe_method_validator(".\\accounts\\signup.html", ["GET", "HEAD", "OPTIONS"])
 def account(request, *args, **kwargs):
     """
     Docstring for account
+    
+    :param request: HTTP Request
+    
+    GET: View Account Details
+    """
+    context = {}
+    user = request.user
+    
+    
+    if(not user.is_authenticated):
+        return redirect('accounts:login')
+    
+    if(request.method == "GET"):
+        total_recipes = Recipe.objects.filter(owner=request.user.pk).count()
+        context['user_recipes_total'] = total_recipes
+        context['edit_details'] = False
+        context['user'] = user
+        return render(request=request, template_name=".\\accounts\\account.html", context=context)
+
+
+@csrf_protect
+@login_required #type: ignore
+@safe_method_validator(".\\accounts\\account.html", ["GET", "POST", "HEAD", "OPTIONS"])
+def edit_account(request, *args, **kwargs):
+    """
+    Docstring for edit_account
     
     :param request: HTTP Request
     
@@ -221,6 +247,7 @@ def account(request, *args, **kwargs):
         # add all appropriate user info to context (to avoid passing hashed passwords)
         context['user'] = user
         context['form'] = form
+        context['edit_details'] = True
         return render(request=request, template_name=".\\accounts\\account.html", context=context)
     elif(request.method == "POST"):
         form = UserUpdateForm(request.POST, instance=request.user)

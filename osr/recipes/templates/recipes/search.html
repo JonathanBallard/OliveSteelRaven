@@ -5,9 +5,10 @@
 {% block title %}Search · RecipeBook{% endblock %}
 {% block extra_css %}<link rel="stylesheet" href="{% static 'css/search.css' %}">{% endblock %}
 {% block content %}
+<div class="container content-container">
 <section class="search-hero">
-  <div class="search-inner background">
-    <div class="container ">
+  <div class="search-inner">
+    <div class="container content-container search-inner-container">
 
       <h2 class="page-title">Search Recipes</h2>
 
@@ -100,4 +101,5 @@
     </div>
   </div>
 </section>
+</div>
 {% endblock %}

@@ -1,29 +1,121 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}Account · RecipeBook{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/account.css' %}">{% endblock %}
 {% block content %}
-<div class="container mt-4">
-    <!-- Example form -->
-    <form action="{% url 'accounts:account' %}" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-</div>
-<div class="d-flex flex-grow-1 justify-content-around gap-3">
-    {% url "recipes:my_recipes" as update_url %}
-    {% static "icons/buttons/MyRecipes.png" as my_recipes_btn_img %}
-    {% include "partials/button.html" with href=update_url label="My Recipes" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=my_recipes_btn_img img_alt="My Recipes" img_class="recipe-btn-img" btn_class="btn bg-transparent recipe-btn-image-wrap" %}
+<div class="container content-container">
+    <h2 class="page-title">My Account</h2>
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">Account Details</h1>
 
-    <form
-    action="{% url 'accounts:change_password' %}"
-    method="post"
-    class="m-0 p-0 d-inline-flex align-items-center"
-    >
-    {% csrf_token %}
-    {% static "icons/buttons/ChangePassword.png" as change_password_btn_img %}
-    {% include "partials/button.html" with type="submit" label="Change Password" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=change_password_btn_img img_class="recipe-btn-img" btn_class="btn bg-transparent recipe-btn-image-wrap" %}
-    </form>
+            {# Optional back link (adjust URL name if you have one) #}
+            {# <a class="btn btn-outline-secondary" href="{% url 'accounts:account' %}">Back</a> #}
+        </div>
+        {% if edit_details %}
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                Please fix the errors below.
+            </div>
+            {% endif %}
+
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="card mb-4">
+            <div class="card-header">Profile</div>
+                <div class="card-body">
+
+                    <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="{{ form.first_name.id_for_label }}">First name</label>
+                        {{ form.first_name }}
+                        <div class="text-danger small">{{ form.first_name.errors }}</div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="{{ form.last_name.id_for_label }}">Last name</label>
+                        {{ form.last_name }}
+                        <div class="text-danger small">{{ form.last_name.errors }}</div>
+                    </div>
+                    </div>
+
+                    <div class="mb-3">
+                    <label class="form-label" for="{{ form.email.id_for_label }}">Email</label>
+                    {{ form.email }}
+                    <div class="text-danger small">{{ form.email.errors }}</div>
+                    {# Optional helper text #}
+                    <div class="form-text">We’ll use this for account notifications and password recovery.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 align-items-center justify-content-center flex-wrap">
+            <button type="submit" class="btn btn-primary">
+                Save changes
+            </button>
+
+            {# Optional cancel link (adjust if needed) #}
+            {# <a class="btn btn-outline-secondary" href="{% url 'accounts:account' %}">Cancel</a> #}
+            </div>
+        </form>
+        {% else %}
+        <div class="card mb-4">
+            <div class="card-header">Profile</div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <span class="me-3">First name:</span>
+                        {{ user.first_name }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <span class="me-3">Last name:</span>
+                        {{ user.last_name }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <span class="me-3">Email:</span>
+                        {{ user.email }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <span class="me-3">Username:</span>
+                        {{ user.username }}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <span class="me-3">Total Recipes:</span>
+                    {{ user_recipes_total }}
+                </div>
+            </div>
+            <div class="d-flex justify-content-center align-items-center edit-details-wrapper">
+                {% url "accounts:edit_account" as edit_account_url %}
+                {% include "partials/button.html" with href=edit_account_url label="Edit Details" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True btn_class="edit-details-btn btn bg-transparent recipe-btn-image-wrap" %}
+            </div>
+        </div>
+        <div class="d-flex flex-grow-1 justify-content-around gap-3">
+            {% url "recipes:my_recipes" as update_url %}
+            {% static "icons/buttons/MyRecipes.png" as my_recipes_btn_img %}
+            {% include "partials/button.html" with href=update_url label="My Recipes" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=my_recipes_btn_img img_alt="My Recipes" img_class="recipe-btn-img" btn_class="btn bg-transparent recipe-btn-image-wrap" %}
+
+            <form
+            action="{% url 'accounts:change_password' %}"
+            method="post"
+            class="m-0 p-0 d-inline-flex align-items-center"
+            >
+            {% csrf_token %}
+            {% static "icons/buttons/ChangePassword.png" as change_password_btn_img %}
+            {% include "partials/button.html" with type="submit" label="Change Password" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=change_password_btn_img img_class="recipe-btn-img" btn_class="btn bg-transparent recipe-btn-image-wrap" %}
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
 
 </div>
 {% endblock %}

@@ -34,5 +34,6 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page=reverse_lazy('accounts:home_page')), name="logout"), # Django's Default Logout View
     # path('logout/', views.my_logout, name='logout'), # POST my logout
     path('account/', views.account, name='account'), #type: ignore
+    path('account/edit_details', views.edit_account, name='edit_account'), #type: ignore
     path('account/change_password', views.change_password, name='change_password'), #type: ignore
 ]

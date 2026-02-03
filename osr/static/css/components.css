@@ -147,11 +147,21 @@
 
 .btn_border:hover {
     border: 3px solid rgb(226, 226, 226);
-    transition: translateY(-20px);
-    box-shadow: 0 12px 24px rgba(145, 178, 207, 0.35), inset 0 0 0 3px rgba(255, 255, 255, 0.05);
-    -webkit-transition: translateY(-20px);
-    -moz-transition: translateY(-20px);
-    -ms-transition: translateY(-20px);
-    -o-transition: translateY(-20px);
+    transition: translateY(-12px);
+    box-shadow: 0 6px 24px rgba(145, 178, 207, 0.35), inset 0 0 0 3px rgba(255, 255, 255, 0.05);
+    -webkit-transition: translateY(-12px);
+    -moz-transition: translateY(-12px);
+    -ms-transition: translateY(-12px);
+    -o-transition: translateY(-12px);
 }
 
+/* Needs to match an inside border-radius for base content-container */
+/* inner-border-radius = outer-border-radius - outer-padding */
+.hero-container {
+    margin-bottom: 18px;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
+}
