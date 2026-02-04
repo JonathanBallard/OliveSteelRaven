@@ -1,62 +1,71 @@
+{% extends "base.html" %}
 {% load static %}
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Site Title{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/site.css' %}">
-    {% block head_extra %}{% endblock %}
-</head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'accounts:home_page' %}">MySite</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navMenu">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:home_page' %}">Home</a></li>
-            </ul>
+
+{% block title %}Log In ● RecipeBook{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-5">
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+
+            <h1 class="h4 mb-2">Log In</h1>
+            <p class="text-muted mb-4">Welcome back. Let’s get you cooking. 🔥</p>
+
+            {# Non-field errors (e.g., invalid username/password) #}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger py-2">
+                {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                {# Preserve redirect target if present #}
+                {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+                {% endif %}
+
+                <div class="mb-3">
+                <label class="form-label" for="{{ form.username.id_for_label }}">Username</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+                {% endif %}
+                </div>
+
+                <div class="mb-3">
+                <label class="form-label" for="{{ form.password.id_for_label }}">Password</label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <div class="text-danger small mt-1">{{ form.password.errors }}</div>
+                {% endif %}
+                </div>
+
+                <div class="d-flex flex-column gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">
+                    Log In
+                </button>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="small text-muted">
+                    Don’t have an account?
+                    <a href="{% url 'accounts:signup' %}">Sign up</a>
+                    </div>
+
+                    <a class="small" href="{% url 'accounts:reset_password' %}">Forgot password?</a>
+                </div>
+                </div>
+
+            </form>
+
+            </div>
+        </div>
+
         </div>
     </div>
-</nav>
-
-<div class="container mt-4">
-    {% if user.is_authenticated %}
-    <p>You are logged in as {{ user.username }}.</p>
-    <form action="{% url 'accounts:logout' %}" method="POST">
-        {% csrf_token %}
-        <button type="submit">Log Out</button>
-    </form>
-    {% else %}
-    <p>You are not logged in.</p>
-    <a href="{% url 'accounts:signup' %}">Sign Up</a>
-    <a href="{% url 'accounts:login' %}">Log In</a>
-    {% endif %}
-
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
-
-    {% block content %}
-    <!-- Example form -->
-    <form action="{% url 'accounts:login' %}" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-    {% endblock %}
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-{% block scripts %}{% endblock %}
-</body>
-</html>
+{% endblock %}

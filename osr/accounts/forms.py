@@ -1,7 +1,63 @@
 from django import forms
 from django.forms.widgets import PasswordInput
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+
+class BootstrapAuthenticationForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["username"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Username",
+            "autocomplete": "username",
+        })
+
+        self.fields["password"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Password",
+            "autocomplete": "current-password",
+        })
+
+class SignupForm(UserCreationForm):
+    class Meta:
+        model = get_user_model()
+        fields = ("username", "email", "password1", "password2")
+    
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["username"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Choose a username",
+            "autocomplete": "username",
+        })
+
+        self.fields["email"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "you@example.com",
+            "autocomplete": "email",
+        })
+
+        self.fields["password1"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Create a password",
+            "autocomplete": "new-password",
+        })
+
+        self.fields["password2"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Repeat your password",
+            "autocomplete": "new-password",
+        })
+    
+    def clean_email(self):
+        User = get_user_model()
+        email = self.cleaned_data["email"].lower()
+        if User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError("An account with this email already exists.")
+        return email
 
 class UserModelForm(UserCreationForm):
     first_name = forms.CharField()

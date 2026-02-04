@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 
 from recipes.models import Recipe, Category, Tag, RecipeIngredient, Ingredient
-from accounts.forms import UserModelForm, UserLoginForm, UserUpdateForm
+from accounts.forms import UserModelForm, UserLoginForm, UserUpdateForm, SignupForm, BootstrapAuthenticationForm
 
 from common.utils import safe_method_validator
 
@@ -72,46 +72,25 @@ def home(request, *args, **kwargs):
 @csrf_protect
 @safe_method_validator(".\\accounts\\login.html", ["GET", "POST", "HEAD", "OPTIONS"])
 def my_login(request, *args, **kwargs):
-    """
-    Docstring for login
-    
-    :param request: HTTP Request
-    
-    GET: Renders Login Form Template
-    POST: Logs user in
-    """
-    context = {}
-    
-    if(request.user.is_authenticated):
+    if request.user.is_authenticated:
         return redirect("accounts:account")
-    
-    if(request.method == 'GET'):
-        form = UserLoginForm
-        context['form'] = UserLoginForm(request.GET)
-        context['form_action'] = "login/submit"
-    elif(request.method == "POST"):
-        logger.debug("POST login")
-        context = {}
-        posted_data_dict = request.POST.copy()
-        
-        form = UserLoginForm(request.POST)
-        context['form'] = form
-        user = authenticate(request, username=request.POST.get('username'), password=request.POST.get('password1'))
-        logger.debug("AUTHENTICATION attempted")
-        if user is not None:
-            logger.debug("User Authenticated")
-            messages.success(request, "User Logged In Succesfully")
+
+    form = BootstrapAuthenticationForm(request, data=request.POST or None)
+
+    if request.method == "POST":
+        if form.is_valid():
+            user = form.get_user()
             login(request, user)
-            return redirect('accounts:home_page')
+            messages.success(request, "User Logged In Successfully")
+            return redirect("accounts:home_page")
         else:
-            logger.debug("User NOT Authenticated")
             messages.error(request, "User Login Failed")
-            # handle invalid login
-            # then redirect with message
-            # return redirect('accounts:get_login_page')
-            return redirect('accounts:login')
-    
-    return render(request=request, template_name=".\\accounts\\login.html", context=context)
+
+    return render(
+        request=request,
+        template_name=".\\accounts\\login.html",
+        context={"form": form},
+    )
 
 @csrf_protect
 @safe_method_validator(".\\accounts\\login.html", ["GET", "POST", "HEAD", "OPTIONS"])
@@ -139,36 +118,16 @@ def signup(request, *args, **kwargs):
     POST: Creates New User
     """
     context = {}
-    if(request.method == 'GET'):
-        form = UserModelForm(request.GET)
-        # form = UserCreationForm(request.GET) # uses default Auth.User model
-        context['form'] = form
-        return render(request=request, template_name=".\\accounts\\signup.html", context=context)
-    elif(request.method == "POST"):
-        posted_data_dict = request.POST.copy()
-        
-        form = UserModelForm(request.POST)
-        User = get_user_model()
-        
-        logger.debug("Received Signup POST")
+    if request.method == "POST":
+        form = SignupForm(request.POST)
         if form.is_valid():
-            logger.debug("Form Valid")
-            user = User.objects.create_user(first_name=request.POST.get('first_name'), last_name=request.POST.get('last_name'), username=request.POST.get('username'), email=request.POST.get('email'), password=request.POST.get('password1'))
-            
-            user.save()
-            messages.success(request, "User Was Succesfully Created")
-            # return redirect('accounts:get_login_page') # Assuming successful signup, redirect user to login
-            return redirect('accounts:login') # Assuming successful signup, redirect user to login
-        elif not form.is_valid:
-            messages.error(request, "User Was Not Created")
-            form = UserModelForm()
-        else:
-            messages.error(request, "User Was Not Created: Other Error")
-            form = UserModelForm()
-        context['form'] = form
-        return redirect('accounts:signup')
+            user = form.save()
+            login(request, user)
+            return redirect("accounts:home_page")
     else:
-        return render(request=request, template_name=".\\accounts\\signup.html", context=context)
+        form = SignupForm()
+
+    return render(request, "accounts/signup.html", {"form": form})
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `LOGOUT` VIEWS
@@ -259,6 +218,9 @@ def edit_account(request, *args, **kwargs):
             messages.error(request, "Updating User Account Failed")
         return redirect('accounts:account')
 
+#&-----------------------------------------------------------------------------------------------------
+#^ START `PASSWORD` VIEWS
+#&-----------------------------------------------------------------------------------------------------
 
 @csrf_protect
 @login_required #type: ignore
@@ -277,6 +239,25 @@ def change_password(request, *args, **kwargs):
     
     if(not user.is_authenticated):
         return redirect('accounts:login')
+    
+    if(request.method == "GET"):
+        return redirect('accounts:account')
+    elif(request.method == "POST"):
+        return redirect('accounts:account')
+
+
+@csrf_protect
+@safe_method_validator(".\\accounts\\account.html", ["GET", "POST", "HEAD", "OPTIONS"])
+def reset_password(request, *args, **kwargs):
+    """
+    Docstring for account
+    
+    :param request: HTTP Request
+    
+    GET: Redirects to account
+    POST: Sends email to change password
+    """
+    context = {}
     
     if(request.method == "GET"):
         return redirect('accounts:account')

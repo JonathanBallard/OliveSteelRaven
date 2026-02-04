@@ -4,6 +4,7 @@
 import functools
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponseBadRequest, HttpResponseForbidden
+from django.contrib.auth import get_user_model
 
 
 def safe_method_validator(backup_render_template_path, safe_methods_list, requires_authentication=False):

@@ -28,12 +28,13 @@ urlpatterns = [
     path('home/', views.home, name='home_page'), # Display the homepage
     path('signup/', views.signup, name='signup'), # Display the sign-up page
     path('login/', views.login_redirect, name='login'), # Currently using 'login_redirect' view to redirect all currently logged-in users to their account page if they go to the url: login/
-    path('login_form/', auth_views.LoginView.as_view(template_name='accounts/login.html', next_page=reverse_lazy('accounts:home_page')), name='login'), # Django's Default Login View
-    # path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html', next_page=reverse_lazy('accounts:home_page')), name='login'), # Django's Default Login View
+    # path('login_form/', auth_views.LoginView.as_view(template_name='accounts/login.html', next_page=reverse_lazy('accounts:home_page')), name='login'), # Django's Default Login View
+    path('login_form/', views.my_login, name='login'), # Display my log-in page
     # path('login/', views.my_login, name='login'), # Display my log-in page
     path('logout/', auth_views.LogoutView.as_view(next_page=reverse_lazy('accounts:home_page')), name="logout"), # Django's Default Logout View
     # path('logout/', views.my_logout, name='logout'), # POST my logout
     path('account/', views.account, name='account'), #type: ignore
     path('account/edit_details', views.edit_account, name='edit_account'), #type: ignore
     path('account/change_password', views.change_password, name='change_password'), #type: ignore
+    path('account/reset_password', views.reset_password, name='reset_password'), #type: ignore
 ]
