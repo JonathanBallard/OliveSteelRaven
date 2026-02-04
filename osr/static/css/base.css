@@ -11,11 +11,17 @@
 
 .content-container {
     padding: 12px;
+    margin-top: 40px;
+    margin-bottom: 40px;
     /* border-radius: 18px !important;
     -webkit-border-radius: 18px !important;
     -moz-border-radius: 18px !important;
     -ms-border-radius: 18px !important;
     -o-border-radius: 18px !important; */
+}
+
+.card-content-container {
+    padding: 12px;
 }
 
 .page-title {

@@ -30,6 +30,15 @@
     -o-transform: translateY(-10px);
 }
 
+.hero-container {
+    margin-bottom: 18px;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
+}
+
 /*~ =======================================  */
 /*^              NavBar Partial              */
 /*~ =======================================  */
@@ -157,11 +166,3 @@
 
 /* Needs to match an inside border-radius for base content-container */
 /* inner-border-radius = outer-border-radius - outer-padding */
-.hero-container {
-    margin-bottom: 18px;
-    border-radius: 6px;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    -ms-border-radius: 6px;
-    -o-border-radius: 6px;
-}
