@@ -3,7 +3,8 @@
 
 {% block title%}{{recipe.title}} ● RecipeBook{% endblock %}
 {% block content %}
-<div class="container pb-5">
+<div class="container content-container">
+<div class="container p-3 pb-5">
   <!-- Title + meta -->
   <div class="mb-4">
     <h1 class="mb-1">{{ recipe.title }}</h1>
@@ -147,6 +148,7 @@
 
     </div>
   </div>
+</div>
 </div>
 {% endblock %}
 {% block scripts %}

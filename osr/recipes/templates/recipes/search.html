@@ -5,12 +5,13 @@
 {% block title %}Search ● RecipeBook{% endblock %}
 {% block extra_css %}<link rel="stylesheet" href="{% static 'css/search.css' %}">{% endblock %}
 {% block content %}
-<div class="container content-container">
-<section class="search-hero">
+{% comment %} 
+<section class="search-hero>"
+{% endcomment %}
+<section class="container content-container"> 
   <div class="search-inner">
+    <h2 class="page-title">Search Recipes</h2>
     <div class="container content-container search-inner-container">
-
-      <h2 class="page-title">Search Recipes</h2>
 
       <div class="search-card p-3 p-md-4 mb-4">
         <form method="get" action="{% url 'recipes:search' %}" class="row g-2 g-md-3 align-items-end">
@@ -101,5 +102,4 @@
     </div>
   </div>
 </section>
-</div>
 {% endblock %}
