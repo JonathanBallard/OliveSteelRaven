@@ -96,12 +96,12 @@ class Recipe(models.Model):
     short_description = models.CharField(
         max_length=300,
         blank=True,
-        default="This is my new recipe.",
+        default="",
         help_text="Type a short description of 300 characters or less. This will show up when people search for your recipe."
     )
     long_description = models.TextField(
         blank=True,
-        default="Let me tell you a little about my recipe.",
+        default="",
         help_text="Type a description of your recipe. Talk about its history, origins, or your creative process here."
     )
 

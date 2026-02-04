@@ -337,7 +337,11 @@ def search(request, *args, **kwargs):
     selected_category = None
 
     # Base queryset: ALL recipes
-    qs = Recipe.objects.select_related("category")
+    qs = (
+        Recipe.objects
+        .select_related("category")
+        .prefetch_related("tags", "ingredients")
+    )
 
     filters = Q()
 
@@ -352,6 +356,7 @@ def search(request, *args, **kwargs):
             Q(title__icontains=q_raw)
             | Q(ingredients__name_normalized__icontains=q_norm)
             | Q(ingredients__name__icontains=q_raw)
+            | Q(tags__name__icontains=q_raw)
         )
 
     # Only hit the DB when at least one filter is provided

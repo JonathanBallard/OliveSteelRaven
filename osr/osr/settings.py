@@ -24,11 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 #& ==================================================
 #^ Available in Templates - Pass to Context Processor
 #& ==================================================
+
 APP_NAME = "RecipeBook"
 DEVELOPER_NAME = "Jonathan Ballard"
 CONTACT_EMAIL = "2ravenstech@gmail.com"
 GITHUB_LINK = "https://github.com/JonathanBallard/OliveSteelRaven"
-DEVELOPER_LINKEDIN = "https://www.linkedin.com/in/jonathanbal"
+DEVELOPER_LINKEDIN = "https://www.linkedin.com/in/jonathanbal/"
 
 # Paths
 MEDIA_URL = "/media/"

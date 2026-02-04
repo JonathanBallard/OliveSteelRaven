@@ -86,8 +86,8 @@ class RecipeForm(forms.ModelForm):
         ]
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control"}),
-            "short_description": forms.Textarea(attrs={"class": "form-control", "rows": 2}),
-            "long_description": forms.Textarea(attrs={"class": "form-control", "rows": 5}),
+            "short_description": forms.Textarea(attrs={"class": "form-control", "rows": 2, "placeholder": "Paint a picture of your recipe"}),
+            "long_description": forms.Textarea(attrs={"class": "form-control", "rows": 5, "placeholder": "A more detailed description of your recipe. Consider including substitutions, variations, and pairings."}),
             "instructions": forms.Textarea(attrs={"class": "form-control", "rows": 8}),
             "category": forms.Select(attrs={"class": "form-select"}),
             "prep_time_minutes": forms.NumberInput(attrs={"class": "form-control", "min": 0}),
