@@ -30,6 +30,8 @@
     -o-transform: translateY(-10px);
 }
 
+/* Needs to match an inside border-radius for base content-container */
+/* inner-border-radius = outer-border-radius - outer-padding */
 .hero-container {
     margin-bottom: 18px;
     border-radius: 6px;
@@ -164,5 +166,37 @@
     -o-transition: translateY(-12px);
 }
 
-/* Needs to match an inside border-radius for base content-container */
-/* inner-border-radius = outer-border-radius - outer-padding */
+/* Base (mobile) */
+.action-btn{
+    width: 74px;
+    height: 74px;
+    padding: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    border-radius: 8px;
+}
+
+.action-btn img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* sm+ */
+@media (min-width: 576px){
+    .action-btn{
+        width: 90px;
+        height: 90px;
+    }
+}
+
+/* lg+ (desktop) */
+@media (min-width: 992px){
+    .action-btn{
+        width: 120px;   /* ← bigger desktop target */
+        height: 120px;
+    }
+}
