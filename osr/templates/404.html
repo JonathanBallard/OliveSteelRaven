@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}404 ● RecipeBook{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4 text-center">
+
+            <h1 class="display-6 mb-2">Page not found</h1>
+            <p class="text-muted mb-4">
+                That link went missing like a sock in the dryer.
+            </p>
+
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a href="{% url 'accounts:home_page' %}" class="btn btn-primary">
+                Go Home
+                </a>
+                <a href="{% url 'recipes:search' %}" class="btn btn-outline-secondary">
+                Search Recipes
+                </a>
+            </div>
+
+            <div class="mt-4 small text-muted">
+                Error 404
+            </div>
+
+            </div>
+        </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

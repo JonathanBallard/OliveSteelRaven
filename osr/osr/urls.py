@@ -18,6 +18,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import handler404
+
 
 # Import views from my apps
 from accounts import views
@@ -31,3 +33,11 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+handler404 = "django.views.defaults.page_not_found"
+
+if settings.DEBUG:
+    urlpatterns += [
+        path("404-test/", lambda request: (_ for _ in ()).throw(Http404())),
+    ]

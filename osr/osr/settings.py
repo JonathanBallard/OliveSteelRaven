@@ -67,9 +67,13 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 2097152 # 2mb
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', True)
+DEBUG = os.getenv('DEBUG', False)
+# DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+]
 
 AUTH_USER_MODEL = 'accounts.User'
 
