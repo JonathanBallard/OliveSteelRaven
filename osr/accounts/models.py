@@ -44,6 +44,8 @@ class User(AbstractUser):
 
     # Text column in SQL
     profile_image_url = models.TextField(null=True, blank=True, default="./assets/icons/users/default_user.png")
+    
+    agreed_to_tos = models.BooleanField(null=False, blank=False, default=False)
 
     # Map AbstractUser's last_login to last_login_at
     last_login = models.DateTimeField(null=True, blank=True, db_column="last_login_at")

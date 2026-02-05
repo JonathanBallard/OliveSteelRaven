@@ -13,6 +13,7 @@ def global_settings(request):
         "CONTACT_EMAIL": getattr(settings, "CONTACT_EMAIL", "2ravenstech@gmail.com"),
         "GITHUB_LINK": getattr(settings, "GITHUB_LINK", "https://github.com/JonathanBallard/OliveSteelRaven"),
         "DEVELOPER_LINKEDIN": getattr(settings, "DEVELOPER_LINKEDIN", "https://www.linkedin.com/in/jonathanbal"),
+        "TOS_DATE": getattr(settings, "TOS_DATE", "2/4/26"),
         
         # Defaults
         "HERO_RECIPE_PK": getattr(settings, "HERO_RECIPE_PK", 0),

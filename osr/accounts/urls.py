@@ -27,6 +27,7 @@ urlpatterns = [
     path('', views.root, name='root_page'), # Display the log-in page unless a user is logged in, in which case it shows the homepage
     path('home/', views.home, name='home_page'), # Display the homepage
     path('signup/', views.signup, name='signup'), # Display the sign-up page
+    path('tos/', views.tos, name='tos'), # Display the sign-up page
     path('login/', views.login_redirect, name='login'), # Currently using 'login_redirect' view to redirect all currently logged-in users to their account page if they go to the url: login/
     # path('login_form/', auth_views.LoginView.as_view(template_name='accounts/login.html', next_page=reverse_lazy('accounts:home_page')), name='login'), # Django's Default Login View
     path('login_form/', views.my_login, name='login'), # Display my log-in page

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Terms of Service ● RecipeBook{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8">
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4 p-md-5">
+
+            <h1 class="h3 mb-3">Terms of Service</h1>
+            <p class="text-muted mb-4">
+                Last updated: <em>{{ TOS_DATE }}</em>
+            </p>
+
+            <p>
+                Welcome to <strong>{{ APP_NAME }}</strong>. These Terms of Service (“Terms”) govern your use of the
+                RecipeBook website and services.
+            </p>
+
+            <p class="text-muted visually-hidden">
+                ⚠️ The content below is placeholder text. Replace it with your finalized Terms of Service
+                before production use.
+            </p>
+
+            <hr class="my-4">
+
+            <h2 class="h5 mt-4">1. Acceptance of Terms</h2>
+            <p>
+                By creating an account or using RecipeBook, you agree to be bound by these Terms.
+            </p>
+
+            <h2 class="h5 mt-4">2. User Accounts</h2>
+            <p>
+                You are responsible for maintaining the security of your account and any activity that occurs
+                under your account.
+            </p>
+
+            <h2 class="h5 mt-4">3. User Content</h2>
+            <p>
+                Recipes, images, and other content you submit remain yours. By submitting content, you grant
+                RecipeBook a non-exclusive license to display and store that content as part of the service.
+            </p>
+
+            <h2 class="h5 mt-4">4. Prohibited Use</h2>
+            <p>
+                You agree not to misuse the service, attempt unauthorized access, or engage in activity that
+                disrupts or harms RecipeBook or its users.
+            </p>
+
+            <h2 class="h5 mt-4">5. Termination</h2>
+            <p>
+                We reserve the right to suspend or terminate accounts that violate these Terms.
+            </p>
+
+            <h2 class="h5 mt-4">6. Changes to These Terms</h2>
+            <p>
+                These Terms may be updated from time to time. Continued use of RecipeBook constitutes acceptance
+                of the updated Terms.
+            </p>
+
+            <h2 class="h5 mt-4">7. Contact</h2>
+            <p>
+                If you have questions about these Terms, please contact us at
+                <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>
+            </p>
+
+            <hr class="my-4">
+
+            <div class="text-muted small">
+                © {{ now|default:2026 }} RecipeBook. All rights reserved.
+            </div>
+
+            </div>
+        </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

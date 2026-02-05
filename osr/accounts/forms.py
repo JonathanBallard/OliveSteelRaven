@@ -20,10 +20,17 @@ class BootstrapAuthenticationForm(AuthenticationForm):
         })
 
 class SignupForm(UserCreationForm):
+    agreed_to_tos = forms.BooleanField(
+        required=True,
+        label="I agree to the Terms of Service",
+        error_messages={
+            "required": "You must agree to the Terms of Service to create an account."
+        },
+    )
+
     class Meta:
         model = get_user_model()
-        fields = ("username", "email", "password1", "password2")
-    
+        fields = ("username", "email", "agreed_to_tos", "password1", "password2")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -51,12 +58,19 @@ class SignupForm(UserCreationForm):
             "placeholder": "Repeat your password",
             "autocomplete": "new-password",
         })
-    
+        
+        # ✅ Checkbox styling (IMPORTANT)
+        self.fields["agreed_to_tos"].widget.attrs.update({
+            "class": "form-check-input",
+        })
+
     def clean_email(self):
         User = get_user_model()
         email = self.cleaned_data["email"].lower()
         if User.objects.filter(email__iexact=email).exists():
-            raise forms.ValidationError("An account with this email already exists.")
+            raise forms.ValidationError(
+                "An account with this email already exists."
+            )
         return email
 
 class UserModelForm(UserCreationForm):

@@ -129,6 +129,22 @@ def signup(request, *args, **kwargs):
 
     return render(request, "accounts/signup.html", {"form": form})
 
+# *DONE* Open signup.html
+@csrf_protect
+@safe_method_validator(".\\accounts\\signup.html", ["GET", "HEAD", "OPTIONS"])
+def tos(request, *args, **kwargs):
+    """
+    Docstring for signup
+    
+    :param request: HTTP Request
+    
+    GET: Renders Signup Form Template
+    POST: Creates New User
+    """
+    context = {}
+
+    return render(request, "accounts/tos.html", context)
+
 #&-----------------------------------------------------------------------------------------------------
 #^ START `LOGOUT` VIEWS
 #&-----------------------------------------------------------------------------------------------------

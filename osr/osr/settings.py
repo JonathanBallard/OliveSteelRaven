@@ -30,6 +30,7 @@ DEVELOPER_NAME = "Jonathan Ballard"
 CONTACT_EMAIL = "2ravenstech@gmail.com"
 GITHUB_LINK = "https://github.com/JonathanBallard/OliveSteelRaven"
 DEVELOPER_LINKEDIN = "https://www.linkedin.com/in/jonathanbal/"
+TOS_DATE = "2/4/26"
 
 # Paths
 MEDIA_URL = "/media/"
