@@ -73,7 +73,7 @@
           </div>
 
           {# Existing image (update view) #}
-          {% if form.instance and form.instance.recipe_image %}
+          {% if form.instance and form.instance.recipe_image and recipe.recipe_image and recipe.recipe_image.name != "defaults/default_recipe.png" %}
             <div class="mt-3" id="existingWrap">
               <div class="small text-muted mb-2">Current image:</div>
               <img

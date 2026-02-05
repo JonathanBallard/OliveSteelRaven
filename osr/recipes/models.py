@@ -91,7 +91,12 @@ class Recipe(models.Model):
 
     title = models.CharField(max_length=100)
     
-    recipe_image = models.ImageField(upload_to="recipe_images/", blank=True, null=True)
+    recipe_image = models.ImageField(
+        upload_to="recipe_images/", 
+        default="defaults/default_recipe.png",
+        blank=True, 
+        null=True
+    )
     
     short_description = models.CharField(
         max_length=300,
@@ -153,13 +158,27 @@ class Recipe(models.Model):
         related_name="recipes",
     )
     def save(self, *args, **kwargs):
+        # Save first so file exists on disk/storage
         super().save(*args, **kwargs)
-        
+
         if not self.recipe_image:
             return
-        
+
+        # --- ✅ Only process user-uploaded images ---
+        # 1) Skip the MEDIA default
+        default_name = (self._meta.get_field("recipe_image").default or "").lstrip("/")
+        current_name = (self.recipe_image.name or "").lstrip("/")
+
+        if default_name and current_name == default_name:
+            return
+
+        # 2) Skip if it’s already been processed to .jpg by us
+        if current_name.lower().endswith(".jpg"):
+            return
+
+        # --- Process user-uploaded image ---
         img = Image.open(self.recipe_image)
-        
+
         # ✅ JPEG can't store alpha. If PNG/WebP has transparency, flatten to white.
         if img.mode in ("RGBA", "LA"):
             bg = Image.new("RGB", img.size, (255, 255, 255))
@@ -168,29 +187,28 @@ class Recipe(models.Model):
             img = bg
         elif img.mode != "RGB":
             img = img.convert("RGB")
-            
+
         # Resize (no distortion)
         img.thumbnail(
             (settings.RECIPE_IMAGE_SIZE, settings.RECIPE_IMAGE_SIZE),
             Image.LANCZOS,  # type: ignore
         )
-        
+
         buffer = BytesIO()
         img.save(buffer, format="JPEG", quality=85)
         buffer.seek(0)
-        
+
         # Replace the file (force .jpg extension so file type matches content)
         base, _dot, _ext = self.recipe_image.name.rpartition(".")
         new_name = f"{base}.jpg" if base else "recipe.jpg"
-        
+
         self.recipe_image.save(
             new_name,
             ContentFile(buffer.read()),
             save=False,
         )
-        
-        super().save(update_fields=["recipe_image"])
 
+        super().save(update_fields=["recipe_image"])
 
     class Meta:
         db_table = "recipes"
@@ -199,7 +217,6 @@ class Recipe(models.Model):
                 condition=Q(prep_time_minutes__gte=0),
                 name="recipes_prep_time_minutes_gte_0",
             ),
-            # Allow NULL, otherwise 1..5
             models.CheckConstraint(
                 condition=Q(user_rating__isnull=True)
                 | (Q(user_rating__gte=1) & Q(user_rating__lte=5)),
