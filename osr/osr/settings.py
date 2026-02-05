@@ -192,7 +192,9 @@ STATICFILES_DIRS = [
 ]
 
 # Login Redirect URL
-LOGIN_REDIRECT_URL = 'home/'
+LOGIN_URL = "accounts:login"
+LOGIN_REDIRECT_URL = "accounts:home"
+LOGOUT_REDIRECT_URL = "accounts:login"
 
 # Logging
 LOGGING = {
