@@ -185,18 +185,45 @@
     display: block;
 }
 
+
+.action-btn-lg {
+    width: 110px;
+    height: 110px;
+    padding: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    border-radius: 8px;
+}
+
+.action-btn-lg img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
 /* sm+ */
 @media (min-width: 576px){
-    .action-btn{
+    .action-btn {
         width: 90px;
         height: 90px;
+    }
+    .action-btn-lg {
+        width: 130px;
+        height: 130px;
     }
 }
 
 /* lg+ (desktop) */
 @media (min-width: 992px){
-    .action-btn{
+    .action-btn {
         width: 120px;   /* ← bigger desktop target */
         height: 120px;
+    }
+    .action-btn-lg {
+        width: 150px;
+        height: 150px;
     }
 }

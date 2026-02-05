@@ -239,7 +239,7 @@
                 <div class="col-md-2 text-end d-flex justify-content-end align-items-center">
                   {% if f.DELETE %}
                     {% static "icons/buttons/DeleteIngredient.png" as delete_ingredient_img %}
-                    {% include "partials/button.html" with type="button" attrs='id="remove-ingredient-btn"' img_alt="Delete ingredient button" label="Delete" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap btn-outline-danger btn-sm remove-ingredient-btn btn-image-lg btn-image-wrap" img_src=delete_ingredient_img %}
+                    {% include "partials/button.html" with type="button" attrs='id="remove-ingredient-btn"' img_alt="Delete ingredient button" label="Delete" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap btn-outline-danger btn-sm remove-ingredient-btn btn-image-lg btn-image-wrap form-action-btn" img_src=delete_ingredient_img %}
                     {% comment %} <button type="button" class="btn btn-outline-danger btn-sm remove-ingredient-btn">Remove</button> {% endcomment %}
                     {{ f.DELETE }} {# hidden input (we set it in JS) #}
                   {% endif %}
@@ -278,7 +278,7 @@
               <div class="col-md-2 text-end d-flex justify-content-end align-items-center">
                 {% if formset.empty_form.DELETE %}
                   {% static "icons/buttons/DeleteIngredient.png" as delete_ingredient_img %}
-                  {% include "partials/button.html" with type="button" attrs='id="remove-ingredient-btn"' img_alt="Delete ingredient button" label="Delete" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap btn-outline-danger btn-sm remove-ingredient-btn btn-image-lg btn-image-wrap" img_src=delete_ingredient_img %}
+                  {% include "partials/button.html" with type="button" attrs='id="remove-ingredient-btn"' img_alt="Delete ingredient button" label="Delete" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap btn-outline-danger btn-sm remove-ingredient-btn btn-image-lg btn-image-wrap form-action-btn" img_src=delete_ingredient_img %}
                   {% comment %} <button type="button" class="btn btn-outline-danger btn-sm remove-ingredient-btn">Remove</button> {% endcomment %}
                   {{ formset.empty_form.DELETE }}
                 {% endif %}
@@ -289,7 +289,7 @@
         <div class="row">
           <div class="col-md-4 offset-md-4 justify-content-center align-items-center text-end d-flex">
             {% static "icons/buttons/AddIngredient.png" as add_ingredient_img %}
-            {% include "partials/button.html" with type="button" img_alt="Add ingredient button" attrs='id="add-ingredient-btn"' label="Add Ingredient" btn_class="col-md-2 icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap btn-outline-danger btn-sm add-ingredient-btn btn-image-lg" img_src=add_ingredient_img %}
+            {% include "partials/button.html" with type="button" img_alt="Add ingredient button" attrs='id="add-ingredient-btn"' label="Add Ingredient" btn_class="col-md-2 icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap btn-outline-danger btn-sm add-ingredient-btn btn-image-lg form-action-btn" img_src=add_ingredient_img %}
           </div>
         </div>
       </div>
@@ -305,10 +305,10 @@
     <div class="d-flex gap-2 align-items-center justify-content-center flex-wrap">
       {% if is_update %}
         {% static "icons/buttons/UpdateRecipeSubmit.png" as update_submit_img %}
-        {% include "partials/button.html" with type="submit" img_alt="Update recipe button" label="Update Recipe" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap" img_src=update_submit_img %}
+        {% include "partials/button.html" with type="submit" img_alt="Update recipe button" label="Update Recipe" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap form-action-btn" img_src=update_submit_img action_btn=False %}
       {% else %}
         {% static "icons/buttons/CreateRecipeSubmit.png" as create_submit_img %}
-        {% include "partials/button.html" with type="submit" img_alt="Submit new recipe button" label="Create Recipe" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap" img_src=create_submit_img %}
+        {% include "partials/button.html" with type="submit" img_alt="Submit new recipe button" label="Create Recipe" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap form-action-btn" img_src=create_submit_img action_btn=False %}
       {% endif %}
 
       {% comment %}       

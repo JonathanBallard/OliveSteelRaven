@@ -21,11 +21,11 @@
 #} 
 {% endcomment %}
 
-{% with label_text=label|default:"Button" show_label=show_lbl|default:False show_border=show_btn_border|default:False button_border=btn_border|default:"" button_class=btn_class|default:"btn p-0 border-0 bg-transparent" button_type=type|default:"button" image_class=img_class|default:"btn-image" action_btn=action_btn|default:False data_bs_toggle=data_toggle|default:False data_bs_target=data_target|default:False data_bs_url=data_url|default:False data_bs_title=data_title|default:False %}
+{% with label_text=label|default:"Button" show_label=show_lbl|default:False show_border=show_btn_border|default:False button_border=btn_border|default:"" button_class=btn_class|default:"btn p-0 border-0 bg-transparent" button_type=type|default:"button" image_class=img_class|default:"btn-image" action_btn=action_btn|default:False action_btn_lg=action_btn_lg|default:False data_bs_toggle=data_toggle|default:False data_bs_target=data_target|default:False data_bs_url=data_url|default:False data_bs_title=data_title|default:False %}
     {% if href %}
     <a
       href="{{ href }}"
-      class="{{ button_class }}{% if disabled %} disabled{% endif %}{% if show_border %} {{ button_border }}{% endif %}{% if action_btn %} action-btn{% endif %}"
+      class="{{ button_class }}{% if disabled %} disabled{% endif %}{% if show_border %} {{ button_border }}{% endif %}{% if action_btn %} action-btn{% endif %}{% if action_btn_lg %} action-btn-lg{% endif %}"
       {% if disabled %}aria-disabled="true" tabindex="-1"{% endif %}
       {% if attrs %}{{ attrs|safe }}{% endif %}
       title="{{ label_text }}"
@@ -56,7 +56,7 @@
   {% else %}
     <button
       type="{{ button_type }}"
-      class="{{ button_class }}{% if show_border %} {{ button_border }}{% endif %} action-btn"
+      class="{{ button_class }}{% if show_border %} {{ button_border }}{% endif %} {% if action_btn %} action-btn{% endif %}{% if action_btn_lg %} action-btn-lg{% endif %}"
       {% if disabled %}disabled aria-disabled="true"{% endif %}
       {% if attrs %}{{ attrs|safe }}{% endif %}
       title="{{ label_text }}"
