@@ -40,7 +40,7 @@ def root(request, *args, **kwargs):
     """
     if(not request.user.is_authenticated):
         # return redirect('accounts:get_login_page')
-        return redirect('accounts:login')
+        return redirect('account_login')
     else:
         return redirect('accounts:home_page')
 
@@ -165,7 +165,7 @@ def my_logout(request, *args, **kwargs):
     context = {}
     logout(request)
     messages.success(request, "User Was Logged Out")
-    return redirect('accounts:login')
+    return redirect('account_login')
     # return redirect('accounts:get_login_page')
 
 #&-----------------------------------------------------------------------------------------------------
@@ -188,7 +188,7 @@ def account(request, *args, **kwargs):
     
     
     if(not user.is_authenticated):
-        return redirect('accounts:login')
+        return redirect('account_login')
     
     if(request.method == "GET"):
         total_recipes = Recipe.objects.filter(owner=request.user.pk).count()
@@ -215,7 +215,7 @@ def edit_account(request, *args, **kwargs):
     
     
     if(not user.is_authenticated):
-        return redirect('accounts:login')
+        return redirect('account_login')
     
     if(request.method == "GET"):
         form = UserUpdateForm(instance=request.user)
@@ -254,7 +254,7 @@ def change_password(request, *args, **kwargs):
     user = request.user
     
     if(not user.is_authenticated):
-        return redirect('accounts:login')
+        return redirect('account_login')
     
     if(request.method == "GET"):
         return redirect('accounts:account')

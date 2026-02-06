@@ -102,7 +102,7 @@
             {% include "partials/button.html" with href=update_url label="My Recipes" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=my_recipes_btn_img img_alt="My Recipes" img_class="recipe-btn-img" btn_class="btn bg-transparent recipe-btn-image-wrap" action_btn=True action_btn_lg=True %}
 
             <form
-            action="{% url 'accounts:change_password' %}"
+            action="{% url 'account_change_password' %}"
             method="post"
             class="m-0 p-0 d-inline-flex align-items-center"
             >

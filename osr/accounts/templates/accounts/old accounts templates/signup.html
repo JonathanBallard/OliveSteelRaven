@@ -26,26 +26,9 @@
                 {% csrf_token %}
 
                 {# Render fields explicitly so we can show per-field errors cleanly #}
+                {# 1️⃣ Render all fields EXCEPT agreed_to_tos #}
                 {% for field in form %}
-
-                {% if field.name == "agreed_to_tos" %}
-                    <div class="form-check mb-3">
-                    {{ field }}
-                    <label class="form-check-label" for="{{ field.id_for_label }}">
-                        I agree to the
-                        <a href="{% url 'accounts:tos' %}" target="_blank" rel="noopener">
-                        Terms of Service
-                        </a>
-                    </label>
-
-                    {% if field.errors %}
-                        <div class="text-danger small mt-1">
-                        {{ field.errors }}
-                        </div>
-                    {% endif %}
-                    </div>
-
-                {% else %}
+                {% if field.name != "agreed_to_tos" %}
                     <div class="mb-3">
                     <label class="form-label" for="{{ field.id_for_label }}">
                         {{ field.label }}
@@ -64,8 +47,26 @@
                     {% endif %}
                     </div>
                 {% endif %}
-
                 {% endfor %}
+
+                {# 2️⃣ Render the ToS checkbox LAST #}
+                {% if form.agreed_to_tos %}
+                <div class="form-check mt-3">
+                    {{ form.agreed_to_tos }}
+                    <label class="form-check-label" for="{{ form.agreed_to_tos.id_for_label }}">
+                    I agree to the
+                    <a href="{% url 'accounts:tos' %}" target="_blank" rel="noopener">
+                        Terms of Service
+                    </a>
+                    </label>
+
+                    {% if form.agreed_to_tos.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ form.agreed_to_tos.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
 
 
                 <div class="d-flex flex-column gap-2 mt-4">

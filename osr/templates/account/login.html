@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Log In ● {{ APP_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container content-container">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-5">
+
+            <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+
+                <h1 class="h4 mb-2 page-title">Log In</h1>
+                <p class="text-muted mb-4">Welcome back. Let’s get you cooking. 🔥</p>
+
+                {# Non-field errors (invalid email/password, unverified email, etc.) #}
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger py-2">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'account_login' %}" novalidate>
+                {% csrf_token %}
+
+                {# allauth redirect handling #}
+                {% if redirect_field_value %}
+                    <input
+                    type="hidden"
+                    name="{{ redirect_field_name }}"
+                    value="{{ redirect_field_value }}"
+                    >
+                {% endif %}
+
+                <div class="mb-3">
+                    <label class="form-label" for="{{ form.login.id_for_label }}">
+                    Email
+                    </label>
+                    {{ form.login }}
+                    {% if form.login.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ form.login.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="{{ form.password.id_for_label }}">
+                    Password
+                    </label>
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ form.password.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex flex-column gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary">
+                    Log In
+                    </button>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="small text-muted">
+                        Don’t have an account?
+                        <a href="{% url 'account_signup' %}">Sign up</a>
+                    </div>
+
+                    <a class="small" href="{% url 'account_reset_password' %}">
+                        Forgot password?
+                    </a>
+                    </div>
+                </div>
+                </form>
+
+                {# Ensure Bootstrap styling if widgets don't provide it #}
+                <script>
+                (function () {
+                    const email = document.getElementById("{{ form.login.id_for_label }}");
+                    const pw = document.getElementById("{{ form.password.id_for_label }}");
+                    if (email) email.classList.add("form-control");
+                    if (pw) pw.classList.add("form-control");
+                })();
+                </script>
+
+            </div>
+            </div>
+
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

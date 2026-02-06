@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign Up ● {{ APP_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container content-container">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6">
+
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-4">
+
+            <h1 class="h4 mb-2 page-title">Create an Account</h1>
+            <p class="text-muted mb-4">
+              Join {{ APP_NAME }} and start saving recipes like a culinary dragon hoarding treasure. 🐉🍲
+            </p>
+
+            {# Non-field errors (form-wide validation errors) #}
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger py-2">
+                {{ form.non_field_errors }}
+              </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'account_signup' %}" novalidate>
+              {% csrf_token %}
+
+              {# Preserve redirect target if present (allauth style) #}
+              {% if redirect_field_value %}
+                <input
+                  type="hidden"
+                  name="{{ redirect_field_name }}"
+                  value="{{ redirect_field_value }}"
+                >
+              {% endif %}
+
+              {# Render fields explicitly so we can show per-field errors cleanly #}
+              {# 1️⃣ Render all fields EXCEPT agreed_to_tos #}
+              {% for field in form %}
+                {% if field.name != "agreed_to_tos" %}
+                  <div class="mb-3">
+                    <label class="form-label" for="{{ field.id_for_label }}">
+                      {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% if field.help_text %}
+                      <div class="form-text">{{ field.help_text|safe }}</div>
+                    {% endif %}
+
+                    {% if field.errors %}
+                      <div class="text-danger small mt-1">
+                        {{ field.errors }}
+                      </div>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+
+              {# 2️⃣ Render the ToS checkbox LAST #}
+              {% if form.agreed_to_tos %}
+                <div class="form-check mt-4 mb-2">
+                  {{ form.agreed_to_tos }}
+                  <label class="form-check-label" for="{{ form.agreed_to_tos.id_for_label }}">
+                    I agree to the
+                    <a href="{% url 'accounts:tos' %}" target="_blank" rel="noopener">
+                      Terms of Service
+                    </a>
+                  </label>
+
+                  {% if form.agreed_to_tos.errors %}
+                    <div class="text-danger small mt-1">
+                      {{ form.agreed_to_tos.errors }}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              <div class="d-flex flex-column gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">
+                  Create Account
+                </button>
+
+                <div class="small text-muted">
+                  Already have an account?
+                  <a href="{% url 'account_login' %}">Log in</a>
+                </div>
+              </div>
+
+            </form>
+
+            {# Ensure Bootstrap styling if widgets don't provide it #}
+            <script>
+              (function () {
+                const inputs = document.querySelectorAll(
+                  'input[type="text"], input[type="email"], input[type="password"]'
+                );
+                inputs.forEach(i => i.classList.add("form-control"));
+
+                const checks = document.querySelectorAll('input[type="checkbox"]');
+                checks.forEach(c => c.classList.add("form-check-input"));
+              })();
+            </script>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

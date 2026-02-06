@@ -28,6 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 APP_NAME = "RecipeBook"
 DEVELOPER_NAME = "Jonathan Ballard"
 CONTACT_EMAIL = "2ravenstech@gmail.com"
+APP_EMAIL = "2ravenstech@gmail.com" # This will be an email at the app's domain
 GITHUB_LINK = "https://github.com/JonathanBallard/OliveSteelRaven"
 DEVELOPER_LINKEDIN = "https://www.linkedin.com/in/jonathanbal/"
 TOS_DATE = "2/4/26"
@@ -78,6 +79,11 @@ ALLOWED_HOSTS = [
 
 AUTH_USER_MODEL = 'accounts.User'
 
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -88,14 +94,54 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    # required by allauth
+    "django.contrib.sites",
+    
+    # allauth
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount", # Social Login
+    
+    # required for CORS protection
     'corsheaders',
     
+    # My apps
     'accounts',
     'recipes',
 ]
 
+#& ==========================================
+#^ Authentication Settings
+#& ==========================================
+
+# 1) Users log in using email
+ACCOUNT_LOGIN_METHODS = {"email"}  # docs: options include "email" / "username" :contentReference[oaicite:5]{index=5}
+
+# 2) Signup form fields (IMPORTANT)
+# Make email required with * when you use mandatory verification. :contentReference[oaicite:6]{index=6}
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
+
+# 3) Email verification is mandatory (blocks login until confirmed) :contentReference[oaicite:7]{index=7}
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+# Optional: confirmation link behavior
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True  # convenience; see docs discussion :contentReference[oaicite:8]{index=8}
+
+# Adds email as username for users going forwards
+ACCOUNT_ADAPTER = "accounts.adapters.AccountAdapter"
+
+SITE_ID = 1
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # Later this will be changed to SMTP or whatever
+# DEFAULT_FROM_EMAIL = "RecipeBook <" + str(APP_EMAIL) + ">" # For production
+DEFAULT_FROM_EMAIL = "RecipeBook <no-reply@localhost>"
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"
+
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    
+    'allauth.account.middleware.AccountMiddleware',
         
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -117,6 +163,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                "django.template.context_processors.debug",
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -197,9 +244,14 @@ STATICFILES_DIRS = [
 ]
 
 # Login Redirect URL
-LOGIN_URL = "accounts:login"
+LOGIN_URL = "account_login"
 LOGIN_REDIRECT_URL = "accounts:home"
-LOGOUT_REDIRECT_URL = "accounts:login"
+LOGOUT_REDIRECT_URL = "account_login"
+ACCOUNT_LOGOUT_REDIRECT_URL = "account_login"
+
+ACCOUNT_FORMS = {
+    "signup": "accounts.forms.SignupForm",
+}
 
 # Logging
 LOGGING = {

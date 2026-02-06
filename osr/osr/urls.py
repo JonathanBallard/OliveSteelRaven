@@ -26,6 +26,7 @@ from accounts import views
 from recipes import views 
 
 urlpatterns = [
+    path("accounts/", include("allauth.urls")),
     path('', include('accounts.urls')),
     path('', include('recipes.urls')),
     path('admin/', admin.site.urls),

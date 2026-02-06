@@ -413,7 +413,7 @@ def my_recipes(request, *args, **kwargs):
     posted_data_dict = request.POST.copy()
     context = {}
     if(not request.user.is_authenticated):
-        return redirect('account:login')
+        return redirect('account_login')
     else:
         my_recipes = Recipe.objects.filter(owner=request.user.pk)
         context['recipes'] = my_recipes
