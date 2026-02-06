@@ -30,14 +30,17 @@
 /* Search card */
 .search-card {
     /* background: rgba(17,17,17,0.92); */
-    background: #131313;
-    border: 1px solid rgba(255,255,255,0.10);
-    box-shadow: 0 10px 22px rgba(0,0,0,0.45);
+    background: var(--color-bg-highlight);
     border-radius: 6px;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     -ms-border-radius: 6px;
     -o-border-radius: 6px;
+}
+
+.search-card {
+    border: 0;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
 }
 
 .search-label {

@@ -1,6 +1,7 @@
 :root {
     /* ===== Core Theme ===== */
     --color-bg: #212529;
+    --color-bg-highlight: #30363d;
     --color-text: #f8f9fa;
     --color-text-muted: #f8f9faa9;
     --color-accent-gold: #ffc107;
@@ -8,6 +9,7 @@
     --color-link-hover: #ffc107;
 
     --color-border: #575757;
+    --color-border-highlight: #30363d;
 
     /* ===== Borders & Depth ===== */
     --color-border-default: #343a40;
