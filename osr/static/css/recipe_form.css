@@ -176,3 +176,44 @@
 
 
 
+/*~ ======================================  */
+/*^       Fix Tags Checkbox       */
+/*~ ======================================  */
+/* Make tag-related checkboxes visible on dark backgrounds (even when added dynamically) */
+
+/* ===== Tag remove "×" (Tom Select / dynamic tag UI) ===== */
+.tags-block a.remove{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 20px;
+    height: 20px;
+
+    margin-left: 6px;
+    border-radius: 999px;
+
+    text-decoration: none;
+    font-weight: 700;
+    line-height: 1;
+
+    /* Make it visible on dark background */
+    color: #212529 !important;           /* dark text */
+    background: #ffc107 !important;      /* your gold accent */
+    border: 1px solid rgba(255,193,7,.6);
+}
+
+/* Hover/focus states */
+.tags-block a.remove:hover,
+.tags-block a.remove:focus{
+    filter: brightness(1.05);
+    outline: none;
+    box-shadow: 0 0 0 .2rem rgba(255,193,7,.25);
+}
+
+@media (max-width: 767.98px){
+  .tags-block a.remove{
+    width: 24px;
+    height: 24px;
+  }
+}
