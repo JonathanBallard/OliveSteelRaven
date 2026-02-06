@@ -2,6 +2,7 @@
     /* ===== Core Theme ===== */
     --color-bg: #212529;
     --color-text: #f8f9fa;
+    --color-text-muted: #f8f9faa9;
     --color-accent-gold: #ffc107;
 
     --color-border: #575757;
@@ -19,11 +20,28 @@
     --button-highlight-green: #2e4501;
     --button-highlight-teal:  #41956c;
     --button-highlight-red:   #cf260f;
+
+    /* ===== Fonts ===== */
+    --font-app-name: "Hack";
+    --font-title: "Libre Baskerville";
+    --font-text: "Hack";
+    --font-muted: "Hack";
 }
 
 
 * {
     background-color: var(--color-bg);
+    color: var(--color-text);
+}
+
+/* Navbar App Name */
+.navbar-brand {
+    color: var(--color-text);
+}
+
+/* Used in multiple locations */
+.text-muted {
+    color: var(--color-text-muted) !important;
 }
 
 #previewImg { max-width: 300px; max-height: 300px; }
@@ -59,4 +77,111 @@
 
 @media (min-width: 992px) {
     .page-title { margin-bottom: 1.6rem; }
+}
+
+/*~ ======================================  */
+/*^       OTHER       */
+/*~ ======================================  */
+
+.form-text {
+    color: var(--color-text);
+}
+
+
+/*~ ======================================  */
+/*^       MESSAGES       */
+/*~ ======================================  */
+
+/* Message-area checkbox contrast fix */
+.messages input[type="checkbox"],
+.django-messages input[type="checkbox"],
+.alert input[type="checkbox"]{
+    accent-color: #ffc107;              /* your gold accent */
+}
+
+/* If Bootstrap styles are being applied (form-check-input), force readable borders */
+.messages .form-check-input,
+.django-messages .form-check-input,
+.alert .form-check-input{
+    background-color: transparent;      /* don't blend into dark bg */
+    border: 2px solid #f8f9fa;          /* bright border so you can see the box */
+}
+
+.messages .form-check-input:checked,
+.django-messages .form-check-input:checked,
+.alert .form-check-input:checked{
+    background-color: #ffc107;          /* checked fill */
+    border-color: #ffc107;
+}
+
+.messages .form-check-input:focus,
+.django-messages .form-check-input:focus,
+.alert .form-check-input:focus{
+    box-shadow: 0 0 0 .2rem rgba(255,193,7,.25);
+}
+
+
+
+/*~ ======================================  */
+/*^       ERRORS       */
+/*~ ======================================  */
+
+/* =========================
+   Error / Validation Styling
+   ========================= */
+
+/* Django form field errors */
+.text-danger,
+.invalid-feedback,
+.errorlist {
+    color: #f8d7da !important; /* light red text */
+}
+
+/* Error containers (alerts, non-field errors) */
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.15); /* Bootstrap danger, softened */
+    color: #f8d7da;
+    border: 1px solid rgba(220, 53, 69, 0.4);
+}
+
+/* Error lists from Django (ul.errorlist) */
+.errorlist {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.errorlist li {
+    margin-top: 0.25rem;
+}
+
+/* Inputs with errors */
+.is-invalid,
+input.is-invalid,
+select.is-invalid,
+textarea.is-invalid {
+    border-color: #dc3545 !important;
+    background-color: transparent;
+}
+
+/* Focused invalid inputs (dark mode safe) */
+.is-invalid:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 .2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Error state for checkboxes */
+.form-check-input.is-invalid {
+    border-color: #dc3545;
+}
+
+.form-check-input.is-invalid:checked {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+
+.messages .alert.alert-danger .btn-close {
+    filter: invert(1) grayscale(1);
+    opacity: 0.9;
 }

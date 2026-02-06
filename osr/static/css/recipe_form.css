@@ -115,6 +115,10 @@
   }
 }
 
+/*~ ======================================  */
+/*^       BUTTONS       */
+/*~ ======================================  */
+
 /* Form buttons should shrink to the image */
 .form-action-btn{
   display: inline-flex;
@@ -168,3 +172,7 @@
     justify-content: center;
   }
 }
+
+
+
+

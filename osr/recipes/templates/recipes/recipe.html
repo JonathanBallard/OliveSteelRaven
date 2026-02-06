@@ -3,6 +3,7 @@
 
 {% block title%}{{recipe.title}} ● RecipeBook{% endblock %}
 {% block content %}
+<section class="recipe-details-hero">
 <div class="container content-container">
 <div class="container p-3 pb-5">
   <!-- Title + meta -->
@@ -40,7 +41,7 @@
 
     <ul class="list-group list-group-flush">
       {% for line in recipe.ingredient_lines %}
-        <li class="list-group-item px-0">
+        <li class="list-group-item px-0 bg-dark text-light">
           {% if line.quantity %}
             {{ line.quantity|floatformat:"-3" }}
           {% endif %}
@@ -67,7 +68,7 @@
     <h3>Instructions</h3>
 
     {% if recipe.instructions %}
-      <pre class="bg-light p-3 rounded">{{ recipe.instructions }}</pre>
+      <pre class="bg-dark p-3 rounded">{{ recipe.instructions }}</pre>
     {% else %}
       <p class="text-muted">No instructions provided.</p>
     {% endif %}
@@ -150,6 +151,7 @@
   </div>
 </div>
 </div>
+</section>
 {% endblock %}
 {% block scripts %}
   {{ block.super }}
