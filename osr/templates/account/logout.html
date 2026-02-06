@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Log Out ● {{ APP_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container content-container">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6">
+
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-4">
+
+            <h1 class="h4 mb-2 page-title">Log Out</h1>
+            <p class="text-muted mb-4">
+              Are you sure you want to log out? Your recipes will be here when you return. 🫡🍲
+            </p>
+
+            <form method="post" action="{% url 'account_logout' %}">
+              {% csrf_token %}
+
+              {# Preserve redirect target if present (allauth style) #}
+              {% if redirect_field_value %}
+                <input
+                  type="hidden"
+                  name="{{ redirect_field_name }}"
+                  value="{{ redirect_field_value }}"
+                >
+              {% endif %}
+
+              <div class="d-flex flex-column gap-2 mt-3">
+                <button type="submit" class="btn btn-primary">
+                  Log Out
+                </button>
+
+                <a class="btn btn-outline-secondary" href="/">
+                  Cancel
+                </a>
+              </div>
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
