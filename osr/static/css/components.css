@@ -257,3 +257,70 @@
 .navbar {
     background-color: var(--color-bg);
 }
+
+
+/*~ ==========================================================  */
+/*^              Modal              */
+/*~ ==========================================================  */
+
+/* =========================
+   Dark Modal Theme
+   ========================= */
+
+.modal.modal-dark .modal-content {
+    background-color: #2b3035; /* slightly lighter than #212529 */
+    color: #f8f9fa;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.modal.modal-dark .modal-header,
+.modal.modal-dark .modal-footer {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.modal.modal-dark .modal-title {
+    color: #f8f9fa;
+}
+
+.modal.modal-dark .modal-body {
+    color: #f8f9fa;
+}
+
+/* Fix Bootstrap close button on dark backgrounds */
+.modal.modal-dark .btn-close {
+    filter: invert(1) grayscale(100%);
+    opacity: 0.85;
+}
+
+.modal.modal-dark .btn-close:hover {
+    opacity: 1;
+}
+
+/* Forms inside modal */
+.modal.modal-dark .form-control,
+.modal.modal-dark .form-select {
+    background-color: #212529;
+    color: #f8f9fa;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.modal.modal-dark .form-control::placeholder {
+    color: rgba(248, 249, 250, 0.5);
+}
+
+.modal.modal-dark .form-control:focus,
+.modal.modal-dark .form-select:focus {
+    background-color: #212529;
+    color: #f8f9fa;
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.15rem rgba(255, 193, 7, 0.25);
+}
+
+/* Optional: links inside modal */
+.modal.modal-dark a {
+    color: #ffc107;  
+}
+
+.modal.modal-dark a:hover {
+    color: #ffcd39;
+}
