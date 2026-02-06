@@ -55,7 +55,7 @@
   {% endblock %}
 
   {% if messages %}
-    <div class="container mt-3 messages">
+    <div class="container py-3 messages">
       {% for message in messages %}
         <div class="alert {% if 'error' in message.tags %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
           {{ message }}

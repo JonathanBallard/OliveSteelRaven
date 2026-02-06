@@ -4,6 +4,8 @@
     --color-text: #f8f9fa;
     --color-text-muted: #f8f9faa9;
     --color-accent-gold: #ffc107;
+    
+    --color-link-hover: #ffc107;
 
     --color-border: #575757;
 
@@ -37,6 +39,13 @@
 /* Navbar App Name */
 .navbar-brand {
     color: var(--color-text);
+}
+.navbar-brand:hover {
+    color: var(--color-link-hover);
+}
+
+.link-text:hover {
+    color: var(--color-link-hover);
 }
 
 /* Used in multiple locations */
@@ -91,6 +100,15 @@
 /*~ ======================================  */
 /*^       MESSAGES       */
 /*~ ======================================  */
+body {
+    background-color: var(--color-bg); /* or whatever your dark bg is */
+    background-repeat: repeat;
+}
+
+.messages {
+    margin-top: 0;
+    padding-top: 1rem;
+}
 
 /* Message-area checkbox contrast fix */
 .messages input[type="checkbox"],

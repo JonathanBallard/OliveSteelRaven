@@ -245,3 +245,15 @@
         height: 150px;
     }
 }
+
+
+
+/*~ ==========================================================  */
+/*^              NavBar              */
+/*~ ==========================================================  */
+
+/* Navbar background should match site chrome */
+.recipe-navbar,
+.navbar {
+    background-color: var(--color-bg);
+}

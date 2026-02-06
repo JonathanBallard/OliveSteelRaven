@@ -1,7 +1,7 @@
     {# templates/partials/navbar.html #}
     {% load static %}
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark recipe-navbar">
     <div class="container-fluid py-2">
         <a class="navbar-brand" href="{% url 'accounts:home_page' %}">RecipeBook</a>
 
@@ -79,7 +79,7 @@
         </ul>
         <div class="ms-lg-auto mt-3 mt-lg-0 d-flex flex-column flex-lg-row align-items-lg-center gap-2">
             {% if user.is_authenticated %}
-            <span class="small text-muted">Logged in as <strong>{{ user.username }}</strong></span>
+            <span class="small text-muted">Logged in as <a class="link-text" href="{% url 'accounts:account' %}"><strong>{{ user.username }}</strong></a></span>
 
             <form action="{% url 'accounts:logout' %}" method="POST" class="m-0">
                 {% csrf_token %}
