@@ -45,4 +45,6 @@ urlpatterns = [
     path('account/edit_details', views.edit_account, name='edit_account'), #type: ignore
     path('account/change_password', views.change_password, name='change_password'), #type: ignore
     path('account/reset_password', views.reset_password, name='reset_password'), #type: ignore
+    
+    path("confirmed/", views.email_confirmed, name="email_confirmed"),
 ]

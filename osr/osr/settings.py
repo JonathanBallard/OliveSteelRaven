@@ -251,7 +251,11 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "account_login"
 
 ACCOUNT_FORMS = {
     "signup": "accounts.forms.SignupForm",
+    "login": "accounts.forms.BootstrapLoginForm",
 }
+
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "accounts:email_confirmed"
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "accounts:email_confirmed"
 
 # Logging
 LOGGING = {

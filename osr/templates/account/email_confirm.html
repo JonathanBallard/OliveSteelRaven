@@ -1,0 +1,48 @@
+{# templates/account/email_confirm.html #}
+{% extends "base.html" %}
+
+{% block title %}Confirm Email ● {{ APP_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container content-container">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-5">
+
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-4 text-center">
+
+            <h1 class="h4 mb-3 page-title">Confirm Your Email</h1>
+
+            {% if confirmation %}
+
+              <p class="text-muted mb-4">
+                Please confirm that
+                <strong>{{ confirmation.email_address.email }}</strong>
+                is your email address.
+              </p>
+
+              <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary w-100 mb-3">
+                  Confirm Email
+                </button>
+              </form>
+
+              <div class="small text-muted">
+                Didn’t get the email?
+                <a href="{% url 'account_email' %}" class="link-warning">
+                  Resend confirmation
+                </a>
+              </div>
+
+            {% else %}
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

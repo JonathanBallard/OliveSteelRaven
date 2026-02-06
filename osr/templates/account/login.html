@@ -76,16 +76,6 @@
                 </div>
                 </form>
 
-                {# Ensure Bootstrap styling if widgets don't provide it #}
-                <script>
-                (function () {
-                    const email = document.getElementById("{{ form.login.id_for_label }}");
-                    const pw = document.getElementById("{{ form.password.id_for_label }}");
-                    if (email) email.classList.add("form-control");
-                    if (pw) pw.classList.add("form-control");
-                })();
-                </script>
-
             </div>
             </div>
 
@@ -93,4 +83,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+
+    <script defer src="{% static 'accounts/js/entrance/login.js' %}"></script>
 {% endblock %}

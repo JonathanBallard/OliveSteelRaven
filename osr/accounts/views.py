@@ -295,3 +295,5 @@ def reset_password(request, *args, **kwargs):
         return redirect('accounts:account')
 
 
+def email_confirmed(request):
+    return render(request, "account/email_confirmed.html")

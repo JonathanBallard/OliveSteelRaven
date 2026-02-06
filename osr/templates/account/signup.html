@@ -96,18 +96,6 @@
 
             </form>
 
-            {# Ensure Bootstrap styling if widgets don't provide it #}
-            <script>
-              (function () {
-                const inputs = document.querySelectorAll(
-                  'input[type="text"], input[type="email"], input[type="password"]'
-                );
-                inputs.forEach(i => i.classList.add("form-control"));
-
-                const checks = document.querySelectorAll('input[type="checkbox"]');
-                checks.forEach(c => c.classList.add("form-check-input"));
-              })();
-            </script>
 
           </div>
         </div>
@@ -116,4 +104,9 @@
     </div>
   </div>
 </div>
+{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+
+    <script defer src="{% static 'accounts/js/entrance/signup.js' %}"></script>
 {% endblock %}

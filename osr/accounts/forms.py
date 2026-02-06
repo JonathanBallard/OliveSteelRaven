@@ -4,6 +4,15 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 from allauth.account.forms import SignupForm as AllauthSignupForm
+from allauth.account.forms import LoginForm as AllauthLoginForm
+
+class BootstrapLoginForm(AllauthLoginForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            existing = field.widget.attrs.get("class", "")
+            field.widget.attrs["class"] = (existing + " form-control").strip()
 
 class SignupForm(AllauthSignupForm):
     agreed_to_tos = forms.BooleanField(
@@ -53,7 +62,7 @@ class SignupForm(AllauthSignupForm):
         We set agreed_to_tos on the user model here.
         """
         user = super().save(request)
-        user.agreed_to_tos = True
+        user.agreed_to_tos = True #type: ignore
         user.save(update_fields=["agreed_to_tos"])
         return user
 
