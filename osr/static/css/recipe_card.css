@@ -1,19 +1,26 @@
-.recipe-card-clickable:hover {
-    transform: translateY(-25px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 0 0 0 5px rgba(255, 255, 255, 0.05);
-    -webkit-transform: translateY(-25px);
-    -moz-transform: translateY(-25px);
-    -ms-transform: translateY(-25px);
-    -o-transform: translateY(-25px);
-}
+
 
 .recipe-card-clickable {
-    background-color: #212529;
+    background-color: var(--color-bg);
     transition: transform 350ms ease, box-shadow 350ms ease, background-color 350ms ease;
     -webkit-transition: transform 350ms ease, box-shadow 350ms ease, background-color 350ms ease;
     -moz-transition: transform 350ms ease, box-shadow 350ms ease, background-color 350ms ease;
     -ms-transition: transform 350ms ease, box-shadow 350ms ease, background-color 350ms ease;
     -o-transition: transform 350ms ease, box-shadow 350ms ease, background-color 350ms ease;
+}
+
+.recipe-card-clickable:hover {
+    border: 2px solid var(--color-border-hover);
+    border-color: var(--color-border-hover) !important;
+    transform: translateY(-25px);
+    /* box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 0 0 0 5px rgba(255, 255, 255, 0.05); */
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.35),
+        0 1px 3px rgba(0, 0, 0, 0.6);
+    -webkit-transform: translateY(-25px);
+    -moz-transform: translateY(-25px);
+    -ms-transform: translateY(-25px);
+    -o-transform: translateY(-25px);
 }
 
 .recipe-card-image {

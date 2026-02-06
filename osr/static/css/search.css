@@ -29,7 +29,8 @@
 
 /* Search card */
 .search-card {
-    background: rgba(17,17,17,0.92);
+    /* background: rgba(17,17,17,0.92); */
+    background: #131313;
     border: 1px solid rgba(255,255,255,0.10);
     box-shadow: 0 10px 22px rgba(0,0,0,0.45);
     border-radius: 6px;
@@ -40,7 +41,7 @@
 }
 
 .search-label {
-    color: rgba(255,255,255,0.85);
+    color: var(--color-text);
     font-weight: 600;
 }
 
@@ -76,7 +77,7 @@
 .thumb {
     width: 100%;
     aspect-ratio: 4 / 3;
-    background: #0e0e0e;
+    background: var(--color-bg);
     border-bottom: 1px solid rgba(255,255,255,0.08);
     display: grid;
     place-items: center;
