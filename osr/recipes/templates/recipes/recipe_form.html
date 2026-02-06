@@ -212,7 +212,7 @@
               {{ f.line_order }}  {# hidden (we manage it) #}
 
               <div class="row g-2 align-items-center">
-                <div class="col-md-4">
+                <div class="col-md-5">
                   <label class="form-label">Ingredient</label>
                   {{ f.ingredient_name }}
                   <div class="text-danger small">{{ f.ingredient_name.errors }}</div>
@@ -230,21 +230,29 @@
                   <div class="text-danger small">{{ f.unit_text.errors }}</div>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3">
                   <label class="form-label">Prep note</label>
                   {{ f.prep_note }}
                   <div class="text-danger small">{{ f.prep_note.errors }}</div>
                 </div>
 
-                <div class="col-md-2 text-end d-flex justify-content-end align-items-center">
+                
+              </div>
+              <div class="col-md-4 offset-md-4 text-end d-flex justify-content-center align-items-center mt-2">
                   {% if f.DELETE %}
                     {% static "icons/buttons/DeleteIngredient.png" as delete_ingredient_img %}
-                    {% include "partials/button.html" with type="button" attrs='id="remove-ingredient-btn"' img_alt="Delete ingredient button" label="Delete" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap btn-outline-danger btn-sm remove-ingredient-btn btn-image-lg btn-image-wrap form-action-btn" img_src=delete_ingredient_img %}
+                    {% comment %} Image Button - If you use image buttons again, change above div to col-md-2, and the Prep note div to col-md-2 {% endcomment %}
+                    {% comment %} {% include "partials/button.html" with type="button" attrs='id="remove-ingredient-btn"' img_alt="Delete ingredient button" label="Delete" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap btn-outline-danger btn-sm remove-ingredient-btn btn-image-lg btn-image-wrap form-action-btn" img_src=delete_ingredient_img %} {% endcomment %}
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger btn-sm remove-ingredient-btn"
+                    >
+                      - Remove -
+                    </button>
                     {% comment %} <button type="button" class="btn btn-outline-danger btn-sm remove-ingredient-btn">Remove</button> {% endcomment %}
                     {{ f.DELETE }} {# hidden input (we set it in JS) #}
                   {% endif %}
                 </div>
-              </div>
             </div>
           {% endfor %}
         </div>
@@ -255,7 +263,7 @@
             {{ formset.empty_form.line_order }}
 
             <div class="row g-2 align-items-center">
-              <div class="col-md-4">
+              <div class="col-md-5">
                 <label class="form-label">Ingredient</label>
                 {{ formset.empty_form.ingredient_name }}
               </div>
@@ -270,26 +278,40 @@
                 {{ formset.empty_form.unit_text }}
               </div>
 
-              <div class="col-md-2">
+              <div class="col-md-3">
                 <label class="form-label">Prep note</label>
                 {{ formset.empty_form.prep_note }}
               </div>
-
-              <div class="col-md-2 text-end d-flex justify-content-end align-items-center">
+              
+            </div>
+            <div class="col-md-4 offset-md-4 text-end d-flex justify-content-center align-items-center mt-2">
                 {% if formset.empty_form.DELETE %}
                   {% static "icons/buttons/DeleteIngredient.png" as delete_ingredient_img %}
-                  {% include "partials/button.html" with type="button" attrs='id="remove-ingredient-btn"' img_alt="Delete ingredient button" label="Delete" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap btn-outline-danger btn-sm remove-ingredient-btn btn-image-lg btn-image-wrap form-action-btn" img_src=delete_ingredient_img %}
-                  {% comment %} <button type="button" class="btn btn-outline-danger btn-sm remove-ingredient-btn">Remove</button> {% endcomment %}
+                  {% comment %} Image Button - If you use image buttons again, change above div to col-md-2, and the Prep note div to col-md-2 {% endcomment %}
+                  {% comment %} {% include "partials/button.html" with type="button" attrs='id="remove-ingredient-btn"' img_alt="Delete ingredient button" label="Delete" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap btn-outline-danger btn-sm remove-ingredient-btn btn-image-lg btn-image-wrap form-action-btn" img_src=delete_ingredient_img %} {% endcomment %}
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger btn-sm remove-ingredient-btn"
+                  >
+                    - Remove -
+                  </button>
                   {{ formset.empty_form.DELETE }}
                 {% endif %}
               </div>
-            </div>
           </div>
         </template>
         <div class="row">
           <div class="col-md-4 offset-md-4 justify-content-center align-items-center text-end d-flex">
             {% static "icons/buttons/AddIngredient.png" as add_ingredient_img %}
-            {% include "partials/button.html" with type="button" img_alt="Add ingredient button" attrs='id="add-ingredient-btn"' label="Add Ingredient" btn_class="col-md-2 icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap btn-outline-danger btn-sm add-ingredient-btn btn-image-lg form-action-btn" img_src=add_ingredient_img %}
+            {% comment %} Image Button {% endcomment %}
+            {% comment %} {% include "partials/button.html" with type="button" img_alt="Add ingredient button" attrs='id="add-ingredient-btn"' label="Add Ingredient" btn_class="col-md-2 icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap btn-outline-danger btn-sm add-ingredient-btn btn-image-lg form-action-btn" img_src=add_ingredient_img %} {% endcomment %}
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+              id="add-ingredient-btn"
+            >
+              + Add ingredient +
+            </button>
           </div>
         </div>
       </div>
@@ -305,10 +327,18 @@
     <div class="d-flex gap-2 align-items-center justify-content-center flex-wrap">
       {% if is_update %}
         {% static "icons/buttons/UpdateRecipeSubmit.png" as update_submit_img %}
-        {% include "partials/button.html" with type="submit" img_alt="Update recipe button" label="Update Recipe" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap form-action-btn" img_src=update_submit_img action_btn=False %}
+        <button type="submit" class="btn btn-warning">
+          Update Recipe
+        </button>
+        {% comment %} Image Button {% endcomment %}
+        {% comment %} {% include "partials/button.html" with type="submit" img_alt="Update recipe button" label="Update Recipe" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap form-action-btn" img_src=update_submit_img action_btn=False %} {% endcomment %}
       {% else %}
         {% static "icons/buttons/CreateRecipeSubmit.png" as create_submit_img %}
-        {% include "partials/button.html" with type="submit" img_alt="Submit new recipe button" label="Create Recipe" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap form-action-btn" img_src=create_submit_img action_btn=False %}
+        <button type="submit" class="btn btn-success">
+          Create Recipe
+        </button>
+        {% comment %} Image Button {% endcomment %}
+        {% comment %} {% include "partials/button.html" with type="submit" img_alt="Submit new recipe button" label="Create Recipe" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap form-action-btn" img_src=create_submit_img action_btn=False %} {% endcomment %}
       {% endif %}
 
       {% comment %}       

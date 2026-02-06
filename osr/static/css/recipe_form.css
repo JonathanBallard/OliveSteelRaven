@@ -217,3 +217,45 @@
     height: 24px;
   }
 }
+
+
+/* When user hovers delete button on ingredient, highlight ingredient */
+/* Smooth transitions */
+.ingredient-form {
+  position: relative;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  -webkit-transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  -moz-transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  -ms-transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  -o-transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* The highlight overlay */
+.ingredient-form::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background-color: rgba(var(--bs-danger-rgb), 0.05);
+  transition: opacity 0.25s ease;
+  -webkit-transition: opacity 0.25s ease;
+  -moz-transition: opacity 0.25s ease;
+  -ms-transition: opacity 0.25s ease;
+  -o-transition: opacity 0.25s ease;
+}
+
+/* Turn on highlight when Remove is hovered OR focused (keyboard) */
+.ingredient-form:has(.remove-ingredient-btn:hover),
+.ingredient-form:has(.remove-ingredient-btn:focus),
+.ingredient-form:has(.remove-ingredient-btn:focus-visible) {
+  border-color: var(--bs-danger);
+  box-shadow: 0 0 0 0.5rem rgba(var(--bs-danger-rgb), 0.5);
+}
+
+.ingredient-form:has(.remove-ingredient-btn:hover)::before,
+.ingredient-form:has(.remove-ingredient-btn:focus)::before,
+.ingredient-form:has(.remove-ingredient-btn:focus-visible)::before {
+  opacity: 1;
+}
