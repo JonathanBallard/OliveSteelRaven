@@ -134,16 +134,30 @@ def signup(request, *args, **kwargs):
 @safe_method_validator(".\\accounts\\signup.html", ["GET", "HEAD", "OPTIONS"])
 def tos(request, *args, **kwargs):
     """
-    Docstring for signup
+    Docstring for tos
     
     :param request: HTTP Request
     
-    GET: Renders Signup Form Template
-    POST: Creates New User
+    GET: Renders Terms of Service Template
     """
     context = {}
 
     return render(request, "accounts/tos.html", context)
+
+# *DONE* Open signup.html
+@csrf_protect
+@safe_method_validator(".\\accounts\\signup.html", ["GET", "HEAD", "OPTIONS"])
+def privacy(request, *args, **kwargs):
+    """
+    Docstring for privacy
+    
+    :param request: HTTP Request
+    
+    GET: Renders Privacy Policy
+    """
+    context = {}
+
+    return render(request, "accounts/privacy.html", context)
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `LOGOUT` VIEWS
