@@ -12,6 +12,7 @@
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3">
           <div>
             <h1 class="mb-2 page-title">{{ recipe.title }}</h1>
+
             <div class="text-white-50">
               {% if recipe.category %}
                 <span class="me-3">📂 {{ recipe.category.name }}</span>
@@ -20,7 +21,7 @@
               <span>Difficulty: {% for _ in ""|center:recipe.difficulty %}🧠{% endfor %}</span>
             </div>
           </div>
-            
+
           {# Owner actions (top-right) #}
           {% if user.is_authenticated and recipe.owner == user %}
             <div class="d-flex gap-3 flex-wrap">
@@ -33,7 +34,6 @@
               {% include "partials/button.html" with label="Delete" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=delete_btn_img img_class="recipe-btn-img" btn_class="btn btn-outline-danger bg-transparent recipe-btn-image-wrap" data_toggle="modal" data_target="#confirmDeleteModal" data_url=data_recipe_url data_title=recipe.title|escape action_btn=True %}
             </div>
           {% endif %}
-          
         </div>
       </div>
     </div>
@@ -52,9 +52,11 @@
             >
           </div>
         {% endif %}
+
         {% if recipe.short_description %}
           <p class="lead mb-2">{{ recipe.short_description }}</p>
         {% endif %}
+
         {% if recipe.long_description %}
           <p class="mb-0">{{ recipe.long_description }}</p>
         {% endif %}

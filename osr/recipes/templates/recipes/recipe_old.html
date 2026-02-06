@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title%}{{recipe.title}} ● {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container content-container">
+<div class="container p-3 pb-5">
+  <!-- Title + meta -->
+  <div class="mb-4">
+    <h1 class="mb-1 page-title">{{ recipe.title }}</h1>
+
+    <div class="text-muted">
+      {% if recipe.category %}
+        <span class="me-3">📂 {{ recipe.category.name }}</span>
+      {% endif %}
+      <span class="me-3">⏱ {{ recipe.prep_time_minutes }} min</span>
+      <span>Difficulty: {% for _ in ""|center:recipe.difficulty %}🧠{% endfor %}</span>
+    </div>
+  </div>
+
+  <!-- Image -->
+  {% if recipe.recipe_image and recipe.recipe_image.name != "defaults/default_recipe.png" %}
+    <img src="{{ recipe.recipe_image.url }}" alt="{{ recipe.title }}" style="max-width: 100%; height: auto;">
+  {% endif %}
+
+  <!-- Descriptions -->
+  {% if recipe.short_description %}
+    <p class="lead">{{ recipe.short_description }}</p>
+  {% endif %}
+
+  {% if recipe.long_description %}
+    <p>{{ recipe.long_description }}</p>
+  {% endif %}
+
+  <hr>
+
+  <!-- Ingredients -->
+  <section class="mb-4">
+    <h3>Ingredients</h3>
+
+    <ul class="list-group list-group-flush">
+      {% for line in recipe.ingredient_lines %}
+        <li class="list-group-item px-0 bg-dark text-light">
+          {% if line.quantity %}
+            {{ line.quantity|floatformat:"-3" }}
+          {% endif %}
+          {% if line.unit_text %}
+            {{ line.unit_text }}
+          {% endif %}
+          {{ line.ingredient.name }}
+          {% if line.prep_note %}
+            <span class="text-muted">— {{ line.prep_note }}</span>
+          {% endif %}
+        </li>
+      {% empty %}
+        <li class="list-group-item text-muted">
+          No ingredients listed.
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <hr>
+
+  <!-- Instructions -->
+  <section class="mb-4">
+    <h3>Instructions</h3>
+
+    {% if recipe.instructions %}
+      <pre class="bg-dark p-3 rounded">{{ recipe.instructions }}</pre>
+    {% else %}
+      <p class="text-muted">No instructions provided.</p>
+    {% endif %}
+  </section>
+
+  <!-- Tags -->
+  {% if recipe.tags.exists %}
+    <section class="mb-4">
+      <h5>Tags</h5>
+      <div>
+        {% for tag in recipe.tags.all %}
+          <span class="badge bg-secondary me-1">{{ tag.name }}</span>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  <hr>
+
+  <!-- Footer / actions -->
+  <div class="d-flex justify-content-between align-items-end recipe-actions">
+
+  {% if user.is_authenticated and recipe.owner == user %}
+    <div class="d-flex flex-grow-1 justify-content-around gap-3">
+
+      {% url "recipes:update_recipe" recipe.id as update_url %}
+      {% static "icons/buttons/Update.png" as edit_btn_img %}
+      {% include "partials/button.html" with href=update_url label="Edit" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=edit_btn_img img_alt="Edit" img_class="recipe-btn-img" btn_class="btn bg-transparent recipe-btn-image-wrap" action_btn=True %}
+
+      {% static "icons/buttons/Delete.png" as delete_btn_img %}
+      {% url 'recipes:delete_recipe' recipe_id=recipe.id as data_recipe_url %}
+      {% include "partials/button.html" with label="Delete" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=delete_btn_img img_class="recipe-btn-img" btn_class="btn btn-outline-danger bg-transparent recipe-btn-image-wrap" data_toggle="modal" data_target="#confirmDeleteModal" data_url=data_recipe_url data_title=recipe.title|escape action_btn=True %}
+    
+
+    </div>
+  {% endif %}
+</div>
+<div class="d-flex justify-content-between align-items-end recipe-actions">
+  <div class="d-flex flex-grow-1 justify-content-around gap-3">
+    <div class="text-muted small">
+        Created {{ recipe.created_at|date:"M j, Y" }}
+    </div>
+  </div>
+</div>
+
+</div>
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Delete recipe?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <p class="mb-2">
+          Are you sure you want to delete
+          <strong id="deleteRecipeTitle">this recipe</strong>?
+        </p>
+        <p class="text-muted small mb-0">
+          This action can’t be undone!
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+
+        <form method="post" id="confirmDeleteForm" action="{% url 'recipes:delete_recipe' recipe.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">
+            Yes, delete
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
+{% block scripts %}
+  {{ block.super }}
+  <script defer src="{% static 'recipes/js/modal.js' %}"></script>
+{% endblock %}
