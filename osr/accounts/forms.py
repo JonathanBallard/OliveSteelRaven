@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 from allauth.account.forms import SignupForm as AllauthSignupForm
 from allauth.account.forms import LoginForm as AllauthLoginForm
+from allauth.account.forms import AddEmailForm as AllauthAddEmailForm
 
 class BootstrapLoginForm(AllauthLoginForm):
     def __init__(self, *args, **kwargs):
@@ -66,6 +67,10 @@ class SignupForm(AllauthSignupForm):
         user.save(update_fields=["agreed_to_tos"])
         return user
 
+class BootstrapAddEmailForm(AllauthAddEmailForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["email"].widget.attrs["class"] = "form-control"
 
 class BootstrapAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
@@ -152,4 +157,17 @@ class UserLoginForm(forms.ModelForm):
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
-        fields = ["first_name", "last_name", "email"]
+        fields = ["first_name", "last_name"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            widget = field.widget
+            existing = widget.attrs.get("class", "")
+
+            # text inputs for first/last name
+            widget.attrs["class"] = (existing + " form-control").strip()
+
+            # optional nice-to-haves
+            widget.attrs.setdefault("autocomplete", "given-name" if name == "first_name" else "family-name")

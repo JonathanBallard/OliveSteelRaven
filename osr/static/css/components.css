@@ -324,3 +324,14 @@
 .modal.modal-dark a:hover {
     color: #ffcd39;
 }
+
+
+/*~ ==========================================================  */
+/*^              Account Details              */
+/*~ ==========================================================  */
+
+.account-details-card {
+    border: 2px solid var(--color-border-default);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+

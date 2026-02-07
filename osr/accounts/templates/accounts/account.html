@@ -25,7 +25,7 @@
             <div class="alert alert-danger">{{ form.non_field_errors }}</div>
             {% endif %}
 
-            <div class="card mb-4">
+            <div class="card mb-4 account-details-card">
             <div class="card-header">Profile</div>
                 <div class="card-body">
 
@@ -42,14 +42,7 @@
                         <div class="text-danger small">{{ form.last_name.errors }}</div>
                     </div>
                     </div>
-
-                    <div class="mb-3">
-                    <label class="form-label" for="{{ form.email.id_for_label }}">Email</label>
-                    {{ form.email }}
-                    <div class="text-danger small">{{ form.email.errors }}</div>
-                    {# Optional helper text #}
-                    <div class="form-text">We’ll use this for account notifications and password recovery.</div>
-                    </div>
+                    
                 </div>
             </div>
 
@@ -63,7 +56,7 @@
             </div>
         </form>
         {% else %}
-        <div class="card mb-4">
+        <div class="card mb-4 account-details-card">
             <div class="card-header">Profile</div>
             <div class="card-body">
                 <div class="row">
@@ -85,17 +78,22 @@
                         <span class="me-3">Email:</span>
                         {{ user.email }}
                     </div>
+                    
                 </div>
                 <div class="mb-3">
                     <span class="me-3">Total Recipes:</span>
                     {{ user_recipes_total }}
                 </div>
+                <a href="{% url 'account_email' %}" class="btn btn-outline-warning mb-3">
+                    Change Email Address
+                </a>
             </div>
             <div class="d-flex justify-content-center align-items-center edit-details-wrapper">
                 {% url "accounts:edit_account" as edit_account_url %}
                 {% include "partials/button.html" with href=edit_account_url label="Edit Details" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True btn_class="edit-details-btn btn bg-transparent recipe-btn-image-wrap" %}
             </div>
-            {% if user.is_staff or user.is_superuser %}
+        </div>
+        {% if user.is_staff or user.is_superuser %}
                 <div class="d-flex justify-content-center align-items-center edit-details-wrapper">
                     <div class="mt-4 pt-3 border p-2 border-secondary">
 
@@ -126,12 +124,11 @@
                     </div>
                 </div>
             {% endif %}
-        </div>
         <div class="d-flex flex-grow-1 justify-content-around gap-3">
             {% url "recipes:my_recipes" as update_url %}
             {% static "icons/buttons/MyRecipes.png" as my_recipes_btn_img %}
             {% include "partials/button.html" with href=update_url label="My Recipes" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=my_recipes_btn_img img_alt="My Recipes" img_class="recipe-btn-img" btn_class="btn bg-transparent recipe-btn-image-wrap" action_btn=True action_btn_lg=True %}
-
+            
             <form
             action="{% url 'account_change_password' %}"
             method="post"
@@ -141,6 +138,7 @@
             {% static "icons/buttons/ChangePassword.png" as change_password_btn_img %}
             {% include "partials/button.html" with type="submit" label="Change Password" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=change_password_btn_img img_class="recipe-btn-img" btn_class="btn bg-transparent recipe-btn-image-wrap" action_btn=True action_btn_lg=True %}
             </form>
+            
             
         </div>
         {% endif %}

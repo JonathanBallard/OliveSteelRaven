@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Change Email ● {{ APP_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container content-container">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-5">
+
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-4">
+
+            <h1 class="h4 mb-2 page-title">Change Email Address</h1>
+
+            <p class="text-muted mb-4">
+              Enter your new email address. You’ll need to confirm it before the change takes effect.
+            </p>
+
+            {# Messages from allauth (success, verification sent, etc.) #}
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} py-2">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+
+            <form method="post" action="{% url 'account_email' %}">
+              {% csrf_token %}
+
+              {# Email field #}
+              <div class="mb-3">
+                <label class="form-label" for="{{ form.email.id_for_label }}">
+                  New Email Address
+                </label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                  <div class="text-danger small mt-1">
+                    {{ form.email.errors }}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">
+                  Update Email
+                </button>
+
+                <a href="{% url 'accounts:account' %}" class="btn btn-outline-secondary">
+                  Back to Account
+                </a>
+              </div>
+            </form>
+
+            <p class="small text-muted mt-3 mb-0">
+              Your current email will remain active until the new one is confirmed.
+            </p>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

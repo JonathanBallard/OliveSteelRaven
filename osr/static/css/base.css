@@ -1,3 +1,7 @@
+/* ========================= */
+/* COLORS */
+/* ========================= */
+
 :root {
     /* ===== Core Theme ===== */
     --color-bg: #212529;
@@ -27,11 +31,79 @@
 
     /* ===== Fonts ===== */
     --font-app-name: "Hack";
-    --font-title: "Libre Baskerville";
-    --font-text: "Hack";
+    --font-heading: "Libre Baskerville";
+    --font-button-text: "Hack";
+    --font-body: "Libre Baskerville";
     --font-muted: "Hack";
 }
 
+/* ========================= */
+/* TYPOGRAPHY */
+/* ========================= */
+:root {
+  /* Font families */
+    --font-body: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --font-heading: var(--font-body);
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Font sizes */
+    --fs-base: 1rem;     /* 16px default */
+    --fs-sm: 0.875rem;   /* 14px */
+    --fs-xs: 0.8125rem;  /* 13px */
+    --fs-lg: 1.125rem;   /* 18px */
+
+  /* Headings (tweak freely) */
+    --fs-h1: 2rem;
+    --fs-h2: 1.75rem;
+    --fs-h3: 1.5rem;
+    --fs-h4: 1.25rem;
+    --fs-h5: 1.125rem;
+    --fs-h6: 1rem;
+
+  /* Line height */
+    --lh-body: 1.5;
+    --lh-heading: 1.2;
+}
+
+/* =========================
+    Apply variables (minimal + safe)
+    ========================= */
+body {
+    font-family: var(--font-body);
+    font-size: var(--fs-base);
+    line-height: var(--lh-body);
+}
+
+h1, h2, h3, h4, h5, h6,
+.page-title {
+    font-family: var(--font-heading);
+    line-height: var(--lh-heading);
+}
+
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+h4 { font-size: var(--fs-h4); }
+h5 { font-size: var(--fs-h5); }
+h6 { font-size: var(--fs-h6); }
+
+small, .small {
+    font-size: var(--fs-sm);
+}
+
+.btn {
+    font-size: var(--fs-base); /* keep buttons consistent with body */
+}
+
+/* Optional: form labels slightly smaller */
+.form-label {
+    font-size: var(--fs-sm);
+}
+
+
+/* ========================= */
+/* END TYPOGRAPHY */
+/* ========================= */
 
 * {
     background-color: var(--color-bg);
@@ -205,3 +277,224 @@ textarea.is-invalid {
     filter: invert(1) grayscale(1);
     opacity: 0.9;
 }
+
+/*~ ======================================  */
+/*^       DARK MODE FORMS       */
+/*~ ======================================  */
+
+.form-control {
+    background-color: #212529;
+    color: #f8f9fa;
+    border-color: rgba(255,255,255,0.15);
+}
+
+.form-control:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.15rem rgba(255,193,7,0.25);
+}
+
+.form-control::placeholder {
+    color: rgba(248, 249, 250, 0.6);
+    opacity: 1;
+}
+
+.form-control:focus::placeholder {
+    color: rgba(19, 19, 19, 0.5);
+}
+
+
+/* =========================
+   Dark UI: Disabled + Readonly form controls
+   ========================= */
+
+/* Disabled (should look clearly unavailable) */
+.form-control:disabled,
+.form-select:disabled,
+textarea.form-control:disabled {
+    background-color: rgba(33, 37, 41, 0.65); /* darker/more muted than normal */
+    color: rgba(248, 249, 250, 0.55);
+    border-color: rgba(255, 255, 255, 0.10);
+    opacity: 1; /* prevent Bootstrap/browser from washing it out unpredictably */
+    cursor: not-allowed;
+}
+
+/* Placeholder inside disabled */
+.form-control:disabled::placeholder,
+.form-select:disabled::placeholder,
+textarea.form-control:disabled::placeholder {
+    color: rgba(248, 249, 250, 0.35);
+    opacity: 1;
+}
+
+/* Readonly (available but not editable) */
+.form-control[readonly],
+textarea.form-control[readonly] {
+    background-color: rgba(33, 37, 41, 0.85); /* close to normal, but subtly different */
+    color: rgba(248, 249, 250, 0.80);
+    border-color: rgba(255, 255, 255, 0.12);
+    opacity: 1;
+    cursor: default;
+}
+
+/* Readonly focus: no “edit me” glow */
+.form-control[readonly]:focus,
+textarea.form-control[readonly]:focus {
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: none;
+}
+
+/* Optional: help text + labels when the control is disabled */
+.form-control:disabled ~ .form-text,
+.form-select:disabled ~ .form-text {
+    color: rgba(248, 249, 250, 0.50);
+}
+
+/* =========================
+   Dark UI: Selects
+   ========================= */
+.form-select {
+    background-color: #212529;
+    color: #f8f9fa;
+    border-color: rgba(255,255,255,0.15);
+
+    /* Fix default light arrow background */
+    background-image:
+        linear-gradient(45deg, transparent 50%, rgba(248,249,250,.7) 50%),
+        linear-gradient(135deg, rgba(248,249,250,.7) 50%, transparent 50%),
+        linear-gradient(to right, transparent, transparent);
+    background-position:
+        calc(100% - 20px) calc(1em + 2px),
+        calc(100% - 15px) calc(1em + 2px),
+        100% 0;
+    background-size:
+        5px 5px,
+        5px 5px,
+        2.5em 2.5em;
+    background-repeat: no-repeat;
+}
+
+.form-select:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.15rem rgba(255,193,7,0.25);
+}
+
+
+
+
+/* =========================
+   Tom Select – Dark Theme
+   ========================= */
+
+/* Main input box */
+.ts-control {
+    background-color: #212529;
+    color: #f8f9fa;
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: none;
+}
+
+/* Focus state */
+.ts-control.focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.15rem rgba(255,193,7,0.25);
+}
+
+/* Placeholder text */
+.ts-control input::placeholder {
+    color: rgba(248,249,250,0.6);
+}
+
+/* Selected tag/item */
+.ts-control .item {
+    background-color: rgba(255,193,7,0.15);
+    color: #ffc107;
+    border-radius: 0.25rem;
+}
+
+/* Dropdown menu */
+.ts-dropdown {
+    background-color: #2b3035;
+    color: #f8f9fa;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Dropdown options */
+.ts-dropdown .option {
+    padding: 0.5rem 0.75rem;
+}
+
+/* Hover / active option */
+.ts-dropdown .option.active,
+.ts-dropdown .option:hover {
+    background-color: rgba(255,193,7,0.15);
+    color: #ffc107;
+}
+
+/* No results text */
+.ts-dropdown .no-results {
+    color: rgba(248,249,250,0.6);
+}
+
+/* Remove light focus outline */
+.ts-wrapper.multi.has-items .ts-control {
+    padding: 0.375rem 0.75rem;
+}
+
+
+/* =========================
+   Tint 'Bootstrap-Danger' on disabled
+   ========================= */
+
+
+
+/* Disabled form controls with danger intent */
+.form-control:disabled,
+textarea.form-control:disabled {
+    background-color: rgba(220, 53, 69, 0.08); /* danger tint */
+    color: rgba(248, 249, 250, 0.6);
+    border-color: rgba(220, 53, 69, 0.35);
+    opacity: 1;
+    cursor: not-allowed;
+}
+
+.form-control:disabled::placeholder,
+textarea.form-control:disabled::placeholder {
+    color: rgba(248, 249, 250, 0.4);
+    opacity: 1;
+}
+
+
+.form-select:disabled {
+    background-color: rgba(220, 53, 69, 0.08);
+    color: rgba(248, 249, 250, 0.6);
+    border-color: rgba(220, 53, 69, 0.35);
+    opacity: 1;
+    cursor: not-allowed;
+}
+
+/* Tom Select – disabled with danger tint */
+.ts-wrapper.disabled .ts-control {
+    background-color: rgba(220, 53, 69, 0.08);
+    border-color: rgba(220, 53, 69, 0.35);
+    color: rgba(248, 249, 250, 0.6);
+    cursor: not-allowed;
+}
+
+/* Disable hover/focus effects */
+.ts-wrapper.disabled .ts-control:hover,
+.ts-wrapper.disabled .ts-control.focus {
+    box-shadow: none;
+}
+
+/* Disabled tags/items */
+.ts-wrapper.disabled .item {
+    background-color: rgba(220, 53, 69, 0.15);
+    color: rgba(248, 249, 250, 0.7);
+}
+
+.form-control:disabled ~ .form-text,
+.form-select:disabled ~ .form-text {
+    color: rgba(220, 53, 69, 0.75);
+}
+
+

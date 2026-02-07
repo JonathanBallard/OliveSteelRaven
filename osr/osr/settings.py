@@ -124,6 +124,11 @@ ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 # 3) Email verification is mandatory (blocks login until confirmed) :contentReference[oaicite:7]{index=7}
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_CHANGE_EMAIL = True
+
 # Optional: confirmation link behavior
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True  # convenience; see docs discussion :contentReference[oaicite:8]{index=8}
 
@@ -141,8 +146,6 @@ ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     
-    'allauth.account.middleware.AccountMiddleware',
-        
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -150,6 +153,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'osr.urls'
@@ -252,6 +257,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "account_login"
 ACCOUNT_FORMS = {
     "signup": "accounts.forms.SignupForm",
     "login": "accounts.forms.BootstrapLoginForm",
+    "add_email": "accounts.forms.BootstrapAddEmailForm",
 }
 
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "accounts:email_confirmed"

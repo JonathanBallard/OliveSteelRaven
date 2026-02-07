@@ -13,8 +13,9 @@
           <div>
             <h1 class="mb-2 page-title">{{ recipe.title }}</h1>
             {% if request.session.admin_mode %}
-            {% if user.is_staff or user.is_superuser %}
-              <h5>Creator: {{ recipe.owner.email }}</h5>
+              {% if user.is_staff or user.is_superuser %}
+                <h5>Creator: {{ recipe.owner.username }}</h5>
+              {% endif %}
             {% endif %}
             <div class="text-white-50">
               {% if recipe.category %}
@@ -27,18 +28,28 @@
           </div>
             
           {# Owner actions (top-right) #}
-          {% if user.is_authenticated and recipe.owner == user or request.session.admin_mode %}
-            <div class="d-flex gap-3 flex-wrap">
-              {% url "recipes:update_recipe" recipe.id as update_url %}
-              {% static "icons/buttons/Update.png" as edit_btn_img %}
-              {% include "partials/button.html" with href=update_url label="Edit" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=edit_btn_img img_alt="Edit" img_class="recipe-btn-img" btn_class="btn bg-transparent recipe-btn-image-wrap" action_btn=True %}
+            {% if user.is_authenticated and recipe.owner == user %}
+                <div class="d-flex gap-3 flex-wrap">
+                  {% url "recipes:update_recipe" recipe.id as update_url %}
+                  {% static "icons/buttons/Update.png" as edit_btn_img %}
+                  {% include "partials/button.html" with href=update_url label="Edit" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=edit_btn_img img_alt="Edit" img_class="recipe-btn-img" btn_class="btn bg-transparent recipe-btn-image-wrap" action_btn=True %}
 
-              {% static "icons/buttons/Delete.png" as delete_btn_img %}
-              {% url 'recipes:delete_recipe' recipe_id=recipe.id as data_recipe_url %}
-              {% include "partials/button.html" with label="Delete" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=delete_btn_img img_class="recipe-btn-img" btn_class="btn btn-outline-danger bg-transparent recipe-btn-image-wrap" data_toggle="modal" data_target="#confirmDeleteModal" data_url=data_recipe_url data_title=recipe.title|escape action_btn=True %}
-            </div>
-          {% endif %}
-          {% endif %}
+                  {% static "icons/buttons/Delete.png" as delete_btn_img %}
+                  {% url 'recipes:delete_recipe' recipe_id=recipe.id as data_recipe_url %}
+                  {% include "partials/button.html" with label="Delete" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=delete_btn_img img_class="recipe-btn-img" btn_class="btn btn-outline-danger bg-transparent recipe-btn-image-wrap" data_toggle="modal" data_target="#confirmDeleteModal" data_url=data_recipe_url data_title=recipe.title|escape action_btn=True %}
+                </div>
+
+            {% elif user.is_authenticated and request.session.admin_mode and user.is_superuser %}
+                <div class="d-flex gap-3 flex-wrap">
+                  {% url "recipes:update_recipe" recipe.id as update_url %}
+                  {% static "icons/buttons/Update.png" as edit_btn_img %}
+                  {% include "partials/button.html" with href=update_url label="Admin Edit" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=edit_btn_img img_alt="Edit" img_class="recipe-btn-img" btn_class="btn bg-transparent recipe-btn-image-wrap" action_btn=True %}
+
+                  {% static "icons/buttons/Delete.png" as delete_btn_img %}
+                  {% url 'recipes:delete_recipe' recipe_id=recipe.id as data_recipe_url %}
+                  {% include "partials/button.html" with label="Admin Delete" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True img_src=delete_btn_img img_class="recipe-btn-img" btn_class="btn btn-outline-danger bg-transparent recipe-btn-image-wrap" data_toggle="modal" data_target="#confirmDeleteModal" data_url=data_recipe_url data_title=recipe.title|escape action_btn=True %}
+                </div>
+            {% endif %}
           
           
         </div>
