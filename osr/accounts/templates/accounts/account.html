@@ -90,7 +90,11 @@
             </div>
             <div class="d-flex justify-content-center align-items-center edit-details-wrapper">
                 {% url "accounts:edit_account" as edit_account_url %}
-                {% include "partials/button.html" with href=edit_account_url label="Edit Details" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True btn_class="edit-details-btn btn bg-transparent recipe-btn-image-wrap" %}
+                {% comment %} Button partial {% endcomment %}
+                {% comment %} {% include "partials/button.html" with href=edit_account_url label="Edit Details" show_btn_border=True btn_border="btn_border btn_border_clickable" show_lbl=True btn_class="edit-details-btn btn bg-transparent recipe-btn-image-wrap" %} {% endcomment %}
+                <a href="{% url 'accounts:edit_account' %}" class="btn btn-outline-primary">
+                Edit Details
+                </a>
             </div>
         </div>
         {% if user.is_staff or user.is_superuser %}
