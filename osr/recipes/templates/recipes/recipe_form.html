@@ -211,6 +211,13 @@
               {{ f.id }}          {# hidden PK field when editing #}
               {{ f.line_order }}  {# hidden (we manage it) #}
 
+              {% comment %} Display Line Order for debugging {% endcomment %}
+              {% comment %} 
+              <div class="col-md-1 text-muted small text-center">
+                <span class="ingredient-order-display"></span>
+              </div>
+              {% endcomment %}
+
               <div class="row g-2 align-items-center">
                 <div class="col-md-5">
                   <label class="form-label">Ingredient</label>
@@ -328,14 +335,14 @@
       {% if is_update %}
         {% static "icons/buttons/UpdateRecipeSubmit.png" as update_submit_img %}
         <button type="submit" class="btn btn-warning">
-          Update Recipe
+          ^ Update Recipe ^
         </button>
         {% comment %} Image Button {% endcomment %}
         {% comment %} {% include "partials/button.html" with type="submit" img_alt="Update recipe button" label="Update Recipe" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap form-action-btn" img_src=update_submit_img action_btn=False %} {% endcomment %}
       {% else %}
         {% static "icons/buttons/CreateRecipeSubmit.png" as create_submit_img %}
         <button type="submit" class="btn btn-success">
-          Create Recipe
+          * Create Recipe *
         </button>
         {% comment %} Image Button {% endcomment %}
         {% comment %} {% include "partials/button.html" with type="submit" img_alt="Submit new recipe button" label="Create Recipe" btn_class="icon-only-btn btn p-0 border-0 bg-transparent btn-image-wrap form-action-btn" img_src=create_submit_img action_btn=False %} {% endcomment %}

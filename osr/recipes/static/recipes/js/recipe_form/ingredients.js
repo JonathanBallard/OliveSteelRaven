@@ -7,17 +7,55 @@
   // Prefix must match your view: prefix="ingredients"
   const totalFormsInput = document.getElementById("id_ingredients-TOTAL_FORMS");
 
+  // Optional: renumber right before submit
+  const formEl = container?.closest("form");
+
   if (!addBtn || !container || !template || !totalFormsInput) return;
 
-  function wireRemoveButton(formEl) {
-    const removeBtn = formEl.querySelector(".remove-ingredient-btn");
-    const deleteField = formEl.querySelector('input[type="checkbox"][name$="-DELETE"]');
+  /**
+   * Renumber line_order for all ACTIVE (non-deleted, visible) ingredient forms
+   * based on their current DOM order.
+   *
+   * - Skips forms marked DELETE (checked)
+   * - Skips forms that are display:none
+   * - Sets line_order to 1..N
+   */
+  function updateLineOrders() {
+    let order = 1;
+
+    container.querySelectorAll(".ingredient-form").forEach((row) => {
+      // If hidden, skip
+      if (row.style.display === "none") return;
+
+      // If marked for deletion, skip
+      const deleteField = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
+      if (deleteField && deleteField.checked) return;
+
+      // Find the line_order input
+      const lineOrderInput = row.querySelector('input[name$="-line_order"]');
+      if (lineOrderInput) {
+        lineOrderInput.value = String(order);
+      }
+
+      // Update visible display (if present)
+      const orderDisplay = row.querySelector(".ingredient-order-display");
+      if (orderDisplay) {
+        orderDisplay.textContent = String(order);
+      }
+
+      order += 1;
+    });
+  }
+
+  function wireRemoveButton(row) {
+    const removeBtn = row.querySelector(".remove-ingredient-btn");
+    const deleteField = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
 
     if (!removeBtn) return;
 
     removeBtn.addEventListener("click", () => {
       // Prevent double-click weirdness while animating
-      if (formEl.classList.contains("ingredient-removing")) return;
+      if (row.classList.contains("ingredient-removing")) return;
 
       // Respect reduced motion: skip animation and do the action immediately
       const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -26,11 +64,14 @@
         // Existing line: mark DELETE + hide
         if (deleteField) {
           deleteField.checked = true;
-          formEl.style.display = "none";
+          row.style.display = "none";
         } else {
           // New unsaved line: remove DOM node
-          formEl.remove();
+          row.remove();
         }
+
+        // ✅ Keep line_order consistent after removal
+        updateLineOrders();
       };
 
       if (prefersReduced) {
@@ -39,13 +80,21 @@
       }
 
       // Animate out, then finalize
-      formEl.classList.add("ingredient-removing");
-      formEl.addEventListener("animationend", finalizeRemoval, { once: true });
+      row.classList.add("ingredient-removing");
+      row.addEventListener("animationend", finalizeRemoval, { once: true });
     });
   }
 
   // Wire existing rows
   container.querySelectorAll(".ingredient-form").forEach(wireRemoveButton);
+
+  // ✅ Initial numbering on load (important for edit pages)
+  updateLineOrders();
+
+  // ✅ Final safety pass on submit (covers odd cases)
+  if (formEl) {
+    formEl.addEventListener("submit", () => updateLineOrders());
+  }
 
   addBtn.addEventListener("click", () => {
     const formIndex = parseInt(totalFormsInput.value, 10);
@@ -55,22 +104,25 @@
 
     const wrapper = document.createElement("div");
     wrapper.innerHTML = html.trim();
-    const newFormEl = wrapper.firstElementChild;
-    if (!newFormEl) return;
+    const newRow = wrapper.firstElementChild;
+    if (!newRow) return;
 
-    container.appendChild(newFormEl);
-    wireRemoveButton(newFormEl);
-
-    // Animate in
-    newFormEl.classList.add("ingredient-just-added");
-    newFormEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    newFormEl.addEventListener(
-      "animationend",
-      () => newFormEl.classList.remove("ingredient-just-added"),
-      { once: true }
-    );
+    container.appendChild(newRow);
+    wireRemoveButton(newRow);
 
     // Increment TOTAL_FORMS
     totalFormsInput.value = String(formIndex + 1);
+
+    // ✅ Renumber after add so the new row gets the correct order
+    updateLineOrders();
+
+    // Animate in
+    newRow.classList.add("ingredient-just-added");
+    newRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    newRow.addEventListener(
+      "animationend",
+      () => newRow.classList.remove("ingredient-just-added"),
+      { once: true }
+    );
   });
 })();

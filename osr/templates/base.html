@@ -38,7 +38,10 @@
 
   <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 
-  {# Global site CSS (project-wide static) #}
+  {% comment %} Fonts {% endcomment %}
+  <link href="https://db.onlinewebfonts.com/c/d7e353f139e1963cd4bb508a3b7773c0?family=Libre+Baskerville+V2" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+  {% comment %} Global site CSS (project-wide static) {% endcomment %}
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
   <link rel="stylesheet" href="{% static 'css/components.css' %}">
 

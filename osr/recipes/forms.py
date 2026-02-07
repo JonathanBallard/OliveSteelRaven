@@ -362,11 +362,20 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
         return instances
 
 
-RecipeIngredientFormSet = inlineformset_factory(
+RecipeIngredientFormSetCreate = inlineformset_factory(
     parent_model=Recipe,
     model=RecipeIngredient,
     form=RecipeIngredientLineForm,
     formset=BaseRecipeIngredientFormSet,
-    extra=1,  # initial blank rows
-    can_delete=True,  # allow removing ingredient lines
+    extra=1,          # show 1 blank on CREATE
+    can_delete=True,
+)
+
+RecipeIngredientFormSetUpdate = inlineformset_factory(
+    parent_model=Recipe,
+    model=RecipeIngredient,
+    form=RecipeIngredientLineForm,
+    formset=BaseRecipeIngredientFormSet,
+    extra=0,          # show ONLY existing rows on UPDATE
+    can_delete=True,
 )

@@ -9,6 +9,9 @@
     --color-text: #f8f9fa;
     --color-text-muted: #f8f9faa9;
     --color-accent-gold: #ffc107;
+
+    --color-form-bg: #14161a;
+    --color-form-text: #f8f9fa;
     
     --color-link-hover: #ffc107;
 
@@ -42,8 +45,8 @@
 /* ========================= */
 :root {
   /* Font families */
-    --font-body: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    --font-heading: var(--font-body);
+    --font-body: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, Arial, sans-serif;
+    --font-heading: "Libre Baskerville V2", system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, Arial, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   /* Font sizes */
@@ -283,8 +286,8 @@ textarea.is-invalid {
 /*~ ======================================  */
 
 .form-control {
-    background-color: #212529;
-    color: #f8f9fa;
+    background-color: var(--color-form-bg);
+    color: var(--color-form-text);
     border-color: rgba(255,255,255,0.15);
 }
 
@@ -353,8 +356,8 @@ textarea.form-control[readonly]:focus {
    Dark UI: Selects
    ========================= */
 .form-select {
-    background-color: #212529;
-    color: #f8f9fa;
+    background-color: var(--color-form-bg);
+    color: var(--color-form-text);
     border-color: rgba(255,255,255,0.15);
 
     /* Fix default light arrow background */

@@ -1,0 +1,35 @@
+/* static/css/fonts.css */
+
+/* Raven Serif */
+@font-face {
+    font-family: "RavenSerif";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src:
+        local("Raven Serif NBP"),
+        url("/static/fonts/raven1_serif.woff") format("woff");
+}
+
+/* Raven Sans */
+@font-face {
+    font-family: "RavenSans";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src:
+        local("Raven Sans NBP"),
+        url("/static/fonts/raven2_sans.woff") format("woff");
+}
+
+@import url(https://db.onlinewebfonts.com/c/d7e353f139e1963cd4bb508a3b7773c0?family=Libre+Baskerville+V2);
+
+@font-face {
+    font-family: "Libre Baskerville V2";
+    src: url("https://db.onlinewebfonts.com/t/d7e353f139e1963cd4bb508a3b7773c0.eot");
+    src: url("https://db.onlinewebfonts.com/t/d7e353f139e1963cd4bb508a3b7773c0.eot?#iefix")format("embedded-opentype"),
+    url("https://db.onlinewebfonts.com/t/d7e353f139e1963cd4bb508a3b7773c0.woff2")format("woff2"),
+    url("https://db.onlinewebfonts.com/t/d7e353f139e1963cd4bb508a3b7773c0.woff")format("woff"),
+    url("https://db.onlinewebfonts.com/t/d7e353f139e1963cd4bb508a3b7773c0.ttf")format("truetype"),
+    url("https://db.onlinewebfonts.com/t/d7e353f139e1963cd4bb508a3b7773c0.svg#Libre Baskerville V2")format("svg");
+}

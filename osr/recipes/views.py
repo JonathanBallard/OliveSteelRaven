@@ -11,7 +11,7 @@ from django.db import transaction
 from django.views.decorators.csrf import csrf_protect
 
 from .models import Recipe, Category, Tag, RecipeIngredient, Ingredient
-from .forms import RecipeForm, RecipeIngredientFormSet
+from .forms import RecipeForm, RecipeIngredientFormSetCreate, RecipeIngredientFormSetUpdate
 from .utils import normalize_name
 
 from common.utils import safe_method_validator
@@ -144,7 +144,7 @@ def create(request, *args, **kwargs):
     
     if(request.method == "GET"):
         form = RecipeForm()
-        formset = RecipeIngredientFormSet(prefix="ingredients")
+        formset = RecipeIngredientFormSetCreate(prefix="ingredients")
         
         context = {
             "form": form,
@@ -157,7 +157,7 @@ def create(request, *args, **kwargs):
     # Otherwise get newly created recipe ID, and redirect to that details page
     elif request.method == "POST":
         form = RecipeForm(request.POST, request.FILES)
-        formset = RecipeIngredientFormSet(request.POST, prefix="ingredients")
+        formset = RecipeIngredientFormSetCreate(request.POST, prefix="ingredients")
         
         if form.is_valid() and formset.is_valid():
             with transaction.atomic():
@@ -218,7 +218,7 @@ def update(request, recipe_id=0, *args, **kwargs):
     if request.method == "GET":
         # ✅ FIX: On GET, do NOT bind request.POST/request.FILES; just use instance
         form = RecipeForm(instance=recipe)
-        formset = RecipeIngredientFormSet(instance=recipe, prefix="ingredients")
+        formset = RecipeIngredientFormSetUpdate(instance=recipe, prefix="ingredients")
 
         context = {
             "recipe": recipe,   # handy for template links/titles
@@ -235,7 +235,7 @@ def update(request, recipe_id=0, *args, **kwargs):
     elif request.method == "POST":
         # ✅ FIX: Include request.FILES so image updates are processed
         form = RecipeForm(request.POST, request.FILES, instance=recipe)
-        formset = RecipeIngredientFormSet(request.POST, instance=recipe, prefix="ingredients")
+        formset = RecipeIngredientFormSetUpdate(request.POST, instance=recipe, prefix="ingredients")
 
         if form.is_valid() and formset.is_valid():
             with transaction.atomic():
