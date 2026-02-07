@@ -297,3 +297,16 @@ def reset_password(request, *args, **kwargs):
 
 def email_confirmed(request):
     return render(request, "account/email_confirmed.html")
+
+# Toggle Admin Mode
+@login_required
+def toggle_admin_mode(request):
+    # Extra safety: only staff or superusers
+    if not (request.user.is_staff or request.user.is_superuser):
+        return redirect("accounts:account")
+
+    current = request.session.get("admin_mode", False)
+    request.session["admin_mode"] = not current
+
+    # Go back to the page the user came from, fallback to account page
+    return redirect(request.META.get("HTTP_REFERER", "accounts:account"))

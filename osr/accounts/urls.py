@@ -47,4 +47,6 @@ urlpatterns = [
     path('account/reset_password', views.reset_password, name='reset_password'), #type: ignore
     
     path("confirmed/", views.email_confirmed, name="email_confirmed"),
+    
+    path("toggle-admin-mode/", views.toggle_admin_mode, name="toggle_admin_mode"),
 ]
