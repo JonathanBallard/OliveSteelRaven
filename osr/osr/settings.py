@@ -107,7 +107,7 @@ INSTALLED_APPS = [
     
     # My apps
     'accounts',
-    'recipes',
+    'recipes.apps.RecipesConfig',
 ]
 
 #& ==========================================
