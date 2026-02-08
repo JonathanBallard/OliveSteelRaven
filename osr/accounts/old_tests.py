@@ -9,9 +9,9 @@ class LoginTests(TestCase):
         User = get_user_model()
         self.user = User.objects.create_user(username="Tester", password="Pw123456", email="tester@testing.com")
         
-        self.signup_url = reverse("accounts:signup")
-        self.login_url = reverse("accounts:login")
-        self.logout_url = reverse("accounts:logout")
+        self.signup_url = reverse("account_signup")
+        self.login_url = reverse("account_login")
+        self.logout_url = reverse("account_logout")
         self.home_url = reverse("accounts:home_page")
         self.account_url = reverse("accounts:account")
     

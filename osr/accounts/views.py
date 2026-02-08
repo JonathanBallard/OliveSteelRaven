@@ -56,8 +56,19 @@ def home(request, *args, **kwargs):
     GET: Renders homepage
     """
     context = {}
-    hero_recipe = Recipe.objects.get(pk=settings.HERO_RECIPE_PK)
-    recipes = Recipe.objects.order_by('?')[:3] # Pick 3 random Recipe objects
+    
+    # HERO Recipe is set in settings HERO_RECIPE_PK, or picked at random
+    hero_recipe = Recipe.objects.filter(pk=settings.HERO_RECIPE_PK).first()
+    if(not hero_recipe):
+        hero_recipe = Recipe.objects.order_by('?')[:1] # If no Hero Recipe is select, choose one at random
+    
+    # CARD Recipes is set in settings FEATURED_RECIPE_PKS, or picked at random
+    card_recipes = Recipe.objects.filter(pk__in=settings.FEATURED_RECIPE_PKS)
+    if(not card_recipes or len(card_recipes) < 3):
+        recipes = Recipe.objects.order_by('?')[:3] # Pick 3 random Recipe objects for homepage recipe cards
+    else:
+        recipes = card_recipes
+        
     context['hero_recipe'] = hero_recipe
     context['recipes'] = recipes
     return render(request=request, template_name=".\\accounts\\home.html", context=context)

@@ -257,7 +257,7 @@ class RecipeCriticalFlowTests(TestCase):
         self.category = Category.objects.create(name="Dinner")
 
         self.create_url = reverse("recipes:create_recipe")
-        self.login_url = reverse("accounts:login")
+        self.login_url = reverse("account_login")
 
         # Seed a recipe owned by owner with 1 ingredient line so update can validate
         self.recipe = Recipe.objects.create(
