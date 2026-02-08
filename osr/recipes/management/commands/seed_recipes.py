@@ -60,7 +60,13 @@ class Command(BaseCommand):
         if not dbname:
             raise CommandError("DATABASES['default']['NAME'] is missing.")
 
-        cmd = ["psql", "-v", f"owner_id={owner_id}", "-f", str(sql_path), dbname]
+        cmd = [
+            "psql",
+            "-v", "ON_ERROR_STOP=1",
+            "-v", f"owner_id={owner_id}",
+            "-f", str(sql_path),
+            dbname,
+        ]
 
         # Add optional connection args
         if user:

@@ -213,7 +213,10 @@ def update(request, recipe_id=0, *args, **kwargs):
     POST: Updates the Recipe Form (including image uploads)
     """
     # Always enforce ownership (both GET + POST)
-    recipe = get_object_or_404(Recipe, pk=recipe_id, owner=request.user)
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    # If not owner and not staff or superuser, 404 on update
+    if(not recipe.owner == request.user and not request.user.is_staff and not request.user.is_superuser):
+        recipe = get_object_or_404(Recipe, pk=recipe_id, owner=request.user)
 
     if request.method == "GET":
         # ✅ FIX: On GET, do NOT bind request.POST/request.FILES; just use instance

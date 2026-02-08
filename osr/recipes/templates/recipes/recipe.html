@@ -124,7 +124,7 @@
       <div class="card-body">
         {% if recipe.instructions %}
           {# pre keeps formatting; add overflow protection #}
-          <pre class="mb-0 p-3 rounded border border-secondary bg-dark text-light" style="white-space: pre-wrap;">{{ recipe.instructions }}</pre>
+          <pre class="mb-0 p-3 rounded border border-secondary bg-dark text-light" style="white-space: pre-wrap;">{{ recipe.instructions|linebreaksbr }}</pre>
         {% else %}
           <p class="text-white-50 mb-0">No instructions provided.</p>
         {% endif %}
