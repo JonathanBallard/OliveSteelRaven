@@ -24,7 +24,6 @@
     display: block;
     text-decoration: none;
     background: var(--color-border-default);
-    border-radius: 0.5rem;
     border: 1px solid rgba(255,255,255,0.08);
     overflow: hidden;
     box-shadow: 0 6px 16px rgba(0,0,0,0.35);
@@ -34,6 +33,11 @@
     -ms-transition: transform 350ms ease, box-shadow 0.12s ease, border-color 0.12s ease;
     -o-transition: transform 350ms ease, box-shadow 0.12s ease, border-color 0.12s ease;
     height: 100%;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
 }
 
 .cat-card:hover {
@@ -58,7 +62,7 @@
 
 /* Icon area */
 .cat-icon {
-    background: var(--color-bg); /* Consider removing */
+    /* background: var(--color-bg); Consider removing */
     border-radius: 0.4rem;
     display: grid;
     place-items: center;
@@ -67,18 +71,24 @@
     overflow: hidden;
 }
 .cat-icon img {
-    border: 1px solid var(--color-bg);
-    width: 84%;
+    /*border: 1px solid var(--color-bg);
+    */width: 84%;
     height: 84%;
-    object-fit: contain;
-    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.45));
+    /*filter: drop-shadow(0 2px 6px rgba(0,0,0,0.45));
+    *//*-webkit-filter: drop-shadow(0 2px 6px rgba(0,0,0,0.45));
+    */object-fit: contain;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
 }
 
 /* Label area (all caps like screenshot) */
 .cat-label {
     margin-top: 0.55rem;
     color: var(--color-text);
-    font-size: 0.72rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.6px;
     text-transform: uppercase;
@@ -97,4 +107,14 @@
 .page-title {
     margin-bottom: 1.6rem;
 }
+}
+
+.card-bg {
+    /*background: rgba(17,17,17,0.92);
+    */background: var(--color-bg-highlight);
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
 }
