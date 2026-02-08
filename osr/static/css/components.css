@@ -318,20 +318,22 @@
 
 /* Optional: links inside modal */
 .modal.modal-dark a {
-    color: #ffc107;  
+    color: var(--color-link-hover);  
 }
 
 .modal.modal-dark a:hover {
-    color: #ffcd39;
+    color: var(--color-link-hover-dark);
 }
 
 
 /*~ ==========================================================  */
-/*^              Account Details              */
+/*^              Raised Panel              */
 /*~ ==========================================================  */
 
-.account-details-card {
+.raised-panel {
     border: 2px solid var(--color-border-default);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
 }
+
+
 

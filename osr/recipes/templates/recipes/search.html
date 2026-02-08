@@ -13,7 +13,7 @@
     <h2 class="page-title">Search Recipes</h2>
     <div class="container content-container search-inner-container">
 
-      <div class="search-card p-3 p-md-4 mb-4">
+      <div class="search-card p-3 p-md-4 mb-4 raised-panel">
         <form method="get" action="{% url 'recipes:search' %}" class="row g-2 g-md-3 align-items-end">
 
           {# Search by title OR ingredient (single text box that your view can interpret) #}
@@ -46,9 +46,8 @@
                 </option>
               {% endfor %}
             </select>
-            <div class="form-text text-white-50 invisible">
-              Limits results to a single category
-            </div>
+            <div class="form-text invisible">.</div>
+            {% comment %} <div class="form-text text-white-50 invisible">Limits results to a single category</div> {% endcomment %}
           </div>
 
           <div class="col-12 col-sm-6 col-lg-1 d-grid">
