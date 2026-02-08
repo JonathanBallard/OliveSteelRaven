@@ -116,6 +116,8 @@ INSTALLED_APPS = [
 
 # 1) Users log in using email
 ACCOUNT_LOGIN_METHODS = {"email"}  # docs: options include "email" / "username" :contentReference[oaicite:5]{index=5}
+ACCOUNT_UNIQUE_EMAIL = True
+
 
 # 2) Signup form fields (IMPORTANT)
 # Make email required with * when you use mandatory verification. :contentReference[oaicite:6]{index=6}
@@ -123,13 +125,7 @@ ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 
 # 3) Email verification is mandatory (blocks login until confirmed) :contentReference[oaicite:7]{index=7}
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_CHANGE_EMAIL = True
-
-# Optional: confirmation link behavior
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True  # convenience; see docs discussion :contentReference[oaicite:8]{index=8}
 
 # Adds email as username for users going forwards
