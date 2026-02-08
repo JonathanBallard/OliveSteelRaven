@@ -7,7 +7,7 @@ from typing import Iterable, List
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.db import IntegrityError, transaction
+from django.db import IntegrityError, transaction, models
 from django.forms import BaseInlineFormSet, inlineformset_factory
 
 from .models import Ingredient, Recipe, RecipeIngredient, Tag, Category
@@ -300,22 +300,34 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
         ]
         if not kept:
             raise ValidationError("Please add at least one ingredient.")
-        
+    
+    # IMPORTANT:
+    # We enforce a UNIQUE constraint on (recipe_id, line_order).
+    # When reordering ingredients, we must avoid transient duplicates
+    # (e.g. two rows briefly having line_order=1).
+    #
+    # To do this safely, we renumber in TWO PHASES:
+    #   1) Move all kept rows into a temporary, high offset range
+    #      so no (recipe_id, line_order) collisions can occur.
+    #   2) Assign the final sequential order (1..N).
+    #
+    # This guarantees deterministic ordering while respecting the DB constraint.
     def save(self, commit: bool = True):
+        # Build instances but don't commit yet
         instances = super().save(commit=False)
-        
+
         kept_forms = [
-            f
-            for f in self.forms
+            f for f in self.forms
             if hasattr(f, "cleaned_data")
             and f.cleaned_data
             and not f.cleaned_data.get("DELETE", False)
         ]
-        
-        # Auto line_order: 1..N in UI order
+
+        # Auto line_order: 1..N in UI order (set on instances)
         for i, form in enumerate(kept_forms, start=1):
             form.instance.line_order = i
-            
+
+        # --- your existing ingredient normalization + FK resolution ---
         norms: list[str] = []
         for form in kept_forms:
             raw = (form.cleaned_data.get("ingredient_name") or "").strip()
@@ -324,41 +336,67 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
             if not norm:
                 raise ValidationError("Ingredient name can't be blank.")
 
-            form.cleaned_data["_ingredient_norm"] = norm  # stash for reuse below
+            form.cleaned_data["_ingredient_norm"] = norm
             norms.append(norm)
 
-        # De-dupe norms to keep queries small
-        unique_norms = list(dict.fromkeys(norms))  # preserves order
-
-        # 1) Fetch all existing Ingredients in one query
+        unique_norms = list(dict.fromkeys(norms))
         existing = Ingredient.objects.filter(name_normalized__in=unique_norms)
         by_norm = {ing.name_normalized: ing for ing in existing}
 
-        # 2) Bulk create missing (ignore_conflicts handles races)
         missing_norms = [n for n in unique_norms if n not in by_norm]
         if missing_norms:
             Ingredient.objects.bulk_create(
                 [Ingredient(name=n.title(), name_normalized=n) for n in missing_norms],
                 ignore_conflicts=True,
             )
-
-            # 3) Re-fetch missing to obtain PKs (one query)
             created = Ingredient.objects.filter(name_normalized__in=missing_norms)
             by_norm.update({ing.name_normalized: ing for ing in created})
 
-        # 4) Assign resolved Ingredient FK to each form instance
         for form in kept_forms:
             norm = form.cleaned_data["_ingredient_norm"]
             ingredient = by_norm.get(norm)
             if ingredient is None:
                 raise ValidationError(f"Could not resolve ingredient: {norm}")
             form.instance.ingredient = ingredient
-            
-        if commit:
+        # --- end your existing logic ---
+
+        if not commit:
+            return instances
+
+        with transaction.atomic():
+            # 1) Save all changed/new objects (but line_order collisions can still happen)
+            # Save ingredient FK changes etc.
             for inst in instances:
                 inst.save()
+
+            # 2) Apply deletions explicitly (since we're not calling super().save(commit=True))
+            for obj in getattr(self, "deleted_objects", []):
+                obj.delete()
+
+            # 3) Two-phase line_order write to avoid unique collisions:
+            # Phase A: push kept instances into a safe temporary range
+            # (Pick an offset bigger than any current line_order for this recipe)
+            current_max = (
+                RecipeIngredient.objects
+                .filter(recipe=self.instance)
+                .aggregate(m=models.Max("line_order"))["m"]
+                or 0
+            )
+            offset = current_max + 1000
+
+            kept_instances = [f.instance for f in kept_forms if f.instance.pk]
+
+            for idx, inst in enumerate(kept_instances, start=1):
+                inst.line_order = offset + idx
+                inst.save(update_fields=["line_order"])
+
+            # Phase B: write final 1..N
+            for idx, inst in enumerate(kept_instances, start=1):
+                inst.line_order = idx
+                inst.save(update_fields=["line_order"])
+
             self.save_m2m()
-            
+
         return instances
 
 

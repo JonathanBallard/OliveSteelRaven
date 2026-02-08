@@ -285,7 +285,7 @@ def delete(request, recipe_id, *args, **kwargs):
     POST: Deletes Recipe
     """
     context = {}
-    recipe = get_object_or_404(Recipe, pk=recipe_id, owner=request.user)
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
     
     if(request.method == "GET"):
         return redirect('recipes:my_recipes')
@@ -294,7 +294,12 @@ def delete(request, recipe_id, *args, **kwargs):
     # Ensure recipe deleted
     # Then redirect to my recipes
     elif(request.method == "POST"):
-        recipe.delete()
+        if(request.user.is_authenticated and recipe.owner == request.user):
+            recipe.delete()
+        elif(request.session.get("admin_mode", False) and request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser)):
+            recipe.delete()
+        else:
+            messages.error(request, "You do not have permission to delete this recipe.")
         posted_data_dict = request.POST.copy()
         return redirect('recipes:my_recipes') # Return to my recipes
     return redirect('recipes:my_recipes')

@@ -37,7 +37,7 @@ def delete_recipe_image_on_delete(sender, instance: Recipe, **kwargs):
     """
     img = getattr(instance, "recipe_image", None)
     if _is_deletable_upload(img):
-        img.delete(save=False)
+        img.delete(save=False) #type: ignore
 
 
 @receiver(pre_save, sender=Recipe)
@@ -60,9 +60,9 @@ def delete_old_recipe_image_on_change(sender, instance: Recipe, **kwargs):
     if not _is_deletable_upload(old_img):
         return
 
-    old_name = old_img.name
+    old_name = old_img.name #type: ignore
     new_name = getattr(new_img, "name", "") if new_img else ""
 
     # If changed or cleared, delete the old
     if old_name and old_name != new_name:
-        old_img.delete(save=False)
+        old_img.delete(save=False) #type: ignore

@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
-from .utils import create_user, set_email_verified, login_via_allauth
+from .utils import create_user, verify_email, login_via_allauth
 
 
 User = get_user_model()
@@ -16,7 +16,7 @@ class AuthFlowTests(TestCase):
             email="tester@testing.com",
             password="Pw123456!!",
         )
-        set_email_verified(self.user)
+        verify_email(self.user)
 
         self.signup_url = reverse("account_signup")
         self.login_url = reverse("account_login")

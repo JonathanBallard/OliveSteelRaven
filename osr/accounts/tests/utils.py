@@ -28,7 +28,7 @@ def create_user(
     return user
 
 
-def set_email_verified(user, email: str | None = None, primary: bool = True):
+def verify_email(user, email: str | None = None, primary: bool = True):
     """
     Mark the given user's email as verified in django-allauth.
     Required when ACCOUNT_EMAIL_VERIFICATION='mandatory' to allow login.

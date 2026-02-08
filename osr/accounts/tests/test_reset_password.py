@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.core import mail
 
-from .utils import create_user, set_email_verified, login_via_allauth
+from .utils import create_user, verify_email, login_via_allauth
 
 
 class ResetPasswordTests(TestCase):
@@ -13,7 +13,7 @@ class ResetPasswordTests(TestCase):
 
     def test_reset_password_sends_email_for_existing_user(self):
         user = create_user(email="rp@example.com", password="Passw0rd!123")
-        set_email_verified(user)
+        verify_email(user)
 
         resp = self.client.post(
             reverse("accounts:reset_password"),

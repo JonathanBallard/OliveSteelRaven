@@ -2,7 +2,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from .utils import create_user, set_email_verified, login_via_allauth
+from .utils import create_user, verify_email, login_via_allauth
 
 
 class AccountAccessTests(TestCase):
@@ -12,7 +12,7 @@ class AccountAccessTests(TestCase):
 
     def test_account_page_loads_for_logged_in_user(self):
         user = create_user(email="u@example.com", password="Passw0rd!123")
-        set_email_verified(user)
+        verify_email(user)
 
         login_via_allauth(self.client, "u@example.com", "Passw0rd!123")
 

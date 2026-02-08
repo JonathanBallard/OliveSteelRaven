@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
-from .utils import create_user, set_email_verified, login_via_allauth
+from .utils import create_user, verify_email, login_via_allauth
 
 User = get_user_model()
 
@@ -11,7 +11,7 @@ User = get_user_model()
 class EditDetailsTests(TestCase):
     def test_edit_details_page_loads(self):
         user = create_user(email="edit@example.com", password="Passw0rd!123")
-        set_email_verified(user)
+        verify_email(user)
         login_via_allauth(self.client, "edit@example.com", "Passw0rd!123")
 
         resp = self.client.get(reverse("accounts:edit_account"))
@@ -23,7 +23,7 @@ class EditDetailsTests(TestCase):
         not the 'edit details' form.
         """
         user = create_user(email="edit2@example.com", password="Passw0rd!123")
-        set_email_verified(user)
+        verify_email(user)
         login_via_allauth(self.client, "edit2@example.com", "Passw0rd!123")
 
         resp = self.client.post(

@@ -132,7 +132,7 @@ def signup(request, *args, **kwargs):
     if request.method == "POST":
         form = SignupForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.save() #type: ignore
             login(request, user)
             return redirect("accounts:home_page")
     else:

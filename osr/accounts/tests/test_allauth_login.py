@@ -2,7 +2,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from .utils import create_user, set_email_verified
+from .utils import create_user, verify_email
 
 
 class AllauthLoginFlowTests(TestCase):
@@ -27,7 +27,7 @@ class AllauthLoginFlowTests(TestCase):
 
     def test_login_succeeds_when_email_verified(self):
         user = create_user(email="verified@example.com", password="Passw0rd!123")
-        set_email_verified(user)
+        verify_email(user)
 
         resp = self.client.post(
             reverse("account_login"),

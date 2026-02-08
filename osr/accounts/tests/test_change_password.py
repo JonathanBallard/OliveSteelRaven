@@ -3,14 +3,14 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
-from .utils import create_user, set_email_verified, login_via_allauth
+from .utils import create_user, verify_email, login_via_allauth
 
 User = get_user_model()
 
 class ChangePasswordTests(TestCase):
     def test_change_password_flow(self):
         user = create_user(email="cp@example.com", password="OldPassw0rd!123")
-        set_email_verified(user)
+        verify_email(user)
 
         login_via_allauth(self.client, "cp@example.com", "OldPassw0rd!123")
         self.assertIn("_auth_user_id", self.client.session)
