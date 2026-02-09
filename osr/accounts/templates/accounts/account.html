@@ -70,20 +70,22 @@
                     </div>
                 </div>
                 <div class="row">
+                    {% if user.username %}
                     <div class="col-md-6 mb-3">
                         <span class="me-3">Username:</span>
                         {{ user.username }}
                     </div>
+                    {% endif %}
                     <div class="col-md-6 mb-3">
                         <span class="me-3">Email:</span>
                         {{ user.email }}
                     </div>
-                    
                 </div>
                 <div class="mb-3">
                     <span class="me-3">Total Recipes:</span>
                     {{ user_recipes_total }}
                 </div>
+                
                 <a href="{% url 'account_email' %}" class="btn btn-outline-warning mb-3">
                     Change Email Address
                 </a>

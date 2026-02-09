@@ -212,16 +212,20 @@
         {% endif %}
 
         {{ formset.management_form }}
-          <div class="small text-muted">
+        {% if DEBUG and request.session.admin_mode %}
+        <div class="container debug-container raised-panel p-2 my-3">
+          <h3 class="debug-title">Debug</h3>
+          <div class="small text-white debug-text">
             TOTAL_FORMS={{ formset.management_form.TOTAL_FORMS.value }}
             INITIAL_FORMS={{ formset.management_form.INITIAL_FORMS.value }}
           </div>
+        </div>
+        {% endif %}
 
         <div id="ingredient-forms">
           {% for f in formset.forms %}
             <div class="border rounded p-3 mb-3 ingredient-form">
               {{ f.id }}          {# hidden PK field when editing #}
-              {{ f.line_order }}  {# hidden (we manage it) #}
 
               {% comment %} Display Line Order for debugging {% endcomment %}
               {% comment %} 
@@ -294,7 +298,6 @@
         <template id="empty-ingredient-form-template">
           <div class="border rounded p-3 mb-3 ingredient-form">
             {{ formset.empty_form.id }}
-            {{ formset.empty_form.line_order }}
 
             <div class="row g-2 align-items-center">
               <div class="col-md-5">

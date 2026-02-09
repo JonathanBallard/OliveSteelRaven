@@ -222,14 +222,6 @@ class RecipeForm(forms.ModelForm):
 
 
 class RecipeIngredientLineForm(forms.ModelForm):
-    """
-    One ingredient line entry for a recipe.
-
-    We intentionally *do not* expose the Ingredient FK as a dropdown.
-    Instead we accept ingredient_name and resolve it to the global Ingredient
-    catalog (deduped by name_normalized).
-    """
-
     ingredient_name = forms.CharField(
         max_length=120,
         required=True,
@@ -238,29 +230,21 @@ class RecipeIngredientLineForm(forms.ModelForm):
 
     class Meta:
         model = RecipeIngredient
-        fields = ["ingredient_name", "quantity", "unit_text", "prep_note", "line_order"]
+        fields = ["ingredient_name", "quantity", "unit_text", "prep_note"]
         widgets = {
             "quantity": forms.NumberInput(attrs={"class": "form-control", "step": "any"}),
             "unit_text": forms.TextInput(attrs={"class": "form-control", "placeholder": "e.g., cup"}),
             "prep_note": forms.TextInput(
                 attrs={"class": "form-control", "placeholder": "e.g., finely chopped"}
             ),
-            "line_order": forms.NumberInput(attrs={"class": "form-control", "min": 1}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
-        if "DELETE" in self.fields:
-            self.fields["DELETE"].widget = forms.HiddenInput()
 
         # When editing existing lines, prefill ingredient_name from FK
         if self.instance and self.instance.pk and getattr(self.instance, "ingredient_id", None):
             self.fields["ingredient_name"].initial = self.instance.ingredient.name
-
-        # Typically better UX: line_order is managed automatically.
-        self.fields["line_order"].required = False
-        self.fields["line_order"].widget = forms.HiddenInput()
 
     def clean_ingredient_name(self) -> str:
         name = (self.cleaned_data.get("ingredient_name") or "").strip()
@@ -279,11 +263,18 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
     
     def add_fields(self, form, index):
         super().add_fields(form, index)
-        
+
         # can_delete=True adds this field at the formset level,
         # so we hide it here (not in the form __init__).
         if "DELETE" in form.fields:
             form.fields["DELETE"].widget = forms.HiddenInput()
+
+        # ✅ CRITICAL: avoid pre-save validate_unique collisions while we reorder+delete
+        # We enforce uniqueness via:
+        # - our own deterministic 1..N renumbering
+        # - the DB constraint
+        # - the two-phase save (offset range -> final range)
+        form._validate_unique = False
     
     def get_queryset(self):
         qs = super().get_queryset()

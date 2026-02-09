@@ -501,4 +501,19 @@ textarea.form-control:disabled::placeholder {
     color: rgba(220, 53, 69, 0.75);
 }
 
+/*~ ======================================  */
+/*^      DEBUG       */
+/*~ ======================================  */
 
+.debug-container {
+    background-color: rgba(104, 2, 13, 0.185);
+}
+
+.debug-title {
+    background-color: rgba(104, 2, 13, 0.185);
+}
+
+.debug-text {
+    color: rgba(68, 1, 8, 0.75);
+    background-color: rgba(104, 2, 13, 0.185);
+}

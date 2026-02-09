@@ -4,10 +4,10 @@ from django.db.models import Q, Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.contrib.auth import get_user_model, authenticate, logout, login
 from django.contrib.auth.decorators import login_required
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from django.views.decorators.csrf import csrf_protect
 
 from .models import Recipe, Category, Tag, RecipeIngredient, Ingredient
@@ -197,10 +197,6 @@ def create(request, *args, **kwargs):
 #&-----------------------------------------------------------------------------------------------------
 #^ START `UPDATE` VIEWS
 #&-----------------------------------------------------------------------------------------------------
-
-# *DONE* Render update.html
-# *DONE* Ensure user is recipe's owner
-# *DONE* Post results
 @csrf_protect
 @login_required
 @safe_method_validator(".\\recipes\\update.html", ["POST", "GET", "HEAD", "OPTIONS"])
@@ -214,17 +210,17 @@ def update(request, recipe_id=0, *args, **kwargs):
     """
     # Always enforce ownership (both GET + POST)
     recipe = get_object_or_404(Recipe, pk=recipe_id)
+
     # If not owner and not staff or superuser, 404 on update
-    if(not recipe.owner == request.user and not request.user.is_staff and not request.user.is_superuser):
+    if (not recipe.owner == request.user and not request.user.is_staff and not request.user.is_superuser):
         recipe = get_object_or_404(Recipe, pk=recipe_id, owner=request.user)
 
     if request.method == "GET":
-        # ✅ FIX: On GET, do NOT bind request.POST/request.FILES; just use instance
         form = RecipeForm(instance=recipe)
         formset = RecipeIngredientFormSetUpdate(instance=recipe, prefix="ingredients")
 
         context = {
-            "recipe": recipe,   # handy for template links/titles
+            "recipe": recipe,
             "form": form,
             "formset": formset,
             "is_update": True,
@@ -235,26 +231,40 @@ def update(request, recipe_id=0, *args, **kwargs):
             context=context,
         )
 
-    elif request.method == "POST":
-        # ✅ FIX: Include request.FILES so image updates are processed
+    if request.method == "POST":
         form = RecipeForm(request.POST, request.FILES, instance=recipe)
-        formset = RecipeIngredientFormSetUpdate(request.POST, instance=recipe, prefix="ingredients")
+        formset = RecipeIngredientFormSetUpdate(
+            request.POST,
+            instance=recipe,
+            prefix="ingredients",
+        )
 
         if form.is_valid() and formset.is_valid():
-            with transaction.atomic():
-                updated_recipe = form.save()  # saves Recipe fields
-                form.save_m2m()               # saves tags M2M
-                formset.save()                # saves ingredient lines (and deletions)
-            
-                try:
-                    with transaction.atomic():
-                        updated_recipe = form.save()
-                        form.save_m2m()
-                        formset.save()
-                except Exception as e:
-                    import traceback
-                    traceback.print_exc()
-                    raise
+            try:
+                with transaction.atomic():
+                    updated_recipe = form.save()   # Recipe fields
+                    form.save_m2m()                # tags M2M
+                    formset.save()                 # ingredient lines + deletions + renumbering
+            except IntegrityError:
+                # Usually means a DB constraint hit (e.g., unique(recipe, line_order))
+                messages.error(
+                    request,
+                    "Couldn’t save ingredient changes due to an ordering conflict. "
+                    "Please refresh the page and try again."
+                )
+
+                context = {
+                    "recipe": recipe,
+                    "form": form,
+                    "formset": formset,
+                    "is_update": True,
+                }
+                return render(
+                    request=request,
+                    template_name=".\\recipes\\recipe_form.html",
+                    context=context,
+                    status=400,
+                )
 
             return redirect("recipes:view_recipe", recipe_id=updated_recipe.pk)
 
@@ -265,6 +275,7 @@ def update(request, recipe_id=0, *args, **kwargs):
             "recipe": recipe,
             "form": form,
             "formset": formset,
+            "is_update": True,
         }
         return render(
             request=request,
@@ -272,9 +283,10 @@ def update(request, recipe_id=0, *args, **kwargs):
             context=context,
             status=400,
         )
-    
+
     # Just in case safe_method_validator fails or is later removed
     return HttpResponseNotAllowed(["GET", "POST"])
+
 
 
 

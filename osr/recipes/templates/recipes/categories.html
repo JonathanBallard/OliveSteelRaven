@@ -21,9 +21,7 @@
                  href="{% url 'recipes:recipe_by_category' category_id=category.id %}"
                  title="{{ category.name }}">
                 <div class="cat-card-body">
-                  {% comment %} If I want to keep the light border around category, swap `cat-icon` with this {% endcomment %}
-                  {% comment %} <div class="cat-icon card-bg"> {% endcomment %}
-                  <div class="cat-icon">
+                  <div class="cat-icon card-bg">
                     {# If you later add per-category icons, swap this to category.image/icon field. #}
                     {# Category names with spaces or special characters should have their image files named "Soups-Stews.png" for Category "Soups & Stews" #}
                     <img
