@@ -517,3 +517,23 @@ textarea.form-control:disabled::placeholder {
     color: rgba(68, 1, 8, 0.75);
     background-color: rgba(104, 2, 13, 0.185);
 }
+
+/*~ ======================================  */
+/*^      ADMIN MODE       */
+/*~ ======================================  */
+
+
+
+.admin-mode-indicator {
+    background: rgba(var(--bs-danger-rgb), 0.15);
+    border: 1px solid rgba(var(--bs-danger-rgb), 0.4);
+    color: var(--bs-danger);
+    /* animation: adminPulse 2.5s ease-in-out infinite; */
+}
+/* 
+@keyframes adminPulse {
+    0%, 100% { box-shadow: 0 0 0 rgba(220,53,69,0); }
+    50% { box-shadow: 0 0 0.5rem rgba(220, 209, 53, 0.35); }
+} 
+*/
+

@@ -93,5 +93,35 @@
         </div>
 
         </div>
+        
     </div>
     </nav>
+{% if request.session.admin_mode %}
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+        <div class="col-12 col-lg-6">
+            <div
+            class="admin-mode-indicator d-flex align-items-center justify-content-between gap-2 px-3 py-2 rounded mb-3"
+            >
+            <span class="fw-semibold debug-title debug-container">
+                <span class="text-warning fw-semibold debug-container">⚠</span>
+                Admin Mode Active
+                <span class="text-warning fw-semibold debug-container">⚠</span>
+            </span>
+
+            <form method="post" action="{% url 'accounts:toggle_admin_mode' %}" class="m-0">
+                {% csrf_token %}
+                <input type="hidden" name="admin_mode" value="off">
+                <button
+                type="submit"
+                class="btn btn-sm btn-outline-warning"
+                title="Disable admin mode"
+                >
+                Turn off
+                </button>
+            </form>
+            </div>
+        </div>
+        </div>
+    </div>
+{% endif %}
