@@ -260,6 +260,17 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
     - assigns line_order based on the order the forms appear on the page
     - resolves ingredient_name -> Ingredient FK (create if missing; dedupe globally)
     """
+    def _is_deleted(self, form) -> bool:
+        return bool(getattr(form, "cleaned_data", {}).get("DELETE", False))
+
+    def _is_empty(self, form) -> bool:
+        """
+        A form is 'empty' if it has no ingredient_name.
+        quantity/unit/prep_note are optional and don't make a row 'real'.
+        """
+        cd = getattr(form, "cleaned_data", {}) or {}
+        name = (cd.get("ingredient_name") or "").strip()
+        return name == ""
     
     def add_fields(self, form, index):
         super().add_fields(form, index)
@@ -284,17 +295,17 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
     
     def clean(self):
         super().clean()
-        
+
         if any(self.errors):
             return
-        
+
         kept = [
-            f
-            for f in self.forms
-            if hasattr(f, "cleaned_data")
-            and f.cleaned_data
-            and not f.cleaned_data.get("DELETE", False)
+            f for f in self.forms
+            if hasattr(f, "cleaned_data") and f.cleaned_data
+            and not self._is_deleted(f)
+            and not self._is_empty(f)
         ]
+
         if not kept:
             raise ValidationError("Please add at least one ingredient.")
     
@@ -310,21 +321,22 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
     #
     # This guarantees deterministic ordering while respecting the DB constraint.
     def save(self, commit: bool = True):
-        # Build instances but don't commit yet
         instances = super().save(commit=False)
 
         kept_forms = [
             f for f in self.forms
-            if hasattr(f, "cleaned_data")
-            and f.cleaned_data
-            and not f.cleaned_data.get("DELETE", False)
+            if hasattr(f, "cleaned_data") and f.cleaned_data
+            and not self._is_deleted(f)
+            and not self._is_empty(f)
         ]
 
-        # Auto line_order: 1..N in UI order (set on instances)
+        kept_instances_all = [f.instance for f in kept_forms]  # new (pk None) + existing
+
+        # Auto line_order: 1..N in UI order (in-memory for now)
         for i, form in enumerate(kept_forms, start=1):
             form.instance.line_order = i
 
-        # --- your existing ingredient normalization + FK resolution ---
+        # --- ingredient normalization + FK resolution ---
         norms: list[str] = []
         for form in kept_forms:
             raw = (form.cleaned_data.get("ingredient_name") or "").strip()
@@ -355,24 +367,21 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
             if ingredient is None:
                 raise ValidationError(f"Could not resolve ingredient: {norm}")
             form.instance.ingredient = ingredient
-        # --- end your existing logic ---
+        # --- end logic ---
 
         if not commit:
             return instances
 
         with transaction.atomic():
-            # 1) Save all changed/new objects (but line_order collisions can still happen)
-            # Save ingredient FK changes etc.
-            for inst in instances:
+            # 1) Save kept instances (new + existing)
+            for inst in kept_instances_all:
                 inst.save()
 
-            # 2) Apply deletions explicitly (since we're not calling super().save(commit=True))
+            # 2) Apply deletions explicitly
             for obj in getattr(self, "deleted_objects", []):
                 obj.delete()
 
             # 3) Two-phase line_order write to avoid unique collisions:
-            # Phase A: push kept instances into a safe temporary range
-            # (Pick an offset bigger than any current line_order for this recipe)
             current_max = (
                 RecipeIngredient.objects
                 .filter(recipe=self.instance)
@@ -381,20 +390,23 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
             )
             offset = current_max + 1000
 
+            # ✅ IMPORTANT: recompute after save so new rows (now with PKs) are included
             kept_instances = [f.instance for f in kept_forms if f.instance.pk]
 
+            # Phase A: temporary range
             for idx, inst in enumerate(kept_instances, start=1):
                 inst.line_order = offset + idx
                 inst.save(update_fields=["line_order"])
 
-            # Phase B: write final 1..N
+            # Phase B: final 1..N
             for idx, inst in enumerate(kept_instances, start=1):
                 inst.line_order = idx
                 inst.save(update_fields=["line_order"])
 
             self.save_m2m()
 
-        return instances
+        return kept_instances_all
+
 
 
 RecipeIngredientFormSetCreate = inlineformset_factory(
