@@ -245,6 +245,16 @@ def update(request, recipe_id=0, *args, **kwargs):
                 updated_recipe = form.save()  # saves Recipe fields
                 form.save_m2m()               # saves tags M2M
                 formset.save()                # saves ingredient lines (and deletions)
+            
+                try:
+                    with transaction.atomic():
+                        updated_recipe = form.save()
+                        form.save_m2m()
+                        formset.save()
+                except Exception as e:
+                    import traceback
+                    traceback.print_exc()
+                    raise
 
             return redirect("recipes:view_recipe", recipe_id=updated_recipe.pk)
 

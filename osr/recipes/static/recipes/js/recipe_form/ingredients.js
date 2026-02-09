@@ -28,7 +28,7 @@
       if (row.style.display === "none") return;
 
       // If marked for deletion, skip
-      const deleteField = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
+      const deleteField = row.querySelector('input[name$="-DELETE"]');
       if (deleteField && deleteField.checked) return;
 
       // Find the line_order input
@@ -49,7 +49,7 @@
 
   function wireRemoveButton(row) {
     const removeBtn = row.querySelector(".remove-ingredient-btn");
-    const deleteField = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
+    const deleteField = row.querySelector('input[name$="-DELETE"]');
 
     if (!removeBtn) return;
 
@@ -63,10 +63,23 @@
       const finalizeRemoval = () => {
         // Existing line: mark DELETE + hide
         if (deleteField) {
-          deleteField.checked = true;
+          // Mark DELETE immediately, regardless of widget type
+          if (deleteField.type === "checkbox") {
+            deleteField.checked = true;
+          } else {
+            // Hidden input or non-checkbox DELETE field
+            deleteField.value = "on";
+          }
+
+          // Hide but DO NOT remove existing forms from DOM
           row.style.display = "none";
         } else {
-          // New unsaved line: remove DOM node
+          // Only remove brand-new, unsaved rows
+          const idField = row.querySelector('input[name$="-id"]');
+          if (idField && idField.value) {
+            console.warn("Refusing to remove existing ingredient row without DELETE field");
+            return;
+          }
           row.remove();
         }
 

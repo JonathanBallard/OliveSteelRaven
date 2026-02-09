@@ -284,7 +284,13 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
         # so we hide it here (not in the form __init__).
         if "DELETE" in form.fields:
             form.fields["DELETE"].widget = forms.HiddenInput()
-            
+    
+    def get_queryset(self):
+        qs = super().get_queryset()
+        # ✅ CRITICAL: ensure DOM order == DB line_order
+        return qs.order_by("line_order", "pk")
+    
+    
     def clean(self):
         super().clean()
         

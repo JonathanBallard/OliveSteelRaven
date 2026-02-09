@@ -203,7 +203,19 @@
           <div class="alert alert-danger">{{ formset.non_form_errors }}</div>
         {% endif %}
 
+        {# ✅ Add this (debug-friendly) #}
+        {% if formset.errors %}
+          <div class="alert alert-danger">
+            <div class="fw-semibold mb-1">Ingredient form errors:</div>
+            <pre class="mb-0 small">{{ formset.errors }}</pre>
+          </div>
+        {% endif %}
+
         {{ formset.management_form }}
+          <div class="small text-muted">
+            TOTAL_FORMS={{ formset.management_form.TOTAL_FORMS.value }}
+            INITIAL_FORMS={{ formset.management_form.INITIAL_FORMS.value }}
+          </div>
 
         <div id="ingredient-forms">
           {% for f in formset.forms %}
@@ -217,6 +229,21 @@
                 <span class="ingredient-order-display"></span>
               </div>
               {% endcomment %}
+
+              {# ✅ Add this directly after the hidden fields #}
+              {% if f.non_field_errors %}
+                <div class="alert alert-danger py-2 mb-2">
+                  {{ f.non_field_errors }}
+                </div>
+              {% endif %}
+
+              {# ✅ Optional: show ALL errors for this ingredient form (super useful) #}
+              {% if f.errors %}
+                <details class="mb-2">
+                  <summary class="text-danger small">This ingredient has errors</summary>
+                  <pre class="text-danger small mb-0">{{ f.errors }}</pre>
+                </details>
+              {% endif %}
 
               <div class="row g-2 align-items-center">
                 <div class="col-md-5">
