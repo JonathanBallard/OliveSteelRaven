@@ -65,4 +65,5 @@ class User(AbstractUser):
         ]
 
     def __str__(self) -> str:
-        return f"User: username={self.username}, email={self.email}, first_name={self.first_name}, last_name={self.last_name}"
+        # return f"User: username={self.username}, email={self.email}, first_name={self.first_name}, last_name={self.last_name}"
+        return self.email
