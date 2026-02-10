@@ -9,7 +9,11 @@ def global_settings(request):
     return {
         # Basics
         "APP_NAME": getattr(settings, "APP_NAME", "RecipeBook"),
+        "APP_EMAIL": getattr(settings, "APP_EMAIL", "2ravenstech@gmail.com"),
+        "APP_DOMAIN": getattr(settings, "APP_DOMAIN", "www.ravenstech.com"),
+        "DOMAIN_NAME": getattr(settings, "DOMAIN_NAME", "Ravenstech"),
         "DEVELOPER_NAME": getattr(settings, "DEVELOPER_NAME", "Jonathan Ballard"),
+        "DEVELOPER_ADDRESS": getattr(settings, "DEVELOPER_ADDRESS", ""),
         "CONTACT_EMAIL": getattr(settings, "CONTACT_EMAIL", "2ravenstech@gmail.com"),
         "GITHUB_LINK": getattr(settings, "GITHUB_LINK", "https://github.com/JonathanBallard/OliveSteelRaven"),
         "DEVELOPER_LINKEDIN": getattr(settings, "DEVELOPER_LINKEDIN", "https://www.linkedin.com/in/jonathanbal"),

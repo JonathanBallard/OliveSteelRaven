@@ -26,9 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 #& ==================================================
 
 APP_NAME = "RecipeBook"
-DEVELOPER_NAME = "Jonathan Ballard"
-CONTACT_EMAIL = "2ravenstech@gmail.com"
 APP_EMAIL = "2ravenstech@gmail.com" # This will be an email at the app's domain
+APP_DOMAIN = "www.ravenstech.com"
+DOMAIN_NAME = "RavensTech"
+DEVELOPER_NAME = "Jonathan Ballard"
+DEVELOPER_ADDRESS = ""
+CONTACT_EMAIL = "2ravenstech@gmail.com"
 GITHUB_LINK = "https://github.com/JonathanBallard/OliveSteelRaven"
 DEVELOPER_LINKEDIN = "https://www.linkedin.com/in/jonathanbal/"
 TOS_DATE = "2/4/26"

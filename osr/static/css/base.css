@@ -537,3 +537,12 @@ textarea.form-control:disabled::placeholder {
 } 
 */
 
+/*~ ======================================  */
+/*^      TOS & PRIVACY       */
+/*~ ======================================  */
+
+
+.legal-text {
+    color: var(--color-text) !important;
+}
+
