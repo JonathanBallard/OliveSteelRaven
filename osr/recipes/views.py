@@ -240,10 +240,12 @@ def update(request, recipe_id=0, *args, **kwargs):
         )
 
         if form.is_valid() and formset.is_valid():
+            print(form.cleaned_data["tags"])
+            print(form.cleaned_data.get("tags"))
             try:
                 with transaction.atomic():
                     updated_recipe = form.save()   # Recipe fields
-                    form.save_m2m()                # tags M2M
+                    #form.save_m2m()                # tags M2M, handled inside recipes.forms.py
                     formset.save()                 # ingredient lines + deletions + renumbering
             except IntegrityError:
                 # Usually means a DB constraint hit (e.g., unique(recipe, line_order))
