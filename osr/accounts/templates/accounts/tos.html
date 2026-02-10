@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block title %}Terms of Service ● {{ APP_NAME }}{% endblock %}
+{% comment %} legal.css is used to style Termly's privacy policy so I could remove embedded styles {% endcomment %}
 {% block extra_css %}<link rel="stylesheet" href="{% static 'css/legal.css' %}">{% endblock %}
 {% block content %}
 <div class="container py-5">
@@ -63,7 +64,7 @@
             <h2 class="h5 mt-4">5. Prohibited Use</h2>
             <p>
                 You agree not to misuse the service, attempt unauthorized access, or engage in activity that
-                disrupts or harms {{ APP_NAME }} or its users.
+                disrupts or harms {{ APP_NAME }} or {{ DEVELOPER_NAME }} or its users.
             </p>
 
             <h2 class="h5 mt-4">6. Termination</h2>

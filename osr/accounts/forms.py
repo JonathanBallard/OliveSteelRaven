@@ -18,9 +18,9 @@ class BootstrapLoginForm(AllauthLoginForm):
 class SignupForm(AllauthSignupForm):
     agreed_to_tos = forms.BooleanField(
         required=True,
-        label="I agree to the Terms of Service",
+        label="I agree to the Terms of Service and Privacy Policy",
         error_messages={
-            "required": "You must agree to the Terms of Service to create an account."
+            "required": "You must agree to the Terms of Service and Privacy Policy to create an account."
         },
     )
 
@@ -30,7 +30,6 @@ class SignupForm(AllauthSignupForm):
         # allauth typically uses these field names:
         # - email
         # - password1, password2
-        # (username may exist depending on your config)
 
         if "email" in self.fields:
             self.fields["email"].widget.attrs.update({
@@ -88,59 +87,6 @@ class BootstrapAuthenticationForm(AuthenticationForm):
             "autocomplete": "current-password",
         })
 
-# class SignupForm(UserCreationForm):
-#     agreed_to_tos = forms.BooleanField(
-#         required=True,
-#         label="I agree to the Terms of Service",
-#         error_messages={
-#             "required": "You must agree to the Terms of Service to create an account."
-#         },
-#     )
-
-#     class Meta:
-#         model = get_user_model()
-#         fields = ("username", "email", "agreed_to_tos", "password1", "password2")
-
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-
-#         self.fields["username"].widget.attrs.update({
-#             "class": "form-control",
-#             "placeholder": "Choose a username",
-#             "autocomplete": "username",
-#         })
-
-#         self.fields["email"].widget.attrs.update({
-#             "class": "form-control",
-#             "placeholder": "you@example.com",
-#             "autocomplete": "email",
-#         })
-
-#         self.fields["password1"].widget.attrs.update({
-#             "class": "form-control",
-#             "placeholder": "Create a password",
-#             "autocomplete": "new-password",
-#         })
-
-#         self.fields["password2"].widget.attrs.update({
-#             "class": "form-control",
-#             "placeholder": "Repeat your password",
-#             "autocomplete": "new-password",
-#         })
-        
-#         # ✅ Checkbox styling (IMPORTANT)
-#         self.fields["agreed_to_tos"].widget.attrs.update({
-#             "class": "form-check-input",
-#         })
-
-#     def clean_email(self):
-#         User = get_user_model()
-#         email = self.cleaned_data["email"].lower()
-#         if User.objects.filter(email__iexact=email).exists():
-#             raise forms.ValidationError(
-#                 "An account with this email already exists."
-#             )
-#         return email
 
 class UserModelForm(UserCreationForm):
     first_name = forms.CharField()
@@ -166,8 +112,6 @@ class UserUpdateForm(forms.ModelForm):
             widget = field.widget
             existing = widget.attrs.get("class", "")
 
-            # text inputs for first/last name
             widget.attrs["class"] = (existing + " form-control").strip()
 
-            # optional nice-to-haves
             widget.attrs.setdefault("autocomplete", "given-name" if name == "first_name" else "family-name")

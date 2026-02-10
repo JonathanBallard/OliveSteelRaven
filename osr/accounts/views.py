@@ -14,21 +14,14 @@ from django.contrib.auth.decorators import login_required
 
 from recipes.models import Recipe, Category, Tag, RecipeIngredient, Ingredient
 from accounts.forms import UserModelForm, UserLoginForm, UserUpdateForm, SignupForm, BootstrapAuthenticationForm
+from accounts.adapters import AccountAdapter
 
 from common.utils import safe_method_validator
 
 # Create your views here.
 
-# *DONE* GET home
-# GET login
-# POST login
-# GET signup
-# POST signup
-# GET logout
-
 logger = logging.getLogger(__name__)
 
-# *DONE* Check if user is logged in. If not, redirect to /login/
 @safe_method_validator("", ["GET", "HEAD", "OPTIONS"])
 def root(request, *args, **kwargs):
     """
@@ -36,16 +29,14 @@ def root(request, *args, **kwargs):
     
     :param request: HTTP Request
     
-    GET: Logs user in, or redirects logged-in users to homepage
+    GET: Redirects to login if not logged in, or redirects logged-in users to homepage
     """
     if(not request.user.is_authenticated):
-        # return redirect('accounts:get_login_page')
         return redirect('account_login')
     else:
         return redirect('accounts:home_page')
 
 
-# *DONE* Otherwise open home.html page
 @safe_method_validator(".\\accounts\\home.html", ["GET", "HEAD", "OPTIONS"])
 def home(request, *args, **kwargs):
     """
@@ -53,7 +44,7 @@ def home(request, *args, **kwargs):
     
     :param request: HTTP Request
     
-    GET: Renders homepage
+    GET: Renders homepage with Hero Recipe and 3 cards
     """
     context = {}
     
@@ -77,8 +68,7 @@ def home(request, *args, **kwargs):
 #^ START `LOGIN` VIEWS
 #&-----------------------------------------------------------------------------------------------------
 
-# *DONE* Open login.html page
-# Not currently in use, using Django's default login view
+#! Not currently in use, using Django's default login view
 #! If we revert to this, it doesn't currently work, and requires renaming to 'login' not 'my_login'
 @csrf_protect
 @safe_method_validator(".\\accounts\\login.html", ["GET", "POST", "HEAD", "OPTIONS"])
@@ -116,7 +106,6 @@ def login_redirect(request, *args, **kwargs):
 #^ START `SIGNUP` VIEWS
 #&-----------------------------------------------------------------------------------------------------
 
-# *DONE* Open signup.html
 @csrf_protect
 @safe_method_validator(".\\accounts\\signup.html", ["GET", "POST", "HEAD", "OPTIONS"])
 def signup(request, *args, **kwargs):
@@ -140,7 +129,7 @@ def signup(request, *args, **kwargs):
 
     return render(request, "accounts/signup.html", {"form": form})
 
-# *DONE* Open signup.html
+
 @csrf_protect
 @safe_method_validator(".\\accounts\\signup.html", ["GET", "HEAD", "OPTIONS"])
 def tos(request, *args, **kwargs):
@@ -155,7 +144,7 @@ def tos(request, *args, **kwargs):
 
     return render(request, "accounts/tos.html", context)
 
-# *DONE* Open signup.html
+
 @csrf_protect
 @safe_method_validator(".\\accounts\\signup.html", ["GET", "HEAD", "OPTIONS"])
 def privacy(request, *args, **kwargs):
@@ -174,8 +163,8 @@ def privacy(request, *args, **kwargs):
 #^ START `LOGOUT` VIEWS
 #&-----------------------------------------------------------------------------------------------------
 
-# logout
-# Currently not in use, instead using Django's built-in logout view
+
+#! Currently not in use, instead using Django's built-in logout view
 @csrf_protect
 @login_required
 @safe_method_validator(".\\accounts\\login.html", ["POST", "HEAD", "OPTIONS"])
@@ -191,7 +180,6 @@ def my_logout(request, *args, **kwargs):
     logout(request)
     messages.success(request, "User Was Logged Out")
     return redirect('account_login')
-    # return redirect('accounts:get_login_page')
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `ACCOUNTS` VIEWS
@@ -244,7 +232,7 @@ def edit_account(request, *args, **kwargs):
     
     if(request.method == "GET"):
         form = UserUpdateForm(instance=request.user)
-        # add all appropriate user info to context (to avoid passing hashed passwords)
+        
         context['user'] = user
         context['form'] = form
         context['edit_details'] = True
@@ -312,8 +300,18 @@ def email_confirmed(request):
 # Toggle Admin Mode
 @login_required
 def toggle_admin_mode(request):
-    # Extra safety: only staff or superusers
+    """
+    Docstring for toggle_admin_mode
+    
+    :param request: HTTP Request
+    
+    Checks if user is authenticated as well as either staff or superuser
+    Then toggles admin mode on or off
+    """
+    # Extra safety: only authenticated staff or superusers
     if not (request.user.is_staff or request.user.is_superuser):
+        return redirect("accounts:account")
+    elif not (request.user.is_authenticated):
         return redirect("accounts:account")
 
     current = request.session.get("admin_mode", False)

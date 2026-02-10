@@ -25,13 +25,13 @@ app_name = 'accounts'
 
 urlpatterns = [
     
-    # My Auth URLS
+    # My Auth URLS - out of date non functional
     # path('signup/', views.signup, name='signup'), # Display the sign-up page
     # path('login/', views.login_redirect, name='login'), # Currently using 'login_redirect' view to redirect all currently logged-in users to their account page if they go to the url: login/
     # path('login_form/', views.my_login, name='login'), # Display my log-in page
     # path('logout/', auth_views.LogoutView.as_view(next_page=reverse_lazy('accounts:home_page')), name="logout"), # Django's Default Logout View
     
-    # Out of date URLS
+    # Out of date non functional URLS
     # path('login_form/', auth_views.LoginView.as_view(template_name='accounts/login.html', next_page=reverse_lazy('accounts:home_page')), name='login'), # Django's Default Login View
     # path('login/', views.my_login, name='login'), # Display my log-in page
     # path('logout/', views.my_logout, name='logout'), # POST my logout

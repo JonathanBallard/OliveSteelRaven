@@ -23,7 +23,7 @@ def unset_agreed_to_tos(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("accounts", "0005_user_agreed_to_tos"),  # Django will auto-fill this
+        ("accounts", "0005_user_agreed_to_tos"),
     ]
 
     operations = [

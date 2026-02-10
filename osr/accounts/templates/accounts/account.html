@@ -8,8 +8,8 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="mb-0 page-title">Account Details</h1>
 
-            {# Optional back link (adjust URL name if you have one) #}
-            {# <a class="btn btn-outline-secondary" href="{% url 'accounts:account' %}">Back</a> #}
+            {% comment %} Optional back link  {% endcomment %}
+            {% comment %} <a class="btn btn-outline-secondary" href="{% url 'accounts:account' %}">Back</a>  {% endcomment %}
         </div>
         {% if edit_details %}
         <form method="post" novalidate>

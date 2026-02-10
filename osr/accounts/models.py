@@ -23,9 +23,6 @@ class User(AbstractUser):
     - profile_image_url stored as TEXT (we'll use TextField)
     """
 
-    # Override username length to match varchar(50)
-    # username = models.CharField(max_length=50, unique=True)
-
     # Email: unique + validator + DB CHECK constraint equivalent
     email = models.EmailField(
         max_length=254,
@@ -39,10 +36,6 @@ class User(AbstractUser):
         ],
     )
 
-    # Store Django's hashed password in column "password" (TEXT)
-    # password = models.PasswordField(db_column="password")
-
-    # Text column in SQL
     profile_image_url = models.TextField(null=True, blank=True, default="./assets/icons/users/default_user.png")
     
     agreed_to_tos = models.BooleanField(null=False, blank=False, default=False)
@@ -50,7 +43,6 @@ class User(AbstractUser):
     # Map AbstractUser's last_login to last_login_at
     last_login = models.DateTimeField(null=True, blank=True, db_column="last_login_at")
 
-    # Timestamps in SQL
     created_at = models.DateTimeField(auto_now_add=True, db_column="created_at")
     updated_at = models.DateTimeField(auto_now=True, db_column="updated_at")
 
@@ -66,4 +58,5 @@ class User(AbstractUser):
 
     def __str__(self) -> str:
         # return f"User: username={self.username}, email={self.email}, first_name={self.first_name}, last_name={self.last_name}"
+        # Changed to only return self.email since this was displaying to users in Django flash messages upon login
         return self.email

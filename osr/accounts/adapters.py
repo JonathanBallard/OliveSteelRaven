@@ -8,6 +8,7 @@ from django.utils.text import slugify
 logger = logging.getLogger(__name__)
 
 class AccountAdapter(DefaultAccountAdapter):
+    # Force username field to be populated at time of user save
     def save_user(self, request, user, form, commit=True):
         user = super().save_user(request, user, form, commit=False)
 
@@ -19,7 +20,6 @@ class AccountAdapter(DefaultAccountAdapter):
         return user
 
     def populate_username(self, request, user):
-        logger.warning("Populate username called.")
         if getattr(user, "username", None):
             return
 

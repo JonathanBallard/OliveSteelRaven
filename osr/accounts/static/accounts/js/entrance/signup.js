@@ -1,3 +1,4 @@
+// Add Bootstrap classes to forms from allauth's views
 (function () {
   const inputs = document.querySelectorAll(
     'input[type="text"], input[type="email"], input[type="password"]'

@@ -5,11 +5,11 @@
 {% block content%}
 <div class="container content-container">
     <div class="container mt-4">
-        {% comment %} include hero {% endcomment %}
+        {% comment %} include hero partial {% endcomment %}
         {% url "recipes:view_recipe" hero_recipe.pk as hero_recipe_url %}
         {% include "partials/hero.html" with recipe=hero_recipe cta_label="Make this recipe now!" cta_url=hero_recipe_url hero_url=hero_recipe_url hero_aria_label="View this recipe" %}
 
-        {% comment %} include  top 3-6 recipes in card format {% endcomment %}
+        {% comment %} include  top 3-6 recipes in card partial {% endcomment %}
         <div class="row g-3">
             {% for recipe in recipes %}
                 <div class="col-12 col-md-6 col-lg-4">

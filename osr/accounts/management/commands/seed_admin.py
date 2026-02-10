@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 # Run with:  python manage.py seed_admin
 
 class Command(BaseCommand):
-    help = "Create or update the admin user (id=1) using an env var for the password."
+    help = "Create or update the admin user (id=1) using an env var for the email and password."
 
     def handle(self, *args, **options):
         # Load .env already called in settings, but just in case
@@ -62,6 +62,6 @@ class Command(BaseCommand):
         action = "Created" if created else "Updated"
         self.stdout.write(
             self.style.SUCCESS(
-                f"{action} admin user: id={user.id}, email={user.email}"
+                f"{action} admin user: id={user.id}, email={user.email}" #type: ignore
             )
         )

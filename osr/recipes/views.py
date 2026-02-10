@@ -240,8 +240,6 @@ def update(request, recipe_id=0, *args, **kwargs):
         )
 
         if form.is_valid() and formset.is_valid():
-            print(form.cleaned_data["tags"])
-            print(form.cleaned_data.get("tags"))
             try:
                 with transaction.atomic():
                     updated_recipe = form.save()   # Recipe fields

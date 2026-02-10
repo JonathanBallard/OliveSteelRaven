@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block title %}Privacy Policy ● {{ APP_NAME }}{% endblock %}
+{% comment %} legal.css is used to style Termly's privacy policy so I could remove embedded styles {% endcomment %}
 {% block extra_css %}<link rel="stylesheet" href="{% static 'css/legal.css' %}">{% endblock %}
 {% block content %}
 <div class="container py-5">
