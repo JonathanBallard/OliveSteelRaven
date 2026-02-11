@@ -18,17 +18,17 @@
     -moz-transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
     -ms-transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
     -o-transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
-    border: 1px solid #575757;
+    border: 2px solid #575757;
 }
 
 .hero-clickable:hover {
     border: 2px solid var(--color-border-hover);
     border-color: var(--color-border-hover) !important;
-    transform: translateY(-10px);
     /* box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.05); */
     box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.35),
-        0 1px 3px rgba(0, 0, 0, 0.6);
+    0 4px 12px rgba(0, 0, 0, 0.35),
+    0 1px 3px rgba(0, 0, 0, 0.6);
+    transform: translateY(-10px);
     -webkit-transform: translateY(-10px);
     -moz-transform: translateY(-10px);
     -ms-transform: translateY(-10px);
@@ -87,11 +87,11 @@
     /*border-color: #e0b84f;
     *//*box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35), inset 0 0 0 3px rgba(255, 255, 255, 0.05);
     */
-    transition: translateY(-4px);
-    -webkit-transition: translateY(-4px);
-    -moz-transition: translateY(-4px);
-    -ms-transition: translateY(-4px);
-    -o-transition: translateY(-4px);
+    transform: translateY(-4px);
+    -webkit-transform: translateY(-4px);
+    -moz-transform: translateY(-4px);
+    -ms-transform: translateY(-4px);
+    -o-transform: translateY(-4px);
 }
 
 /* In button.html partial */
@@ -113,12 +113,12 @@
 
 .recipe-btn:hover {
     border-color: var(--color-border-hover) !important;
-    transition: translateX(8px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35), inset 0 0 0 3px rgba(255, 255, 255, 0.05);
-    -webkit-transition: translateX(8px);
-    -moz-transition: translateX(8px);
-    -ms-transition: translateX(8px);
-    -o-transition: translateX(8px);
+    transform: translateX(8px);
+    -webkit-transform: translateX(8px);
+    -moz-transform: translateX(8px);
+    -ms-transform: translateX(8px);
+    -o-transform: translateX(8px);
 }
 
 /* Action button container */
@@ -180,12 +180,8 @@
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
     border: 2px solid var(--color-border-hover);
     border-color: #e0b84f !important;
-    transition: translateY(-12px);
-    /* box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45); */
-    -webkit-transition: translateY(-12px);
-    -moz-transition: translateY(-12px);
-    -ms-transition: translateY(-12px);
-    -o-transition: translateY(-12px);
+    /*box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+    */
 }
 
 

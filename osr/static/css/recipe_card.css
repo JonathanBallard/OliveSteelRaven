@@ -12,11 +12,11 @@
 .recipe-card-clickable:hover {
     border: 2px solid var(--color-border-hover);
     border-color: var(--color-border-hover) !important;
-    transform: translateY(-25px);
     /* box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 0 0 0 5px rgba(255, 255, 255, 0.05); */
     box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.35),
-        0 1px 3px rgba(0, 0, 0, 0.6);
+    0 4px 12px rgba(0, 0, 0, 0.35),
+    0 1px 3px rgba(0, 0, 0, 0.6);
+    transform: translateY(-25px);
     -webkit-transform: translateY(-25px);
     -moz-transform: translateY(-25px);
     -ms-transform: translateY(-25px);
