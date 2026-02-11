@@ -3,7 +3,7 @@
 /*^              HERO Partial              */
 /*~ =====================================  */
 
-.hero-img{
+.hero-img {
     width: 100%;
     height: auto;        /* key: preserve aspect ratio */
     max-width: 100%;
@@ -59,6 +59,7 @@
 
 }
 
+/* NOT IN USE - Not found anywhere */
 .navbar-btn-img-wrap {
     display: inline-flex;
     align-items: center;
@@ -93,6 +94,7 @@
     -o-transition: translateY(-4px);
 }
 
+/* In button.html partial */
 .btn-label {
     size: 1.125rem;
 }
@@ -125,6 +127,7 @@
 }
 
 /* Button group */
+/* NOT IN USE - NOT FOUND */
 .recipe-action-buttons {
     display: flex;
     align-items: flex-end;
@@ -185,7 +188,7 @@
 }
 
 /* Base (mobile) */
-.action-btn{
+.action-btn {
     width: 74px;
     height: 74px;
     padding: 6px;
@@ -326,14 +329,6 @@
 }
 
 
-/*~ ==========================================================  */
-/*^              Raised Panel              */
-/*~ ==========================================================  */
-
-.raised-panel {
-    border: 2px solid var(--color-border-default);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-}
 
 
 

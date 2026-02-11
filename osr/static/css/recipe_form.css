@@ -134,10 +134,11 @@
 
   padding: 4px !important;
   line-height: 1;
-  font-size: 0; 
+  font-size: 0;
 }
 
 /* Force image to be the same size for all 3 buttons */
+/* Currently not in use - commented out */
 .form-action-btn img{
   display: block;
   width: 150px !important;     /* mobile size */
@@ -168,7 +169,7 @@
 
 /* Center Remove Ingredient button on small screens */
 @media (max-width: 768px){
-  .remove-ingredient-btn{
+  .remove-ingredient-btn {
     margin-left: auto;
     margin-right: auto;
     margin-top: 10px;
@@ -186,7 +187,7 @@
 /* Make tag-related checkboxes visible on dark backgrounds (even when added dynamically) */
 
 /* ===== Tag remove "×" (Tom Select / dynamic tag UI) ===== */
-.tags-block a.remove{
+.tags-block a.remove {
     display: inline-flex;
     align-items: center;
     justify-content: center;

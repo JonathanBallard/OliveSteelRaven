@@ -1,5 +1,6 @@
 
   /* Same background behavior as Categories */
+/* Currently not in use - commented out */
 .search-hero {
     min-height: 100vh;
     background-image: url("{% static 'images/categories-bg.png' %}");
@@ -15,6 +16,7 @@
     inset: 0;
     background: rgba(0,0,0,0.15);
 }
+
 
 .search-inner {
     position: relative;
@@ -48,51 +50,6 @@
     font-weight: 600;
 }
 
-/* Results cards (matches your dark UI style) */
-.result-card {
-    background: rgba(17,17,17,0.92);
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 0.75rem;
-    overflow: hidden;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.35);
-    height: 100%;
-    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
-}
-.result-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 22px rgba(0,0,0,0.45);
-    border-color: rgba(255,255,255,0.18);
-}
-
-.result-title {
-    color: #fff;
-    font-weight: 700;
-    margin: 0;
-    font-size: 1rem;
-    line-height: 1.2;
-}
-.result-meta {
-    color: rgba(255,255,255,0.70);
-    font-size: 0.85rem;
-    margin-top: 0.35rem;
-}
-
-.thumb {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    background: var(--color-bg);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-}
-.thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
 @media (min-width: 992px) {
     .search-inner { padding: 2.75rem 0 3.25rem; }
-    .page-title { margin-bottom: 1.6rem; }
 }
