@@ -9,7 +9,6 @@ class AdminModeTests(TestCase):
         login_via_allauth(self.client, "admin@example.com", "Passw0rd!123")
         self.assertIn("_auth_user_id", self.client.session)
 
-        # Use GET or POST depending on your view. Try GET first.
         self.client.get(reverse("accounts:toggle_admin_mode"))
 
         # Reload session state
@@ -21,7 +20,6 @@ class AdminModeTests(TestCase):
         login_via_allauth(self.client, "staff@example.com", "Passw0rd!123")
         self.assertIn("_auth_user_id", self.client.session)
 
-        # Use GET or POST depending on your view. Try GET first.
         self.client.get(reverse("accounts:toggle_admin_mode"))
 
         # Reload session state

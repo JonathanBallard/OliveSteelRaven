@@ -204,7 +204,7 @@
         {% endif %}
 
         {# ✅ Add this (debug-friendly) #}
-        {% if formset.errors %}
+        {% if DEBUG and request.user.admin_mode and formset.errors %}
           <div class="alert alert-danger">
             <div class="fw-semibold mb-1">Ingredient form errors:</div>
             <pre class="mb-0 small">{{ formset.errors }}</pre>
