@@ -230,9 +230,14 @@ body {
 .text-danger,
 .invalid-feedback,
 .errorlist {
-    color: #f8d7da !important; /* light red text */
+    /* light red text */
+    /* color: #f8d7da !important; */
+    color: #f55b67 !important; /* light red text */
 }
 
+.text-danger li {
+    color: #f55b67 !important;
+}
 /* Error containers (alerts, non-field errors) */
 .alert-danger {
     background-color: rgba(220, 53, 69, 0.15); /* Bootstrap danger, softened */

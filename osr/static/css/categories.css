@@ -107,8 +107,8 @@
 }
 
 .card-bg {
-    /*background: rgba(17,17,17,0.92);
-    */background: var(--color-bg-highlight);
+    /*background: rgba(17,17,17,0.92);*/
+    background: var(--color-bg-highlight);
     border-radius: 6px;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
