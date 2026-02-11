@@ -289,7 +289,7 @@ class BaseRecipeIngredientFormSet(BaseInlineFormSet):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        # ✅ CRITICAL: ensure DOM order == DB line_order
+        # CRITICAL: ensure DOM order == DB line_order
         return qs.order_by("line_order", "pk")
     
     

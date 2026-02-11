@@ -3,6 +3,7 @@ import logging
 from django.db.models import Q, Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed
+from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.contrib.auth import get_user_model, authenticate, logout, login
@@ -32,7 +33,6 @@ from common.utils import safe_method_validator
 #^ START `CATEGORIES` VIEWS
 #&-----------------------------------------------------------------------------------------------------
 
-# *DONE* Render categories.html
 @safe_method_validator(".\\recipes\\categories.html", ["GET", "HEAD", "OPTIONS"])
 def categories(request, *args, **kwargs):
     """
@@ -46,9 +46,6 @@ def categories(request, *args, **kwargs):
     return render(request=request, template_name=".\\recipes\\categories.html", context=context)
 
 
-# *DONE* Open search results for single category
-# *DONE* Search database for that category
-# *DONE* Render Search Results with data
 @safe_method_validator(".\\recipes\\categories.html", ["GET", "HEAD", "OPTIONS"])
 def recipe_by_category(request, category_id, *args, **kwargs):
     """
@@ -92,7 +89,6 @@ def recipe_by_category(request, category_id, *args, **kwargs):
 #^ START `RECIPE` VIEWS
 #&-----------------------------------------------------------------------------------------------------
 
-# *DONE* Render recipe.html
 @safe_method_validator(".\\recipes\\recipe.html", ["GET", "HEAD", "OPTIONS"])
 def recipe(request, recipe_id, *args, **kwargs):
     """
@@ -126,8 +122,7 @@ def recipe(request, recipe_id, *args, **kwargs):
 #^ START `CREATE` VIEWS
 #&-----------------------------------------------------------------------------------------------------
 
-# *DONE* Render create.html
-# *DONE* Create new Recipe
+
 @csrf_protect
 @login_required
 @safe_method_validator(".\\recipes\\create.html", ["POST", "GET", "HEAD", "OPTIONS"])
@@ -175,7 +170,7 @@ def create(request, *args, **kwargs):
                 
             return redirect("recipes:view_recipe", recipe_id=recipe.pk)
         
-        # ❌ INVALID — re-render template with bound forms (NO redirect)
+        # INVALID — re-render template with bound forms (NO redirect)
         messages.error(request, "Please fix the errors below.")
         
         context = {
@@ -294,8 +289,7 @@ def update(request, recipe_id=0, *args, **kwargs):
 #^ START `DELETE` VIEWS
 #&-----------------------------------------------------------------------------------------------------
 
-# *DONE* Render delete.html
-# *DONE* Delete Recipe if user is owner
+
 @csrf_protect
 @login_required
 @safe_method_validator(".\\recipes\\delete.html", ["POST", "GET", "HEAD", "OPTIONS"])
@@ -350,8 +344,13 @@ def search(request, *args, **kwargs):
     """
     
     # --- Search guardrails ---
-    MIN_Q_LEN = 2
-    MAX_Q_LEN = 64
+    MIN_Q_LEN = settings.MIN_Q_LEN
+    MAX_Q_LEN = settings.MAX_Q_LEN
+    
+    if not(MIN_Q_LEN):
+        MIN_Q_LEN = 2
+    if not(MAX_Q_LEN):
+        MAX_Q_LEN = 64
     
     q_raw = (request.GET.get("q") or "").strip()
     q_raw = q_raw[:MAX_Q_LEN]
@@ -411,9 +410,7 @@ def search(request, *args, **kwargs):
     return render(request, "recipes/search.html", context)
 
 
-# Retreive information from search
-# Search Database
-# Render Results in search_results.html
+
 @safe_method_validator(".\\recipes\\search_results.html", ["GET", "HEAD", "OPTIONS"])
 def search_results(request, *args, **kwargs):
     """
@@ -426,8 +423,7 @@ def search_results(request, *args, **kwargs):
     context = {}
     return render(request=request, template_name=".\\recipes\\search_results.html", context=context)
 
-# *DONE* Render my recipes
-# *DONE* Return search results for authenticated user
+
 @csrf_protect
 @login_required
 @safe_method_validator(".\\recipes\\search_results.html", ["GET", "POST", "HEAD", "OPTIONS"])
@@ -457,6 +453,5 @@ def my_recipes(request, *args, **kwargs):
             "results_count": results_count,
         }
     return render(request=request, template_name=".\\recipes\\search.html", context=context)
-    # return redirect('recipes:create_recipe') #~! TEMPORARY REDIRECT
 
 

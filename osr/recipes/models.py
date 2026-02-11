@@ -110,7 +110,7 @@ class Recipe(models.Model):
         help_text="Type a description of your recipe. Talk about its history, origins, or your creative process here."
     )
 
-    # ✅ Single text box (textarea) for all steps/instructions
+    # Single text box (textarea) for all steps/instructions
     # Store as plain text; users can separate steps with new lines, numbers, bullets, etc.
     instructions = models.TextField(
         blank=True,
@@ -164,7 +164,7 @@ class Recipe(models.Model):
         if not self.recipe_image:
             return
 
-        # --- ✅ Only process user-uploaded images ---
+        # --- Only process user-uploaded images ---
         # 1) Skip the MEDIA default
         default_name = (self._meta.get_field("recipe_image").default or "").lstrip("/")
         current_name = (self.recipe_image.name or "").lstrip("/")
@@ -179,7 +179,7 @@ class Recipe(models.Model):
         # --- Process user-uploaded image ---
         img = Image.open(self.recipe_image)
 
-        # ✅ JPEG can't store alpha. If PNG/WebP has transparency, flatten to white.
+        # JPEG can't store alpha. If PNG/WebP has transparency, flatten to white.
         if img.mode in ("RGBA", "LA"):
             bg = Image.new("RGB", img.size, (255, 255, 255))
             alpha = img.split()[-1]
@@ -275,7 +275,6 @@ class RecipeIngredient(models.Model):
         qty = f"{self.quantity:g} " if self.quantity is not None else ""
         unit = f"{self.unit_text} " if self.unit_text else ""
         return f"{self.recipe}: {qty}{unit}{self.ingredient.name}"
-        # return f"{self.recipe_id}: {qty}{unit}{self.ingredient.name}"
 
 
 class RecipeFavorite(models.Model):

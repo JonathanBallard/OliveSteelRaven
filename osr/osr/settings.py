@@ -47,6 +47,8 @@ DEFAULT_USER_IMAGE = "default_user.png"
 DEFAULT_RECIPE_IMAGE = "default_recipe.png"
 HERO_RECIPE_PK = 0 # This recipe is our homepage Hero recipe, otherwise random
 FEATURED_RECIPE_PKS = [] # These recipes will be shown on the front page, otherwise picked at random
+MIN_Q_LEN = 2
+MAX_Q_LEN = 64
 
 MAX_TAGS_PER_RECIPE = 3 # Currently hardcoded to 3 elsewhere
 MAX_INGREDIENTS_PER_RECIPE = 30 # Not currently enforced
