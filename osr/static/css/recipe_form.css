@@ -1,8 +1,11 @@
 
 /*~ =====================================  */
 /*^              Form Buttons              */
+/*^  These are all commented out currently  */
+/*^ and we're using Bootstrap buttons instead */
 /*~ =====================================  */
 
+/* Currently not in use - commented out */
 .icon-only-btn {
   display: inline-flex;
   padding: 0px;
@@ -12,6 +15,7 @@
   flex: 0 0 auto;
 }
 
+/* Currently not in use - commented out */
 .btn-image {
   align-self: center;
   display: block;
@@ -20,10 +24,7 @@
   object-fit: contain;
 }
 
-.btn-image-md .btn-image {
-  height: 60px; 
-}
-
+/* Currently not in use - commented out */
 .btn-image-lg {
   display: inline-flex;
   height: 40px;
@@ -32,6 +33,7 @@
   max-width: 100%;
 }
 
+/* Currently not in use - commented out */
 .btn-image-wrap {
   display: inline-flex;
   align-items: center;
@@ -39,6 +41,7 @@
   line-height: 1;
 }
 
+/* Currently not in use - commented out */
 .btn-image-lg .btn-image {
   height: 40px;
 }
@@ -120,7 +123,8 @@
 /*~ ======================================  */
 
 /* Form buttons should shrink to the image */
-.form-action-btn{
+/* Currently not in use - commented out */
+.form-action-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
