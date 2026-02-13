@@ -144,6 +144,19 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # Later this wi
 DEFAULT_FROM_EMAIL = "RecipeBook <no-reply@localhost>"
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"
 
+#& ==========================================
+#^ CSRF Settings
+#& ==========================================
+CSRF_COOKIE_SECURE = True
+
+
+
+#& ==========================================
+#^ Security Settings
+#& ==========================================
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+# SECURE_HSTS_SECONDS
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
