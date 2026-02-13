@@ -1,0 +1,32 @@
+{# templates/partials/error.html #}
+<div class="card shadow-sm border-0">
+  <div class="card-body p-4 text-center">
+
+    <h1 class="display-6 mb-2">{{ title }}</h1>
+
+    {% if message %}
+      <p class="text-muted mb-4">{{ message }}</p>
+    {% endif %}
+
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+      {% if primary_href and primary_label %}
+        <a href="{{ primary_href }}" class="btn btn-primary">
+          {{ primary_label }}
+        </a>
+      {% endif %}
+
+      {% if secondary_href and secondary_label %}
+        <a href="{{ secondary_href }}" class="btn btn-outline-secondary">
+          {{ secondary_label }}
+        </a>
+      {% endif %}
+    </div>
+
+    {% if status_code %}
+      <div class="mt-4 small text-muted">
+        Error {{ status_code }}
+      </div>
+    {% endif %}
+
+  </div>
+</div>

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}404 ● {{ APP_NAME }}{% endblock %}
+{% block title %}403 ● {{ APP_NAME }}{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -12,9 +12,9 @@
         {% url 'recipes:search' as search_url %}
 
         {% include "partials/error.html" with
-            status_code="404"
-            title="Page not found"
-            message="That link went missing like a sock in the dryer."
+            status_code="403"
+            title="Forbidden"
+            message="The server understood the request but refuses to authorize it."
             primary_href=home_url
             primary_label="Go Home"
             secondary_href=search_url
