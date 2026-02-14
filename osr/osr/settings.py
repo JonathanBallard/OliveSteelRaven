@@ -83,6 +83,9 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
 ]
 
+if(not DEBUG):
+    ALLOWED_HOSTS.append(APP_DOMAIN)
+
 AUTH_USER_MODEL = 'accounts.User'
 
 AUTHENTICATION_BACKENDS = [
@@ -142,16 +145,30 @@ ACCOUNT_ADAPTER = "accounts.adapters.AccountAdapter"
 
 SITE_ID = 1
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # Later this will be changed to SMTP or whatever
-# DEFAULT_FROM_EMAIL = "RecipeBook <" + str(APP_EMAIL) + ">" # For production
-DEFAULT_FROM_EMAIL = "RecipeBook <no-reply@localhost>"
+
+#& ==========================================
+#^ EMAIL Settings
+#& ==========================================
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # For Development
+# DEFAULT_FROM_EMAIL = "RecipeBook <no-reply@localhost>" # For Development
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.mailersend.net' # Replace with your SMTP host
+EMAIL_PORT = 587 # Common ports are 587 (TLS) or 465 (SSL)
+
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USERNAME')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True # Use TLS for security
+# EMAIL_USE_SSL = False
+# DEFAULT_FROM_EMAIL = "RecipeBook <noreply@" + str(APP_EMAIL) + ">" # For production
+DEFAULT_FROM_EMAIL = "RecipeBook <noreply@ravenstech.com>"
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"
 
 #& ==========================================
 #^ CSRF Settings
 #& ==========================================
 CSRF_COOKIE_SECURE = True
-
+# CSRF_TRUSTED_ORIGINS = ["https://yourdomain.com"]
 
 
 #& ==========================================
@@ -159,7 +176,14 @@ CSRF_COOKIE_SECURE = True
 #& ==========================================
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
-# SECURE_HSTS_SECONDS
+
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = "DENY"
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -244,6 +268,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:9000",
 ]
 
+if(not DEBUG):
+    https_domain = 'https://'.join(APP_DOMAIN)
+    CORS_ALLOWED_ORIGINS.append(https_domain)
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
@@ -261,7 +289,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / "static",   # project-wide static folder
 ]
