@@ -229,6 +229,9 @@ WSGI_APPLICATION = 'osr.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+#~ ============================================================================================================
+#^ Currently settings set for production User/Password. For local development revert to DB_USER and DB_PASSWORD
+#~ ============================================================================================================
 DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
@@ -237,8 +240,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME', 'osrdb'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASS'),
+        'USER': os.getenv('DB_SUPERUSER'),
+        'PASSWORD': os.getenv('DB_SUPERPASS'),
         'HOST': os.getenv('DB_HOST', 'localhost'),  # Or the host IP if not local
         'PORT': os.getenv('DB_PORT', ''),           # PostgreSQL default port is 5432. Leaving empty uses the default.
     }
