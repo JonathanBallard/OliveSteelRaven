@@ -141,6 +141,18 @@ recipe_insert AS (
       AND x.title = r.title
   )
   RETURNING id, title
+), seeded_recipes AS (
+  -- recipes inserted in this run
+  SELECT id, title
+  FROM recipe_insert
+
+  UNION
+
+  -- recipes that already existed (same owner + same titles from recipe_src)
+  SELECT r.id, r.title
+  FROM recipes r
+  JOIN recipe_src s ON s.title = r.title
+  WHERE r.owner_user_id = :'owner_id'::bigint
 )
 
 -- ------------------------------------------------------
@@ -154,7 +166,7 @@ SELECT
   ri.quantity,
   ri.unit_text,
   ri.prep_note
-FROM recipe_insert rec
+FROM seeded_recipes rec
 JOIN LATERAL (
   SELECT * FROM (
     VALUES
@@ -186,7 +198,7 @@ JOIN LATERAL (
       ('BLT Sandwich', 2, 4.000, 'slices', NULL, 'Bread'),
       ('BLT Sandwich', 3, 2.000, 'tbsp', NULL, 'Mayonnaise'),
       ('BLT Sandwich', 4, 1.000, 'head', NULL, 'Romaine Lettuce'),
-      ('BLT Sandwich', 5, 1.000, 'whole', NULL, 'Diced Tomatoes'),
+      ('BLT Sandwich', 5, 1.000, 'whole', NULL, 'Sliced Tomatoes'),
 
       -- PB&J
       ('Peanut Butter & Jelly', 1, 2.000, 'slices', NULL, 'Bread'),
