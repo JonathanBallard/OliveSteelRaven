@@ -175,6 +175,8 @@ CSRF_COOKIE_SECURE = True
 #^ Security Settings
 #& ==========================================
 SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
 SESSION_COOKIE_SECURE = True
 
 SECURE_HSTS_SECONDS = 31536000  # 1 year
