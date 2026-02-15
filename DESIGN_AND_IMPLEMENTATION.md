@@ -40,16 +40,24 @@ Ideally the plan will be repeatable and refinable for future projects.
 8. *DONE* Create wireframes/mockups on Framer
 9. *DONE* Create Design elements (background image, logo, etc...) on Canva
 10. *DONE* Create batch files for development servers
-11. Create typography/font sizes
-12. Create color palettes
+11. *DONE* Create typography/font sizes
+12. *DONE* Create color palettes
 13. *DONE* Create Django project and Django App(s)
 14. *DONE* Setup Database to work with Django
 15. *DONE* Creating Views in Django
 16. *DONE* Plan models based on Django Apps
-17. Create `accounts` urls.py
-18. Create `recipes` urls.py
-19. Create `accounts` views.py
-20. Create `recipes` views.py
+17. *DONE* Create `accounts` urls.py
+18. *DONE* Create `recipes` urls.py
+19. *DONE* Create `accounts` views.py
+20. *DONE* Create `recipes` views.py
+
+### Button Assets
+
+1. Generative AI for base image
+   1. Constraints: Transparent Background, symmetry for buttons, same style as previous, semi-realistic style
+2. Crop image to as close to graphic as possible [Adobe Express](https://new.express.adobe.com)
+3. Set Background to transparent [Adobe Express](https://new.express.adobe.com)
+4. Then resize to ~530px by 110px [Free Image Resizer](https://imageresizer.com/resize/)
 
 ### Fonts & Sizes
 
@@ -103,8 +111,9 @@ Show my Recipes -> Runs a search with all recipes you've created
 
 1. Accounts - Contains all user authentication and validation logic
 2. Recipes - Contains CRUD for Recipes
-3. Comments - If implemented, will contain logic for commenting on recipes
-4. Ratings - Ifi implemented, will contain logic for rating recipes
+3. Django-allauth - Used for Login/Signup/Password/Email Routes
+4. Comments - If implemented, will contain logic for commenting on recipes
+5. Ratings - Ifi implemented, will contain logic for rating recipes
 
 #### Database
 
@@ -161,10 +170,18 @@ updated_at - datetime
 
 Note: Each piece of AI generated code was reviewed and edited.
 
-1. I used AI generation to assist me with comments, forms, templates, and models to varying extents.
-Models: I designed my own Schema, and created my own models.
-I then asked AI to edit those models as the project progressed.
-Forms: I built the `accounts` app forms first, and later asked AI to rework them.
-Templates: I had AI generate templates for me to use during testing.
-I then worked from those stubs to create the final templates.
-2. I relied heavily on AI to generate Docstring stubs and comment my code.
+1. I used AI assistance in the following areas:
+   1. Creating Tests
+   2. Reworking Forms
+   3. Reworking Models tp accept Images and to add normalization
+   4. Changing over to Django-allauth
+   5. Generating Images for buttons and dummy recipes
+   6. Generating CSS Styles that worked with my own and with Bootstrap
+   7. JavaScript to add Bootstrap styles to Django-allauth forms
+   8. Heavily used for Docstrings and Commenting
+
+#### Notes for Future
+
+1. Disabled Django's per-form validate_unique() during form validation. So formset validation won't catch uniqueness errors early.
+   1. If there’s any bug upstream (seed data, admin edits, future reorder UI) that causes duplicate (recipe, line_order) in *final save*
+   2. This means we won't get a form error during is_valid() and instead will get an IntegrityError on save

@@ -49,6 +49,7 @@ to give me good practice in organization.
 - Well designed database schema
 - Well-formed and SQL-Injection proofed CRUD operations
 - Design and Implementation Plans
+- Implementing AI into Workflow without creating problems downstream
 
 #### Tools & Resources to use
 

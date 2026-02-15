@@ -1,7 +1,20 @@
-*.vscode
+
+# Certs
+*.pem
+**/certs/
+/certs/
+
+# Environment variables
 creds.env
 .env
-*.env
-**/.env
+.env.*
+
+# Whitelist .env example
+!.env.example 
+
+#Development Assets and Notes
+**/*_dev_only
 /Schema/
 **/Recipe Images/
+*.vscode
+*.code-workspace
