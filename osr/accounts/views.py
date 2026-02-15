@@ -49,9 +49,9 @@ def home(request, *args, **kwargs):
     context = {}
     
     # HERO Recipe is set in settings HERO_RECIPE_PK, or picked at random
-    hero_recipe = Recipe.objects.filter(pk=settings.HERO_RECIPE_PK).first()
+    hero_recipe = Recipe.objects.filter(pk=int(settings.HERO_RECIPE_PK)).first()
     if(not hero_recipe):
-        hero_recipe = Recipe.objects.order_by('?')[:1] # If no Hero Recipe is select, choose one at random
+        hero_recipe = Recipe.objects.order_by("?").first() # If no Hero Recipe is select, choose one at random
     
     # CARD Recipes is set in settings FEATURED_RECIPE_PKS, or picked at random
     card_recipes = Recipe.objects.filter(pk__in=settings.FEATURED_RECIPE_PKS)
