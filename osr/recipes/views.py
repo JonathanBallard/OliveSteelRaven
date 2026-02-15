@@ -33,7 +33,7 @@ from common.utils import safe_method_validator
 #^ START `CATEGORIES` VIEWS
 #&-----------------------------------------------------------------------------------------------------
 
-@safe_method_validator(".\\recipes\\categories.html", ["GET", "HEAD", "OPTIONS"])
+@safe_method_validator("recipes/categories.html", ["GET", "HEAD", "OPTIONS"])
 def categories(request, *args, **kwargs):
     """
     Docstring for categories
@@ -43,10 +43,10 @@ def categories(request, *args, **kwargs):
     GET: Renders the Browse Categories Template
     """
     context = {"categories": Category.objects.all().order_by("name")}
-    return render(request=request, template_name=".\\recipes\\categories.html", context=context)
+    return render(request=request, template_name="recipes/categories.html", context=context)
 
 
-@safe_method_validator(".\\recipes\\categories.html", ["GET", "HEAD", "OPTIONS"])
+@safe_method_validator("recipes/categories.html", ["GET", "HEAD", "OPTIONS"])
 def recipe_by_category(request, category_id, *args, **kwargs):
     """
     Docstring for recipe_by_category
@@ -89,7 +89,7 @@ def recipe_by_category(request, category_id, *args, **kwargs):
 #^ START `RECIPE` VIEWS
 #&-----------------------------------------------------------------------------------------------------
 
-@safe_method_validator(".\\recipes\\recipe.html", ["GET", "HEAD", "OPTIONS"])
+@safe_method_validator("recipes/recipe.html", ["GET", "HEAD", "OPTIONS"])
 def recipe(request, recipe_id, *args, **kwargs):
     """
     GET: Renders the Recipe Details Page
@@ -114,7 +114,7 @@ def recipe(request, recipe_id, *args, **kwargs):
     context = {"recipe": recipe_obj}
     return render(
         request=request,
-        template_name=".\\recipes\\recipe.html",
+        template_name="recipes/recipe.html",
         context=context,
     )
 
@@ -125,7 +125,7 @@ def recipe(request, recipe_id, *args, **kwargs):
 
 @csrf_protect
 @login_required
-@safe_method_validator(".\\recipes\\create.html", ["POST", "GET", "HEAD", "OPTIONS"])
+@safe_method_validator("recipes/create.html", ["POST", "GET", "HEAD", "OPTIONS"])
 def create(request, *args, **kwargs):
     """
     Docstring for create
@@ -146,7 +146,7 @@ def create(request, *args, **kwargs):
             "formset": formset,
             "is_update": False,
         }
-        return render(request=request, template_name=".\\recipes\\recipe_form.html", context=context)
+        return render(request=request, template_name="recipes/recipe_form.html", context=context)
     # POST create recipe page
     # If POST fails, redirect to create recipe page
     # Otherwise get newly created recipe ID, and redirect to that details page
@@ -179,12 +179,12 @@ def create(request, *args, **kwargs):
         }
         return render(
             request=request,
-            template_name=".\\recipes\\recipe_form.html",
+            template_name="recipes/recipe_form.html",
             context=context,
             status=400,
         )
         
-    return render(request=request, template_name=".\\recipes\\recipe_form.html", context=context)
+    return render(request=request, template_name="recipes/recipe_form.html", context=context)
 
 
 
@@ -194,7 +194,7 @@ def create(request, *args, **kwargs):
 #&-----------------------------------------------------------------------------------------------------
 @csrf_protect
 @login_required
-@safe_method_validator(".\\recipes\\update.html", ["POST", "GET", "HEAD", "OPTIONS"])
+@safe_method_validator("recipes/update.html", ["POST", "GET", "HEAD", "OPTIONS"])
 def update(request, recipe_id=0, *args, **kwargs):
     """
     :param request: HTTP Request
@@ -222,7 +222,7 @@ def update(request, recipe_id=0, *args, **kwargs):
         }
         return render(
             request=request,
-            template_name=".\\recipes\\recipe_form.html",
+            template_name="recipes/recipe_form.html",
             context=context,
         )
 
@@ -256,7 +256,7 @@ def update(request, recipe_id=0, *args, **kwargs):
                 }
                 return render(
                     request=request,
-                    template_name=".\\recipes\\recipe_form.html",
+                    template_name="recipes/recipe_form.html",
                     context=context,
                     status=400,
                 )
@@ -274,7 +274,7 @@ def update(request, recipe_id=0, *args, **kwargs):
         }
         return render(
             request=request,
-            template_name=".\\recipes\\recipe_form.html",
+            template_name="recipes/recipe_form.html",
             context=context,
             status=400,
         )
@@ -292,7 +292,7 @@ def update(request, recipe_id=0, *args, **kwargs):
 
 @csrf_protect
 @login_required
-@safe_method_validator(".\\recipes\\delete.html", ["POST", "GET", "HEAD", "OPTIONS"])
+@safe_method_validator("recipes/delete.html", ["POST", "GET", "HEAD", "OPTIONS"])
 def delete(request, recipe_id, *args, **kwargs):
     """
     Docstring for delete
@@ -332,7 +332,7 @@ def delete(request, recipe_id, *args, **kwargs):
 # Open search.html
 @csrf_protect
 @login_required
-@safe_method_validator(".\\recipes\\search.html", ["POST", "GET", "HEAD", "OPTIONS"])
+@safe_method_validator("recipes/search.html", ["POST", "GET", "HEAD", "OPTIONS"])
 def search(request, *args, **kwargs):
     """
     Docstring for search
@@ -411,7 +411,7 @@ def search(request, *args, **kwargs):
 
 
 
-@safe_method_validator(".\\recipes\\search_results.html", ["GET", "HEAD", "OPTIONS"])
+@safe_method_validator("recipes/search_results.html", ["GET", "HEAD", "OPTIONS"])
 def search_results(request, *args, **kwargs):
     """
     Docstring for search_results
@@ -421,12 +421,12 @@ def search_results(request, *args, **kwargs):
     GET: Renders the search results
     """
     context = {}
-    return render(request=request, template_name=".\\recipes\\search_results.html", context=context)
+    return render(request=request, template_name="recipes/search_results.html", context=context)
 
 
 @csrf_protect
 @login_required
-@safe_method_validator(".\\recipes\\search_results.html", ["GET", "POST", "HEAD", "OPTIONS"])
+@safe_method_validator("recipes/search_results.html", ["GET", "POST", "HEAD", "OPTIONS"])
 def my_recipes(request, *args, **kwargs):
     """
     Docstring for my_recipes
@@ -452,6 +452,6 @@ def my_recipes(request, *args, **kwargs):
             "selected_category": None,
             "results_count": results_count,
         }
-    return render(request=request, template_name=".\\recipes\\search.html", context=context)
+    return render(request=request, template_name="recipes/search.html", context=context)
 
 

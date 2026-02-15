@@ -37,7 +37,7 @@ def root(request, *args, **kwargs):
         return redirect('accounts:home_page')
 
 
-@safe_method_validator(".\\accounts\\home.html", ["GET", "HEAD", "OPTIONS"])
+@safe_method_validator("accounts/home.html", ["GET", "HEAD", "OPTIONS"])
 def home(request, *args, **kwargs):
     """
     Docstring for get_home
@@ -62,7 +62,7 @@ def home(request, *args, **kwargs):
         
     context['hero_recipe'] = hero_recipe
     context['recipes'] = recipes
-    return render(request=request, template_name=".\\accounts\\home.html", context=context)
+    return render(request=request, template_name="accounts/home.html", context=context)
 
 #&-----------------------------------------------------------------------------------------------------
 #^ START `LOGIN` VIEWS
@@ -71,7 +71,7 @@ def home(request, *args, **kwargs):
 #! Not currently in use, using Django's default login view
 #! If we revert to this, it doesn't currently work, and requires renaming to 'login' not 'my_login'
 @csrf_protect
-@safe_method_validator(".\\accounts\\login.html", ["GET", "POST", "HEAD", "OPTIONS"])
+@safe_method_validator("accounts/login.html", ["GET", "POST", "HEAD", "OPTIONS"])
 def my_login(request, *args, **kwargs):
     if request.user.is_authenticated:
         return redirect("accounts:account")
@@ -89,7 +89,7 @@ def my_login(request, *args, **kwargs):
 
     return render(
         request=request,
-        template_name=".\\accounts\\login.html",
+        template_name="accounts/login.html",
         context={"form": form},
     )
 
@@ -107,7 +107,7 @@ def login_redirect(request, *args, **kwargs):
 #&-----------------------------------------------------------------------------------------------------
 
 @csrf_protect
-@safe_method_validator(".\\accounts\\signup.html", ["GET", "POST", "HEAD", "OPTIONS"])
+@safe_method_validator("accounts/signup.html", ["GET", "POST", "HEAD", "OPTIONS"])
 def signup(request, *args, **kwargs):
     """
     Docstring for signup
@@ -131,7 +131,7 @@ def signup(request, *args, **kwargs):
 
 
 @csrf_protect
-@safe_method_validator(".\\accounts\\signup.html", ["GET", "HEAD", "OPTIONS"])
+@safe_method_validator("accounts/signup.html", ["GET", "HEAD", "OPTIONS"])
 def tos(request, *args, **kwargs):
     """
     Docstring for tos
@@ -146,7 +146,7 @@ def tos(request, *args, **kwargs):
 
 
 @csrf_protect
-@safe_method_validator(".\\accounts\\signup.html", ["GET", "HEAD", "OPTIONS"])
+@safe_method_validator("accounts/signup.html", ["GET", "HEAD", "OPTIONS"])
 def privacy(request, *args, **kwargs):
     """
     Docstring for privacy
@@ -167,7 +167,7 @@ def privacy(request, *args, **kwargs):
 #! Currently not in use, instead using Django's built-in logout view
 @csrf_protect
 @login_required
-@safe_method_validator(".\\accounts\\login.html", ["POST", "HEAD", "OPTIONS"])
+@safe_method_validator("accounts/login.html", ["POST", "HEAD", "OPTIONS"])
 def my_logout(request, *args, **kwargs):
     """
     Docstring for post_logout
@@ -187,7 +187,7 @@ def my_logout(request, *args, **kwargs):
 
 @csrf_protect
 @login_required #type: ignore
-@safe_method_validator(".\\accounts\\signup.html", ["GET", "HEAD", "OPTIONS"])
+@safe_method_validator("accounts/signup.html", ["GET", "HEAD", "OPTIONS"])
 def account(request, *args, **kwargs):
     """
     Docstring for account
@@ -208,12 +208,12 @@ def account(request, *args, **kwargs):
         context['user_recipes_total'] = total_recipes
         context['edit_details'] = False
         context['user'] = user
-        return render(request=request, template_name=".\\accounts\\account.html", context=context)
+        return render(request=request, template_name="accounts/account.html", context=context)
 
 
 @csrf_protect
 @login_required #type: ignore
-@safe_method_validator(".\\accounts\\account.html", ["GET", "POST", "HEAD", "OPTIONS"])
+@safe_method_validator("accounts/account.html", ["GET", "POST", "HEAD", "OPTIONS"])
 def edit_account(request, *args, **kwargs):
     """
     Docstring for edit_account
@@ -236,7 +236,7 @@ def edit_account(request, *args, **kwargs):
         context['user'] = user
         context['form'] = form
         context['edit_details'] = True
-        return render(request=request, template_name=".\\accounts\\account.html", context=context)
+        return render(request=request, template_name="accounts/account.html", context=context)
     elif(request.method == "POST"):
         form = UserUpdateForm(request.POST, instance=request.user)
         context['form'] = form
@@ -253,7 +253,7 @@ def edit_account(request, *args, **kwargs):
 
 @csrf_protect
 @login_required #type: ignore
-@safe_method_validator(".\\accounts\\account.html", ["GET", "POST", "HEAD", "OPTIONS"])
+@safe_method_validator("accounts/account.html", ["GET", "POST", "HEAD", "OPTIONS"])
 def change_password(request, *args, **kwargs):
     """
     Docstring for account
@@ -276,7 +276,7 @@ def change_password(request, *args, **kwargs):
 
 
 @csrf_protect
-@safe_method_validator(".\\accounts\\account.html", ["GET", "POST", "HEAD", "OPTIONS"])
+@safe_method_validator("accounts/account.html", ["GET", "POST", "HEAD", "OPTIONS"])
 def reset_password(request, *args, **kwargs):
     """
     Docstring for account
