@@ -81,10 +81,10 @@ DEBUG = os.getenv('DEBUG', False)
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
+    "recipebook.ravenstech.com",
+    "ravenstech.com",
 ]
 
-if(not DEBUG):
-    ALLOWED_HOSTS.append(APP_DOMAIN)
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -266,12 +266,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000", 
     "http://localhost:3000",
     "http://127.0.0.1:9000",
+    "http://ravenstech.com",
+    "https://recipebook.ravenstech.com",
+    "http://recipebook.ravenstech.com",
 ]
-
-if(not DEBUG):
-    https_domain = 'https://'.join(APP_DOMAIN)
-    CORS_ALLOWED_ORIGINS.append(https_domain)
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
