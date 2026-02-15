@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 APP_NAME = "RecipeBook"
 APP_EMAIL = "2ravenstech@gmail.com" # This will be an email at the app's domain
-APP_DOMAIN = "www.ravenstech.com"
+APP_DOMAIN = "recipebook.ravenstech.com"
 DOMAIN_NAME = "RavensTech"
 DEVELOPER_NAME = "Jonathan Ballard"
 DEVELOPER_ADDRESS = ""
@@ -159,9 +159,9 @@ EMAIL_PORT = 587 # Common ports are 587 (TLS) or 465 (SSL)
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USERNAME')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True # Use TLS for security
-# EMAIL_USE_SSL = False
+EMAIL_USE_SSL = False
 # DEFAULT_FROM_EMAIL = "RecipeBook <noreply@" + str(APP_EMAIL) + ">" # For production
-DEFAULT_FROM_EMAIL = "RecipeBook <noreply@ravenstech.com>"
+DEFAULT_FROM_EMAIL = "noreply@ravenstech.com"
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"
 
 #& ==========================================
