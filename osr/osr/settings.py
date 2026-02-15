@@ -38,8 +38,8 @@ TOS_DATE = "2/4/26"
 
 # Paths
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
-
+MEDIA_ROOT = "/var/www/recipebook/media"
+# MEDIA_ROOT = BASE_DIR / "media" #development
 
 #! Everything below that's part of `Template Variables` is currently hardcoded - need update app to pull from here
 # Defaults
@@ -292,7 +292,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = "/var/www/recipebook/static"
+# STATIC_ROOT = BASE_DIR / "staticfiles" #development
 STATICFILES_DIRS = [
     BASE_DIR / "static",   # project-wide static folder
 ]
