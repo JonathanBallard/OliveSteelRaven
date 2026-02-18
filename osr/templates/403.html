@@ -11,15 +11,7 @@
         {% url 'accounts:home_page' as home_url %}
         {% url 'recipes:search' as search_url %}
 
-        {% include "partials/error.html" with
-            status_code="403"
-            title="Forbidden"
-            message="The server understood the request but refuses to authorize it."
-            primary_href=home_url
-            primary_label="Go Home"
-            secondary_href=search_url
-            secondary_label="Search Recipes"
-        %}
+        {% include "partials/error.html" with status_code="403" title="Forbidden" message="The server understood the request but refuses to authorize it." primary_href=home_url primary_label="Go Home" secondary_href=search_url secondary_label="Search Recipes" %}
 
         </div>
     </div>
