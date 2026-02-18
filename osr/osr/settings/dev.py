@@ -5,7 +5,7 @@ from django.core.management.utils import get_random_secret_key
 DEBUG = True
 
 # safe defaults for local
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
 
 # optional: console email backend
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
@@ -33,3 +33,4 @@ SECURE_SSL_REDIRECT = False
 SECURE_HSTS_SECONDS = 0
 
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"
+TEST_CONFIRMATION_EMAIL = "2ravenstech@gmail.com"
