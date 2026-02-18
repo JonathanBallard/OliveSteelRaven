@@ -176,7 +176,7 @@ EMAIL_USE_TLS = True # Use TLS for security
 EMAIL_USE_SSL = False
 # DEFAULT_FROM_EMAIL = "RecipeBook <noreply@" + str(APP_EMAIL) + ">" # For production
 DEFAULT_FROM_EMAIL = "noreply@ravenstech.com"
-
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "[RecipeBook] "
 #ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"
 
 #& ==========================================
