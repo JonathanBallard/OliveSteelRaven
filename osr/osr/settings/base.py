@@ -19,7 +19,8 @@ load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Additional .parent added because split into multiple files in subfolder 'settings'
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 #& ==================================================
 #^ Available in Templates - Pass to Context Processor
@@ -36,17 +37,23 @@ GITHUB_LINK = "https://github.com/JonathanBallard/OliveSteelRaven"
 DEVELOPER_LINKEDIN = "https://www.linkedin.com/in/jonathanbal/"
 TOS_DATE = "2/4/26"
 
-# Paths
-MEDIA_URL = "/media/"
-MEDIA_ROOT = "/var/www/recipebook/media"
+# Paths 
+# & SPLIT TO DEV/PROD
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = "/var/www/recipebook/media"
 # MEDIA_ROOT = BASE_DIR / "media" #development
 
 #! Everything below that's part of `Template Variables` is currently hardcoded - need update app to pull from here
 # Defaults
 DEFAULT_USER_IMAGE = "default_user.png"
 DEFAULT_RECIPE_IMAGE = "default_recipe.png"
-HERO_RECIPE_PK = 17 # This recipe is our homepage Hero recipe, otherwise random - SET FOR PRODUCTION
-FEATURED_RECIPE_PKS = [] # These recipes will be shown on the front page, otherwise picked at random
+
+#& =================
+#^ SPLIT TO DEV/PROD
+#& =================
+#HERO_RECIPE_PK = 17 # This recipe is our homepage Hero recipe, otherwise random - SET FOR PRODUCTION
+#FEATURED_RECIPE_PKS = [] # These recipes will be shown on the front page, otherwise picked at random
+
 MIN_Q_LEN = 2 # Min Query length for search
 MAX_Q_LEN = 64 # Max Query length for search
 
@@ -72,11 +79,18 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 2097152 # 2mb
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+#& =================
+#^ SPLIT TO DEV/PROD
+#& =================
+#SECRET_KEY = os.getenv('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', False)
-# DEBUG = False
+#& =================
+#^ SPLIT TO DEV/PROD
+#& =================
+#DEBUG = os.getenv('DEBUG', False) #SPLIT TO DEV/PROD
+
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -162,30 +176,38 @@ EMAIL_USE_TLS = True # Use TLS for security
 EMAIL_USE_SSL = False
 # DEFAULT_FROM_EMAIL = "RecipeBook <noreply@" + str(APP_EMAIL) + ">" # For production
 DEFAULT_FROM_EMAIL = "noreply@ravenstech.com"
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"
+
+#ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"
 
 #& ==========================================
 #^ CSRF Settings
 #& ==========================================
-CSRF_COOKIE_SECURE = True
+#& =================
+#^ SPLIT TO DEV/PROD
+#& =================
+# CSRF_COOKIE_SECURE = True
 # CSRF_TRUSTED_ORIGINS = ["https://yourdomain.com"]
+
 
 
 #& ==========================================
 #^ Security Settings
 #& ==========================================
-SECURE_SSL_REDIRECT = True
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-USE_X_FORWARDED_HOST = True
-SESSION_COOKIE_SECURE = True
+#& =================
+#^ SPLIT TO DEV/PROD
+#& =================
+# SECURE_SSL_REDIRECT = True
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# USE_X_FORWARDED_HOST = True
+# SESSION_COOKIE_SECURE = True
 
-SECURE_HSTS_SECONDS = 31536000  # 1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+# SECURE_HSTS_SECONDS = 31536000  # 1 year
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
 
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = "DENY"
+# SECURE_BROWSER_XSS_FILTER = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+#X_FRAME_OPTIONS = "DENY"
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -291,12 +313,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = "/var/www/recipebook/static"
-# STATIC_ROOT = BASE_DIR / "staticfiles" #development
-STATICFILES_DIRS = [
-    BASE_DIR / "static",   # project-wide static folder
-]
+
+#& =================
+#^ SPLIT TO DEV/PROD
+#& =================
+#STATIC_URL = 'static/'
+# STATIC_ROOT = "/var/www/recipebook/static" #prod
+# STATIC_ROOT = BASE_DIR / "staticfiles" #dev
+
+#& =================
+#^ BOTH DEV AND PROD
+#& =================
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",   # project-wide static folder
+# ]
 
 # Login Redirect URL
 LOGIN_URL = "account_login"
