@@ -18,7 +18,6 @@ class User(AbstractUser):
     Key mapping differences vs default Django:
     - username max_length=50
     - email unique + CHECK constraint (regex) + validator
-    - password stored in DB column password_hash (TEXT)
     - last_login stored in DB column last_login_at (timestamptz)
     - profile_image_url stored as TEXT (we'll use TextField)
     """

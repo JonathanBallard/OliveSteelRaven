@@ -45,7 +45,7 @@ MEDIA_ROOT = "/var/www/recipebook/media"
 # Defaults
 DEFAULT_USER_IMAGE = "default_user.png"
 DEFAULT_RECIPE_IMAGE = "default_recipe.png"
-HERO_RECIPE_PK = 17 # This recipe is our homepage Hero recipe, otherwise random
+HERO_RECIPE_PK = 17 # This recipe is our homepage Hero recipe, otherwise random - SET FOR PRODUCTION
 FEATURED_RECIPE_PKS = [] # These recipes will be shown on the front page, otherwise picked at random
 MIN_Q_LEN = 2 # Min Query length for search
 MAX_Q_LEN = 64 # Max Query length for search
