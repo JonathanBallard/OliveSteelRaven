@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}400 ● {{ APP_NAME }}{% endblock %}
+{% block title %}Bad Request (Error 400) ● {{ APP_NAME }}{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -11,7 +11,7 @@
         {% url 'accounts:home_page' as home_url %}
         {% url 'recipes:search' as search_url %}
 
-        {% include "partials/error.html" with status_code="400" title="Bad Request" message="The server encountered an unexpected condition that prevented it from fulfilling the request." primary_href=home_url primary_label="Go Home" secondary_href=search_url secondary_label="Search Recipes" %}
+        {% include "partials/error.html" with status_code="400" title="Bad Request" message="The server encountered an unexpected condition that prevented it from fulfilling the request. Also known as: 'You probably did something wrong'." primary_href=home_url primary_label="Go Home" secondary_href=search_url secondary_label="Search Recipes" %}
 
         </div>
     </div>

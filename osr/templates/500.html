@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}500 ● {{ APP_NAME }}{% endblock %}
+{% block title %}Internal Server Error (Error 500) ● {{ APP_NAME }}{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -11,7 +11,7 @@
         {% url 'accounts:home_page' as home_url %}
         {% url 'recipes:search' as search_url %}
 
-        {% include "partials/error.html" with status_code="500" title="Internal Server Error" message="The server encountered an unexpected condition that prevented it from fulfilling the request." primary_href=home_url primary_label="Go Home" secondary_href=search_url secondary_label="Search Recipes" %}
+        {% include "partials/error.html" with status_code="500" title="Internal Server Error" message="The server encountered an unexpected condition that prevented it from fulfilling the request. Also known as: 'I probably did something wrong'. Also also known as an 'oopsy daisy'." primary_href=home_url primary_label="Go Home" secondary_href=search_url secondary_label="Search Recipes" %}
 
         </div>
     </div>
