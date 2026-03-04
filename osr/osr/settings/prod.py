@@ -33,3 +33,18 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
+
+DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'osrdb'),
+        'USER': os.getenv('DB_PROD_USER'),
+        'PASSWORD': os.getenv('DB_PROD_PASSWORD'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),  # Or the host IP if not local
+        'PORT': os.getenv('DB_PORT', ''),           # PostgreSQL default port is 5432. Leaving empty uses the default.
+    }
+}

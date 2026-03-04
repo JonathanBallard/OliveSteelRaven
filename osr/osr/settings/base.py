@@ -254,20 +254,20 @@ WSGI_APPLICATION = 'osr.wsgi.application'
 #~ ============================================================================================================
 #^ Currently settings set for production User/Password. For local development revert to DB_USER and DB_PASSWORD
 #~ ============================================================================================================
-DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'osrdb'),
-        'USER': os.getenv('DB_PROD_USER'),
-        'PASSWORD': os.getenv('DB_PROD_PASSWORD'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),  # Or the host IP if not local
-        'PORT': os.getenv('DB_PORT', ''),           # PostgreSQL default port is 5432. Leaving empty uses the default.
-    }
-}
+# DATABASES = {
+#     # 'default': {
+#     #     'ENGINE': 'django.db.backends.sqlite3',
+#     #     'NAME': BASE_DIR / 'db.sqlite3',
+#     # }
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('DB_NAME', 'osrdb'),
+#         'USER': os.getenv('DB_PROD_USER'),
+#         'PASSWORD': os.getenv('DB_PROD_PASSWORD'),
+#         'HOST': os.getenv('DB_HOST', 'localhost'),  # Or the host IP if not local
+#         'PORT': os.getenv('DB_PORT', ''),           # PostgreSQL default port is 5432. Leaving empty uses the default.
+#     }
+# }
 
 
 # Password validation
