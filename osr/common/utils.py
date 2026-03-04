@@ -11,8 +11,9 @@ def safe_method_validator(backup_render_template_path, safe_methods_list, requir
     """
     Docstring for safe_method_validator
     
-    :param template: The path to the template this view should re-route to if 
-    this view is called from any request method besides the intended method.
+    :param backup_render_template_path: The path to the template this view 
+    should re-route to if this view is called from any request method besides 
+    the intended method.
     
     Example Usage:
     @safe_method_validator(".\\path\\to\\backup\\template.html", ["GET", "HEAD", "OPTIONS"], requires_authentication=True)

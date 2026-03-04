@@ -19,7 +19,7 @@ class User(AbstractUser):
     - username max_length=50
     - email unique + CHECK constraint (regex) + validator
     - last_login stored in DB column last_login_at (timestamptz)
-    - profile_image_url stored as TEXT (we'll use TextField)
+    - profile_image_url stored as TEXT (TextField)
     """
 
     # Email: unique + validator + DB CHECK constraint equivalent

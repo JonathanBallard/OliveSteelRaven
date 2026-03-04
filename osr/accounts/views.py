@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 @safe_method_validator("", ["GET", "HEAD", "OPTIONS"])
 def root(request, *args, **kwargs):
     """
-    Docstring for get_root
+    Docstring for root
     
     :param request: HTTP Request
     
@@ -40,7 +40,7 @@ def root(request, *args, **kwargs):
 @safe_method_validator("accounts/home.html", ["GET", "HEAD", "OPTIONS"])
 def home(request, *args, **kwargs):
     """
-    Docstring for get_home
+    Docstring for home
     
     :param request: HTTP Request
     
@@ -250,18 +250,18 @@ def edit_account(request, *args, **kwargs):
 #&-----------------------------------------------------------------------------------------------------
 #^ START `PASSWORD` VIEWS
 #&-----------------------------------------------------------------------------------------------------
-
+#! NOT IN USE -- using allauth
 @csrf_protect
 @login_required #type: ignore
 @safe_method_validator("accounts/account.html", ["GET", "POST", "HEAD", "OPTIONS"])
 def change_password(request, *args, **kwargs):
     """
-    Docstring for account
+    Docstring for change_password (NOT IN USE)
     
     :param request: HTTP Request
     
     GET: Redirects to account
-    POST: Sends email to change password
+    POST: Redirects to accounts:account
     """
     context = {}
     user = request.user
@@ -274,17 +274,17 @@ def change_password(request, *args, **kwargs):
     elif(request.method == "POST"):
         return redirect('accounts:account')
 
-
+#! NOT IN USE -- using allauth
 @csrf_protect
 @safe_method_validator("accounts/account.html", ["GET", "POST", "HEAD", "OPTIONS"])
 def reset_password(request, *args, **kwargs):
     """
-    Docstring for account
+    Docstring for reset_password (NOT IN USE)
     
     :param request: HTTP Request
     
     GET: Redirects to account
-    POST: Sends email to change password
+    POST: Redirects to account
     """
     context = {}
     
@@ -305,13 +305,11 @@ def toggle_admin_mode(request):
     
     :param request: HTTP Request
     
-    Checks if user is authenticated as well as either staff or superuser
+    Checks if user is either staff or superuser
     Then toggles admin mode on or off
     """
     # Extra safety: only authenticated staff or superusers
     if not (request.user.is_staff or request.user.is_superuser):
-        return redirect("accounts:account")
-    elif not (request.user.is_authenticated):
         return redirect("accounts:account")
 
     current = request.session.get("admin_mode", False)

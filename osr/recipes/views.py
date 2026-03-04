@@ -54,7 +54,7 @@ def recipe_by_category(request, category_id, *args, **kwargs):
     :param request: HTTP Request
     :param category_id: PK of the category that we're displaying the search results for
     
-    GET: Renders the Browse Categories Template
+    GET: Returns recipes by chosen category
     """
     qs = Recipe.objects.select_related("category")
     
@@ -434,7 +434,6 @@ def my_recipes(request, *args, **kwargs):
     :param request: HTTP Request
     
     GET: Renders Logged-in User's Recipes
-    POST: Searches for Logged-in User's Recipes
     """
     posted_data_dict = request.POST.copy()
     context = {}

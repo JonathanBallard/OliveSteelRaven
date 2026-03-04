@@ -43,8 +43,8 @@ urlpatterns = [
     path('privacy/', views.privacy, name='privacy'), # Display the Privacy Policy
     path('account/', views.account, name='account'), #type: ignore
     path('account/edit_details', views.edit_account, name='edit_account'), #type: ignore
-    path('account/change_password', views.change_password, name='change_password'), #type: ignore
-    path('account/reset_password', views.reset_password, name='reset_password'), #type: ignore
+    path('account/change_password', views.change_password, name='change_password'), #type: ignore   #!NOT IN USE
+    path('account/reset_password', views.reset_password, name='reset_password'), #type: ignore      #!NOT IN USE
     
     path("confirmed/", views.email_confirmed, name="email_confirmed"),
     
