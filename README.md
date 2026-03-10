@@ -21,7 +21,7 @@ their favorite family recipes.
 
 ### Demo
 
-When the demo is live, a link will be posted here
+[Link to RecipeBook](https://recipebook.ravenstech.com)
 
 ### Project Preview
 
